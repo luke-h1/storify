@@ -6,6 +6,8 @@ const reviewSchema = new Schema<Review>(
     name: { type: String, required: true },
     rating: { type: Number, required: true },
     comment: { type: String, required: true },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     user: {
       type: Schema.Types.ObjectId,
       required: true,

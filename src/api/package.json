@@ -7,6 +7,8 @@
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist",
     "watch": "tsc -w",
+    "seed:database": "node dist/data/seed",
+    "clean:database": "node dist/data/seed -d",
     "dev": "cross-env NODE_ENV=development nodemon dist/index.js",
     "tsc": "tsc --noEmit",
     "gen-env": "gen-env-types .env -o src/env.d.ts -e ."

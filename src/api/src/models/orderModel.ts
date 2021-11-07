@@ -58,7 +58,7 @@ const orderSchema = new Schema<Order>(
       default: false,
     },
     paidAt: {
-      type: Date,
+      type: Number,
     },
     isDelivered: {
       type: Boolean,
@@ -66,7 +66,7 @@ const orderSchema = new Schema<Order>(
       default: false,
     },
     deliveredAt: {
-      type: Date,
+      type: Number,
     },
   },
   {
