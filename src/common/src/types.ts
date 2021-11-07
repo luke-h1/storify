@@ -11,7 +11,7 @@ export interface Review {
   name: string;
   rating: number;
   comment: string;
-  user: User;
+  user: string; // only need user id for reviews;
 }
 
 export interface Product {
