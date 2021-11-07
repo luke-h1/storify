@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "alwaysStrict": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": false,
+    "strict": true,
+    "strictNullChecks": true,
+    "baseUrl": "./",
+    "jsx": "preserve",
+    "lib": [
+      "dom",
+      "DOM.iterable",
+      "esnext"
+    ],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "noFallthroughCasesInSwitch": true,
+  },
+  "exclude": ["node_modules"],
+  "paths": {
+    "@admin/*": ["./src/admin/*"],
+    "@common/*": ["./src/common/*"],
+    "@frontend/*": ["./src/frontend/*"]
+  }
+}
