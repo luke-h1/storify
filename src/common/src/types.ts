@@ -5,6 +5,7 @@ export interface User {
   password: string;
   isAdmin: boolean;
   matchPassword: (password: string) => boolean;
+  token: string;
 }
 
 export interface Review {
@@ -59,3 +60,4 @@ export interface Order {
   deliveredAt: number;
 }
 
+export type UserResponse = User | { message: string }
