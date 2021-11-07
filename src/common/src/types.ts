@@ -16,6 +16,7 @@ export interface Review {
 }
 
 export interface Product {
+  _id: string;
   user: User;
   name: string;
   image: string;
@@ -61,3 +62,5 @@ export interface Order {
 }
 
 export type UserResponse = User | { message: string }
+
+export type ProductResponse = { products: Product[], page: string; pages: string }
