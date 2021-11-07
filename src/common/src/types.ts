@@ -1,8 +1,10 @@
 export interface User {
+  _id: string;
   name: string;
   email: string;
   password: string;
   isAdmin: boolean;
+  matchPassword: (password: string) => boolean;
 }
 
 export interface Review {
@@ -56,3 +58,4 @@ export interface Order {
   isDelivered: boolean;
   deliveredAt: Date;
 }
+
