@@ -29,8 +29,14 @@ export interface Product {
   price: number;
   countInStock: number;
 }
-
+export interface PaymentResult {
+  id: string;
+  status: string;
+  update_time: string;
+  email_address: string;
+}
 export interface Order {
+  _id: string;
   user: User;
   orderItems: {
     name: string;
@@ -46,12 +52,7 @@ export interface Order {
     country: string;
   };
   paymentMethod: string;
-  paymentResult: {
-    id: string;
-    status: string;
-    update_time: string;
-    email_address: string;
-  };
+  paymentResult: PaymentResult;
   taxPrice: number;
   shippingPrice: number;
   totalPrice: number;
@@ -64,3 +65,5 @@ export interface Order {
 export type UserResponse = User | { message: string }
 
 export type ProductResponse = { products: Product[], page: string; pages: string }
+
+export type OrderResponse = Order | { message: string }
