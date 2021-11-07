@@ -23,7 +23,7 @@
       "version": "detect"
     }
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "jest"],
   "env": {
     "browser": true,
     "jest": true,

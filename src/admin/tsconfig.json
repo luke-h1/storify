@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "es5",
     "lib": [
@@ -7,40 +6,21 @@
       "dom.iterable",
       "esnext"
     ],
-    "paths": {
-      "@src/*": ["src/*"],
-      "@common/*": ["../common/*"]
-    },
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
-    "alwaysStrict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
-    "baseUrl": "."
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
   "include": [
-    "next-env.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx"
-, "src/styles/prism.ts"  ],
-  "exclude": [
-    "node_modules",
-    "cypress",  
-    "src/__mocks__"
+    "src"
   ]
 }
