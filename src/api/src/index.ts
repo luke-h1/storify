@@ -45,5 +45,9 @@ const main = async () => {
   app.use('/api/users', userRoutes)
   app.use('/api/orders', orderRoutes)
   app.use('/api/upload', uploadRoutes)
+
+  app.listen(process.env.PORT, () => {
+    console.log(`API listening on http://localhost:${process.env.PORT}`)
+  })
 }
 main().catch(e => console.error(e));
