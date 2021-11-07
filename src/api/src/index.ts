@@ -8,6 +8,10 @@ import morgan from 'morgan'
 import { join, resolve } from 'path';
 import connect from "./db/connect";
 import 'dotenv/config';
+import orderRoutes from './routes/order';
+import productRoutes from './routes/product';
+import uploadRoutes from './routes/upload';
+import userRoutes from './routes/user';
 
 const main = async () => {
   const app = express();
@@ -20,7 +24,6 @@ const main = async () => {
   app.use(morgan('dev'))
   const dirname = resolve()
   app.use('/uploads', express.static(join(dirname, '/uploads')))
-  
   
   app.use(
     cors({
@@ -38,11 +41,9 @@ const main = async () => {
   app.get('/api/health', limiter, (_, res) => {
     res.status(200).json({ status: 'ok' });
   });
-  // app.use('/api/products', productRoutes)
-  // app.use('/api/users', userRoutes)
-  // app.use('/api/orders', orderRoutes)
-  // app.use('/api/upload', uploadRoutes)
-
-
+  app.use('/api/products', productRoutes)
+  app.use('/api/users', userRoutes)
+  app.use('/api/orders', orderRoutes)
+  app.use('/api/upload', uploadRoutes)
 }
 main().catch(e => console.error(e));
