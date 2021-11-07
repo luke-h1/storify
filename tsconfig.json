@@ -27,7 +27,6 @@
   },
   "exclude": ["node_modules"],
   "paths": {
-    "@admin/*": ["./src/admin/*"],
     "@common/*": ["./src/common/*"],
     "@api/*": ["./src/api/*"],
     "@frontend/*": ["./src/frontend/*"]
