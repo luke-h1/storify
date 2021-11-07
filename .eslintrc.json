@@ -48,10 +48,7 @@
       }
     ],
     "import/no-unresolved": [
-      "error",
-      {
-        "ignore": ["^(part|all):"] // eslint doesn't play nice with sanity imports
-      }
+      "error"
     ],
     "import/order": [
       "error",
@@ -114,6 +111,8 @@
       "files": ["**/*.js"],
       "rules": {
         "@typescript-eslint/no-var-requires": "off",
+        "import/no-unresolved": "off",
+        "import/extensions": "off",
         "global-require": "off",
         "import/no-dynamic-require": "off",
         "no-console": "off"
