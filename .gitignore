@@ -3,3 +3,4 @@ node_modules
 .dbdata
 tmp
 dist
+src/api/,env
