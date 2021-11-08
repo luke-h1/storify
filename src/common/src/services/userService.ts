@@ -22,19 +22,19 @@ const userService = {
     const { data } = await storifyApi.put('/api/users/profile', user)
     return data;
   },
-  list: async ():Promise<User[]> => {
+  listUsers: async ():Promise<User[]> => {
     const { data } = await storifyApi.get('/api/users')
     return data;
   },
-  update: async (user: User): Promise<UserResponse> => {
+  updateUser: async (user: User): Promise<UserResponse> => {
     const { data } = await storifyApi.put(`/api/users/${user._id}`, user);
     return data;
   },
-  delete: async (id: string): Promise<{ message: string }> => {
+  deleteUser: async (id: string): Promise<{ message: string }> => {
     const { data } = await storifyApi.delete(`/api/users/${id}`)
     return data;
   },
-  getDetails: async(id: string): Promise<UserResponse> => {
+  getUserDetails: async(id: string): Promise<UserResponse> => {
     const { data } = await storifyApi.get(`/api/users/${id}`);
     return data;
   }

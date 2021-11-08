@@ -3,22 +3,22 @@ import storifyApi from './Client';
 
 
 const orderService = {
-  create: async (order: Order): Promise<OrderResponse> => {
+  createOrder: async (order: Order): Promise<OrderResponse> => {
     const { data } = await storifyApi.post('/api/orders', order);
     return data;
   },
 
-  getDetails: async (id: string): Promise<OrderResponse> => {
+  getOrderDetails: async (id: string): Promise<OrderResponse> => {
     const { data } = await storifyApi.get(`/api/orders/${id}`)
     return data;
   },
 
-  pay: async (orderId: string, paymentResult: PaymentResult): Promise<OrderResponse> => {
+  payOrder: async (orderId: string, paymentResult: PaymentResult): Promise<OrderResponse> => {
     const { data } = await storifyApi.put(`/api/orders/${orderId}/pay`, paymentResult);
     return data;
   },
 
-  deliver: async (order: Order): Promise<OrderResponse> => {
+  deliverOrder: async (order: Order): Promise<OrderResponse> => {
     const { data } = await storifyApi.put(`/api/orders/${order._id}/deliver`, {});
     return data;
   },
