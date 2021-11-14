@@ -1,6 +1,5 @@
-import { Order, OrderResponse, PaymentResult } from "../../types";
-import storifyApi from './Client';
-
+import { Order, OrderResponse, PaymentResult } from '../types';
+import storifyApi from './client/Client';
 
 const orderService = {
   createOrder: async (order: Order): Promise<OrderResponse> => {
@@ -9,17 +8,26 @@ const orderService = {
   },
 
   getOrderDetails: async (id: string): Promise<OrderResponse> => {
-    const { data } = await storifyApi.get(`/api/orders/${id}`)
+    const { data } = await storifyApi.get(`/api/orders/${id}`);
     return data;
   },
 
-  payOrder: async (orderId: string, paymentResult: PaymentResult): Promise<OrderResponse> => {
-    const { data } = await storifyApi.put(`/api/orders/${orderId}/pay`, paymentResult);
+  payOrder: async (
+    orderId: string,
+    paymentResult: PaymentResult,
+  ): Promise<OrderResponse> => {
+    const { data } = await storifyApi.put(
+      `/api/orders/${orderId}/pay`,
+      paymentResult,
+    );
     return data;
   },
 
   deliverOrder: async (order: Order): Promise<OrderResponse> => {
-    const { data } = await storifyApi.put(`/api/orders/${order._id}/deliver`, {});
+    const { data } = await storifyApi.put(
+      `/api/orders/${order._id}/deliver`,
+      {},
+    );
     return data;
   },
 
@@ -32,6 +40,6 @@ const orderService = {
     const { data } = await storifyApi.get(`/api/orders`);
     return data;
   },
-}
+};
 
 export default orderService;
