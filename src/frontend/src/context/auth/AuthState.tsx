@@ -1,8 +1,8 @@
-import React, { ReactNode, useReducer, useContext } from 'react';
+import React, { useReducer, useContext, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import authReducer, { State } from './authReducer';
 import userService from '../../../../common/src/services/userService';
-import { REGISTER_REQUEST } from '../constants/AuthConstants';
+import AuthContext from './authContext';
 
 interface Props {
   children: React.ReactNode;
@@ -105,5 +105,42 @@ const AuthState = ({ children }: Props) => {
       });
     }
   };
+  const logout = () => {
+    dispatch({
+      type: 'LOGIN_REQUEST',
+      user: null,
+      loading: true,
+      error: null,
+      token: null,
+    });
+    dispatch({
+      type: 'LOGOUT',
+      user: null,
+      loading: false,
+      error: null,
+      token: null,
+    });
+    history.push('/');
+  };
+
+  const contextState: State = useMemo(() => {
+    return {
+      loading: state.loading,
+      error: state.error,
+      user: state.user,
+      token: state.token,
+      register,
+      login,
+      logout,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.loading, state.error, state.user, state.token]);
+
+  return (
+    <AuthContext.Provider value={contextState}>{children}</AuthContext.Provider>
+  );
 };
-export default AuthState;
+export function useAuthContext(): State {
+  const context = useContext(AuthContext);
+  return context ?? ({} as any);
+}

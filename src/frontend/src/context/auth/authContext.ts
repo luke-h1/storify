@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { State } from './authReducer';
 
-const authContext = createContext<State | undefined>(undefined);
+const AuthContext = createContext<State | undefined>(undefined);
 
-export default authContext;
+export default AuthContext;
