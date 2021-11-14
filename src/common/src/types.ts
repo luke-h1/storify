@@ -32,7 +32,9 @@ export interface Product {
 export interface PaymentResult {
   id: string;
   status: string;
+  // eslint-disable-next-line camelcase
   update_time: string;
+  // eslint-disable-next-line camelcase
   email_address: string;
 }
 export interface Order {
@@ -62,8 +64,12 @@ export interface Order {
   deliveredAt: number;
 }
 
-export type UserResponse = User | { message: string }
+export type UserResponse = User | { message: string };
 
-export type ProductResponse = { products: Product[], page: string; pages: string }
+export type ProductResponse = {
+  products: Product[];
+  page: string;
+  pages: string;
+};
 
-export type OrderResponse = Order | { message: string }
+export type OrderResponse = Order | { message: string };

@@ -30,18 +30,16 @@ const login = asyncHandler(async (req: IRequest, res: Response) => {
 // @route   POST /api/users
 // @access  Public
 const register = asyncHandler(async (req: IRequest, res: Response) => {
-  const { name, email, password } = req.body;
-
-  const userExists = await User.findOne({ email });
+  const userExists = await User.findOne({ email: req.body.email });
 
   if (userExists) {
     res.status(400).json({ message: 'User already exists' });
   }
 
   const user = await User.create({
-    name,
-    email,
-    password,
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
   });
   if (user) {
     res.status(201).json({
@@ -130,9 +128,9 @@ const getUser = asyncHandler(async (req: IRequest, res: Response) => {
   if (user) {
     res.status(200).json(user);
   } else {
-    res.status(404).json({ message: "User not found" })
+    res.status(404).json({ message: 'User not found' });
   }
-})
+});
 
 // @desc    Update user
 // @route   PUT /api/users/:id
@@ -152,11 +150,11 @@ const updateUser = asyncHandler(async (req: IRequest, res: Response) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
-    })
+    });
   } else {
-    res.status(404).json({ message: "user not found" })
+    res.status(404).json({ message: 'user not found' });
   }
-})
+});
 
 export {
   login,
@@ -167,4 +165,4 @@ export {
   deleteUser,
   getUser,
   updateUser,
-}
+};

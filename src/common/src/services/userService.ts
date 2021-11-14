@@ -6,7 +6,7 @@ const userService = {
     name: string,
     email: string,
     password: string,
-  ): Promise<UserResponse> => {
+  ): Promise<User> => {
     const { data } = await storifyApi.post('/api/users', {
       name,
       email,
@@ -14,16 +14,19 @@ const userService = {
     });
     return data;
   },
-  login: async (email: string, password: string): Promise<UserResponse> => {
-    const { data } = await storifyApi.post('/api/users/login', { email, password });
+  login: async (email: string, password: string): Promise<User> => {
+    const { data } = await storifyApi.post('/api/users/login', {
+      email,
+      password,
+    });
     return data;
   },
   updateProfile: async (user: User): Promise<UserResponse> => {
-    const { data } = await storifyApi.put('/api/users/profile', user)
+    const { data } = await storifyApi.put('/api/users/profile', user);
     return data;
   },
-  listUsers: async ():Promise<User[]> => {
-    const { data } = await storifyApi.get('/api/users')
+  listUsers: async (): Promise<User[]> => {
+    const { data } = await storifyApi.get('/api/users');
     return data;
   },
   updateUser: async (user: User): Promise<UserResponse> => {
@@ -31,12 +34,12 @@ const userService = {
     return data;
   },
   deleteUser: async (id: string): Promise<{ message: string }> => {
-    const { data } = await storifyApi.delete(`/api/users/${id}`)
+    const { data } = await storifyApi.delete(`/api/users/${id}`);
     return data;
   },
-  getUserDetails: async(id: string): Promise<UserResponse> => {
+  getUserDetails: async (id: string): Promise<UserResponse> => {
     const { data } = await storifyApi.get(`/api/users/${id}`);
     return data;
-  }
+  },
 };
 export default userService;
