@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel';
@@ -9,11 +10,9 @@ import generateToken from '../utils/generateToken';
 // @access  Public
 
 const login = asyncHandler(async (req: IRequest, res: Response) => {
-  const { email, password } = req.body;
+  const user = await User.findOne({ email: req.body.email });
 
-  const user = await User.findOne({ email });
-
-  if (user && (await user.matchPassword(password))) {
+  if (user && (await bcrypt.compare(req.body.password, user.password))) {
     res.json({
       _id: user._id,
       name: user.name,
@@ -35,11 +34,12 @@ const register = asyncHandler(async (req: IRequest, res: Response) => {
   if (userExists) {
     res.status(400).json({ message: 'User already exists' });
   }
+  const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
   const user = await User.create({
     name: req.body.name,
     email: req.body.email,
-    password: req.body.password,
+    password: hashedPassword,
   });
   if (user) {
     res.status(201).json({
