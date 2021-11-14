@@ -1,4 +1,4 @@
-import { Title } from 'src/styles/typography';
+import { Title } from '../styles/typography';
 
 const Home = () => {
   return (
