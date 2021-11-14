@@ -1,4 +1,4 @@
-import { User } from '../../../../common/src/types';
+import { User } from '@storify/common/src/types';
 
 type Action =
   | {
