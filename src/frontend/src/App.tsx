@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components';
 import { GlobalThemeObject, ThemeObjectInitial } from './types/styled';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Home from './pages/Home';
+import { GlobalStyles } from './styles';
 
 const initTheme = {
   theme: undefined,
@@ -29,6 +30,7 @@ const App = () => {
   return (
     <>
       <AuthState>
+        <GlobalStyles />
         <ThemeProvider theme={themeForContext}>
           <BrowserRouter>
             <Route component={Home} exact />

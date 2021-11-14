@@ -1,7 +1,9 @@
+import { Title } from 'src/styles/typography';
+
 const Home = () => {
   return (
     <>
-      <h1>Hello from home page</h1>
+      <Title size={5}>Hello from home page</Title>
     </>
   );
 };
