@@ -1,7 +1,7 @@
 import React, { useReducer, useContext, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import authReducer, { State } from './authReducer';
-import userService from '../../../../common/src/services/userService';
+import userService from '@storify/common/src/services/userService';
 import AuthContext from './authContext';
 
 interface Props {
@@ -140,6 +140,8 @@ const AuthState = ({ children }: Props) => {
     <AuthContext.Provider value={contextState}>{children}</AuthContext.Provider>
   );
 };
+export default AuthState;
+
 export function useAuthContext(): State {
   const context = useContext(AuthContext);
   return context ?? ({} as any);
