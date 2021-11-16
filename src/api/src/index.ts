@@ -11,6 +11,7 @@ import 'dotenv-safe/config';
 import { graphqlUploadExpress } from 'graphql-upload';
 import createConn from './db/createConn';
 import redis from './db/redis';
+import { createUserLoader } from './loaders/createUserLoader';
 import { isProd } from './shared/constants';
 import createSchema from './utils/createSchema';
 
@@ -67,6 +68,7 @@ const main = async () => {
       req,
       res,
       redis,
+      userLoader: createUserLoader(),
     }),
   });
   await apolloServer.start();
