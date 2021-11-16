@@ -12,7 +12,7 @@
     "lint": "eslint --ext .ts,.tsx,.js,.jsx src --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "tsc": "tsc --noEmit",
-    "gen-env": "gen-env-types .env -o src/env.d.ts -e ."
+    "gen-env": "gen-env-types .env -o src/types/env.d.ts -e ."
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
