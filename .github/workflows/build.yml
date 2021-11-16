@@ -35,6 +35,9 @@ jobs:
       - name: tsc
         run: yarn tsc
 
-      - name: build
-        run: yarn build
+      - name: build backend
+        run: yarn workspace @storify/api build 
+
+      - name: build common
+        run: yarn workspace @storify/common build 
 
