@@ -1,19 +1,18 @@
 /* eslint-disable no-console */
 import 'reflect-metadata';
+import { ApolloServer } from 'apollo-server-express';
+import compression from 'compression';
+import connectRedis from 'connect-redis';
+import cors from 'cors';
+import express from 'express';
+import rateLimit from 'express-rate-limit';
 import session from 'express-session';
 import 'dotenv-safe/config';
-import connectRedis from 'connect-redis';
-import express from 'express';
 import { graphqlUploadExpress } from 'graphql-upload';
-import { join } from 'path';
-import { ApolloServer } from 'apollo-server-express';
-import cors from 'cors';
-import rateLimit from 'express-rate-limit';
-import compression from 'compression';
 import createConn from './db/createConn';
 import redis from './db/redis';
+import { isProd } from './shared/constants';
 import createSchema from './utils/createSchema';
-import isProd from './utils/isProd';
 
 const main = async () => {
   await createConn();
@@ -24,7 +23,7 @@ const main = async () => {
   app.set('trust-proxy', 1);
   app.use(
     cors({
-      origin: process.env.CORS_ORIGIN!,
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     }),
   );
