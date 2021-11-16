@@ -12,6 +12,7 @@
     "strict": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "baseUrl": "./",
     "jsx": "preserve",
     "lib": [
