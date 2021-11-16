@@ -1,8 +1,7 @@
 {
   "private": true,
   "workspaces": [
-    "src/gql-api",
-    "src/common"
+    "src/*"
   ],
   "name": "next-storify",
   "version": "1.0.0",
