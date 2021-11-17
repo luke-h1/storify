@@ -10,7 +10,7 @@
   "author": "luke-h1 <luke.howsam@yahoo.com>",
   "license": "MIT",
   "devDependencies": {
-    "@commitlint/cli": "^14.1.0",
+    "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^14.1.0",
     "eslint": "^7.2.0",
     "eslint-plugin-jest": "^25.2.3",
