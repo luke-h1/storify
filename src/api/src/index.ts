@@ -5,7 +5,6 @@ import compression from 'compression';
 import connectRedis from 'connect-redis';
 import cors from 'cors';
 import express from 'express';
-import rateLimit from 'express-rate-limit';
 import session from 'express-session';
 import 'dotenv-safe/config';
 import { graphqlUploadExpress } from 'graphql-upload';
@@ -28,16 +27,6 @@ const main = async () => {
       credentials: true,
     }),
   );
-  const limiter = rateLimit({
-    windowMs: 10 * 60 * 1000, // 10 minutes
-    max: 15, // limit each IP to 15 requests per windowMs
-    message: 'Too many health check requests',
-  });
-
-  app.get('/api/health', limiter, (_, res) => {
-    res.status(200).json({ status: 'ok' });
-  });
-
   app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
   const RedisStore = connectRedis(session);
@@ -60,9 +49,12 @@ const main = async () => {
       resave: false,
     }),
   );
+  // health check endpoint
+  // https://API_URL/.well-known/apollo/server-health
 
   const apolloServer = new ApolloServer({
     allowBatchedHttpRequests: true,
+    debug: !isProd,
     schema: await createSchema(),
     context: ({ req, res }) => ({
       req,
