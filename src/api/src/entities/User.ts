@@ -45,7 +45,7 @@ export class User extends BaseEntity {
 
   @Field(() => String)
   @Column()
-  url: string;
+  image: string;
 
   @Column()
   s3ImageFileName: string;
