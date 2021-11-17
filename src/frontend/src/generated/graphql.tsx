@@ -90,10 +90,45 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type ErrorFragment = {
+  __typename?: 'FieldError';
+  field: string;
+  message: string;
+};
+
 export type UserFragmentFragment = {
   __typename?: 'User';
   id: number;
   email: string;
+};
+
+export type UserResponseFragmentFragment = {
+  __typename?: 'UserResponse';
+  errors?:
+    | Array<{ __typename?: 'FieldError'; field: string; message: string }>
+    | null
+    | undefined;
+  user?: { __typename?: 'User'; id: number; email: string } | null | undefined;
+};
+
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+export type LoginMutation = {
+  __typename?: 'Mutation';
+  login: {
+    __typename?: 'UserResponse';
+    errors?:
+      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
+      | null
+      | undefined;
+    user?:
+      | { __typename?: 'User'; id: number; email: string }
+      | null
+      | undefined;
+  };
 };
 
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
@@ -103,12 +138,42 @@ export type MeQuery = {
   me?: { __typename?: 'User'; id: number; email: string } | null | undefined;
 };
 
+export const ErrorFragmentDoc = gql`
+  fragment Error on FieldError {
+    field
+    message
+  }
+`;
 export const UserFragmentFragmentDoc = gql`
   fragment UserFragment on User {
     id
     email
   }
 `;
+export const UserResponseFragmentFragmentDoc = gql`
+  fragment UserResponseFragment on UserResponse {
+    errors {
+      ...Error
+    }
+    user {
+      ...UserFragment
+    }
+  }
+  ${ErrorFragmentDoc}
+  ${UserFragmentFragmentDoc}
+`;
+export const LoginDocument = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      ...UserResponseFragment
+    }
+  }
+  ${UserResponseFragmentFragmentDoc}
+`;
+
+export function useLoginMutation() {
+  return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+}
 export const MeDocument = gql`
   query Me {
     me {
