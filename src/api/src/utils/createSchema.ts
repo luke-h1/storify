@@ -1,9 +1,9 @@
 import { buildSchema } from 'type-graphql';
-import { User } from '../entities/User';
+import { UserResolver } from '../resolvers/user';
 
 const createSchema = async () =>
   buildSchema({
-    resolvers: [User],
+    resolvers: [UserResolver],
     validate: false,
   });
 export default createSchema;

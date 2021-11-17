@@ -23,7 +23,7 @@ const main = async () => {
   app.set('trust-proxy', 1);
   app.use(
     cors({
-      origin: process.env.CORS_ORIGIN,
+      origin: [process.env.CORS_ORIGIN, 'https://studio.apollographql.com'],
       credentials: true,
     }),
   );
@@ -53,7 +53,6 @@ const main = async () => {
   // https://API_URL/.well-known/apollo/server-health
 
   const apolloServer = new ApolloServer({
-    allowBatchedHttpRequests: true,
     debug: !isProd,
     schema: await createSchema(),
     context: ({ req, res }) => ({

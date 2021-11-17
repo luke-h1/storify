@@ -28,7 +28,7 @@ export class Product extends BaseEntity {
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 
-  @Field()
+  @Field(() => [Review])
   @Column()
   reviews: Review[];
 

@@ -51,7 +51,7 @@ export const upload = multer({
   fileFilter,
   storage: multerS3({
     acl: 'public-read',
-    s3,
+    s3: Bucket,
     bucket: 'bwm-ng-dev',
     metadata (req, file, cb) {
       cb(null, {fieldName: 'TESTING_METADATA'});

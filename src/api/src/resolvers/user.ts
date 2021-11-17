@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import bcrypt from 'bcryptjs';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
-import { UserRegisterInput } from 'src/inputs/user/UserRegisterInput';
 import {
   Arg,
   Ctx,
@@ -16,6 +15,7 @@ import {
 import { getConnection } from 'typeorm';
 import { v4 } from 'uuid';
 import { User } from '../entities/User';
+import { UserRegisterInput } from '../inputs/user/UserRegisterInput';
 import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from '../shared/constants';
 import { MyContext } from '../types/MyContext';
 import { upload } from '../utils/s3';
@@ -124,6 +124,7 @@ export class UserResolver {
 
   @Query(() => User, { nullable: true })
   me(@Ctx() { req }: MyContext) {
+    // not logged in
     if (!req.session.userId) {
       return null;
     }
