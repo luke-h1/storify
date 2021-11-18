@@ -15,6 +15,7 @@ import {
   MeQuery,
   LoginMutation,
   RegisterMutation,
+  LogoutMutation,
 } from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
@@ -88,6 +89,14 @@ export const createurqlClient = (
                     me: result.register.user,
                   };
                 },
+              );
+            },
+            logout: (_result, args, cache) => {
+              CustomUpdateQuery<LogoutMutation, MeQuery>(
+                cache,
+                { query: MeDocument },
+                _result,
+                () => ({ me: null }),
               );
             },
           },
