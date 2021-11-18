@@ -7,17 +7,13 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  Input,
 } from '@chakra-ui/react';
 import { Formik } from 'formik';
-import { withUrqlClient } from 'next-urql';
-import ImageInput from '../components/ImageInput';
+import React from 'react';
 import InputField from '../components/InputField';
-import { useRegisterMutation } from '../generated/graphql';
-import { createurqlClient } from '../utils/createUrqlClient';
-import toErrorMap from '../utils/toErrorMap';
 
 const Register = () => {
-  const [, register] = useRegisterMutation();
   return (
     <Flex
       minH="100vh"
@@ -42,20 +38,7 @@ const Register = () => {
             image: '',
           }}
           onSubmit={async (values, { setErrors }) => {
-            const res = await register({
-              options: {
-                firstName: values.firstName,
-                lastName: values.lastName,
-                email: values.email,
-                password: values.password,
-                bio: values.bio,
-              },
-              image: values.image,
-            });
-            if (res.data?.register.errors) {
-              setErrors(toErrorMap(res.data.register.errors));
-            }
-            console.log('done');
+            // do stuff
           }}
         >
           {({ isSubmitting, setFieldValue }) => (
@@ -89,8 +72,16 @@ const Register = () => {
                   placeholder="password"
                 />
 
-                <ImageInput setFieldValue={setFieldValue} />
-
+                <Input
+                  placeholder="Image"
+                  type="file"
+                  accept="image/*"
+                  onChange={({ target: { validity, files } }) => {
+                    if (validity.valid && files) {
+                      setFieldValue('image', files[0]);
+                    }
+                  }}
+                />
                 <Stack spacing={10}>
                   <Stack
                     direction={{ base: 'column', sm: 'row' }}
@@ -121,4 +112,4 @@ const Register = () => {
     </Flex>
   );
 };
-export default withUrqlClient(createurqlClient, { ssr: false })(Register);
+export default Register;

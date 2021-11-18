@@ -1,72 +1,56 @@
 /* eslint-disable no-console */
-import 'reflect-metadata';
-import { ApolloServer } from 'apollo-server-express';
 import compression from 'compression';
-import connectRedis from 'connect-redis';
 import cors from 'cors';
 import express from 'express';
-import session from 'express-session';
-import 'dotenv-safe/config';
-import { graphqlUploadExpress } from 'graphql-upload';
-import createConn from './db/createConn';
-import redis from './db/redis';
-import { createUserLoader } from './loaders/createUserLoader';
-import { isProd } from './shared/constants';
-import createSchema from './utils/createSchema';
+import fileUpload from 'express-fileupload';
+import rateLimit from 'express-rate-limit';
+import morgan from 'morgan';
+import { join, resolve } from 'path';
+import connect from './db/connect';
+import 'dotenv/config';
+import orderRoutes from './routes/order';
+import productRoutes from './routes/product';
+import uploadRoutes from './routes/upload';
+import userRoutes from './routes/user';
 
 const main = async () => {
-  await createConn();
-
   const app = express();
-
+  connect();
   app.use(compression());
-  app.set('trust-proxy', 1);
+  app.set('trust proxy', 1);
+  app.use(express.json());
+  app.disable('x-powered-by');
+  app.use(fileUpload({ safeFileNames: true }));
+  app.use(morgan('dev'));
+  const dirname = resolve();
+  app.use('/uploads', express.static(join(dirname, '/uploads')));
+
   app.use(
     cors({
-      origin: [process.env.CORS_ORIGIN, 'https://studio.apollographql.com'],
+      origin:
+        process.env.NODE_ENV !== 'production'
+          ? ['http://localhost:3000', 'http://localhost:4000']
+          : [''],
       credentials: true,
     }),
   );
-  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
-  const RedisStore = connectRedis(session);
-  app.use(
-    session({
-      name: 'fid',
-      store: new RedisStore({
-        client: redis,
-        disableTouch: true,
-      }),
-      cookie: {
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        httpOnly: true,
-        sameSite: 'lax', // csrf
-        secure: isProd,
-        domain: isProd ? '.url' : undefined,
-      },
-      saveUninitialized: false,
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-    }),
-  );
-  // health check endpoint
-  // https://API_URL/.well-known/apollo/server-health
-
-  const apolloServer = new ApolloServer({
-    debug: !isProd,
-    schema: await createSchema(),
-    context: ({ req, res }) => ({
-      req,
-      res,
-      redis,
-      userLoader: createUserLoader(),
-    }),
+  const limiter = rateLimit({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 15, // limit each IP to 15 requests per windowMs
+    message: 'Too many health check requests',
   });
-  await apolloServer.start();
-  apolloServer.applyMiddleware({ app, cors: false });
 
-  app.listen(process.env.PORT, () =>
-    console.log(`Server running on http://localhost:${process.env.PORT}`),
-  );
+  app.get('/api/health', limiter, (_, res) => {
+    res.status(200).json({ status: 'ok' });
+  });
+  app.use('/api/products', productRoutes);
+  app.use('/api/users', userRoutes);
+  app.use('/api/orders', orderRoutes);
+  app.use('/api/upload', uploadRoutes);
+
+  app.listen(process.env.PORT, () => {
+    console.log(`API listening on http://localhost:${process.env.PORT}`);
+  });
 };
 main().catch(e => console.error(e));

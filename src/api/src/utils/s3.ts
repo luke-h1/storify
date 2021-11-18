@@ -45,21 +45,21 @@ const fileFilter = (req, file, cb) => {
   } else {
     cb(new Error('Invalid file type, only JPEG and PNG is allowed!'), false);
   }
-}
+};
 
 export const upload = multer({
   fileFilter,
   storage: multerS3({
     acl: 'public-read',
     s3: Bucket,
-    bucket: 'bwm-ng-dev',
-    metadata (req, file, cb) {
-      cb(null, {fieldName: 'TESTING_METADATA'});
+    bucket: '',
+    metadata(req, file, cb) {
+      cb(null, { fieldName: 'TESTING_METADATA' });
     },
-    key (req, file, cb) {
-      cb(null, Date.now().toString())
-    }
-  })
+    key(req, file, cb) {
+      cb(null, Date.now().toString());
+    },
+  }),
 });
 
 module.exports = upload;
