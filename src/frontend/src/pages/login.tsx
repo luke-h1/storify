@@ -9,8 +9,10 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { Formik } from 'formik';
+import { withUrqlClient } from 'next-urql';
 import InputField from '../components/InputField';
 import { useLoginMutation } from '../generated/graphql';
+import { createurqlClient } from '../utils/createUrqlClient';
 import toErrorMap from '../utils/toErrorMap';
 
 const Login = () => {
@@ -48,7 +50,7 @@ const Login = () => {
             >
               <Stack spacing={4}>
                 <InputField label="email" name="email" />
-                <InputField label="password" name="password" />
+                <InputField label="password" name="password" type="password" />
 
                 <Stack spacing={10}>
                   <Stack
@@ -79,4 +81,4 @@ const Login = () => {
     </Flex>
   );
 };
-export default Login;
+export default withUrqlClient(createurqlClient, { ssr: false })(Login);

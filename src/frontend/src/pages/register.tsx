@@ -1,10 +1,6 @@
 import {
   Flex,
   Box,
-  FormControl,
-  FormLabel,
-  Input,
-  Checkbox,
   Stack,
   Link,
   Button,
@@ -13,9 +9,11 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { Formik } from 'formik';
+import { withUrqlClient } from 'next-urql';
 import ImageInput from '../components/ImageInput';
 import InputField from '../components/InputField';
 import { useRegisterMutation } from '../generated/graphql';
+import { createurqlClient } from '../utils/createUrqlClient';
 import toErrorMap from '../utils/toErrorMap';
 
 const Register = () => {
@@ -45,7 +43,6 @@ const Register = () => {
           }}
           onSubmit={async (values, { setErrors }) => {
             const res = await register({
-              image: values.image,
               options: {
                 firstName: values.firstName,
                 lastName: values.lastName,
@@ -53,10 +50,12 @@ const Register = () => {
                 password: values.password,
                 bio: values.bio,
               },
+              image: values.image,
             });
             if (res.data?.register.errors) {
               setErrors(toErrorMap(res.data.register.errors));
             }
+            console.log('done');
           }}
         >
           {({ isSubmitting, setFieldValue }) => (
@@ -69,13 +68,26 @@ const Register = () => {
               px={8}
             >
               <Stack spacing={5}>
-                <InputField label="First Name" name="firstName" />
-                <InputField label="Last Name" name="lastName" />
+                <InputField
+                  label="First Name"
+                  name="firstName"
+                  placeholder="First name"
+                />
+                <InputField
+                  label="Last Name"
+                  name="lastName"
+                  placeholder="Last name"
+                />
 
-                <InputField label="Bio" name="bio" textarea />
+                <InputField label="Bio" name="bio" textarea placeholder="Bio" />
 
-                <InputField label="email" name="email" />
-                <InputField label="password" name="password" />
+                <InputField label="email" name="email" placeholder="Email" />
+                <InputField
+                  label="password"
+                  name="password"
+                  type="password"
+                  placeholder="password"
+                />
 
                 <ImageInput setFieldValue={setFieldValue} />
 
@@ -85,16 +97,17 @@ const Register = () => {
                     align="start"
                     justify="space-between"
                   >
-                    {/* <Checkbox>Remember me</Checkbox> */}
                     <Link color="blue.400">Already a user?</Link>
                   </Stack>
                   <Button
+                    as="button"
                     bg="blue.400"
                     color="white"
                     _hover={{
                       bg: 'blue.500',
                     }}
                     type="submit"
+                    isLoading={isSubmitting}
                     disabled={isSubmitting}
                   >
                     Sign up
@@ -108,4 +121,4 @@ const Register = () => {
     </Flex>
   );
 };
-export default Register;
+export default withUrqlClient(createurqlClient, { ssr: false })(Register);
