@@ -10,7 +10,12 @@ import {
   stringifyVariables,
 } from 'urql';
 import { pipe, tap } from 'wonka';
-import { MeDocument, MeQuery } from '../generated/graphql';
+import {
+  MeDocument,
+  MeQuery,
+  LoginMutation,
+  RegisterMutation,
+} from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
 
@@ -26,6 +31,14 @@ const errorExchange: Exchange =
       }),
     );
   };
+
+function invalidateAllProducts(cache: Cache) {
+  const allFields = cache.inspectFields('Query');
+  const fieldInfos = allFields.filter(info => info.fieldName === 'products');
+  fieldInfos.forEach(fi => {
+    cache.invalidate('Query', 'products', fi.arguments || {});
+  });
+}
 
 export const createurqlClient = (
   ssrExchange: SSRExchange,
@@ -44,7 +57,42 @@ export const createurqlClient = (
     },
     exchanges: [
       dedupExchange,
-      cacheExchange({}),
+      cacheExchange({
+        updates: {
+          Mutation: {
+            login: (_result, args, cache) => {
+              CustomUpdateQuery<LoginMutation, MeQuery>(
+                cache,
+                { query: MeDocument },
+                _result,
+                (result, query) => {
+                  if (result.login.errors) {
+                    return query;
+                  }
+                  return {
+                    me: result.login.user,
+                  };
+                },
+              );
+            },
+            register: (_result, args, cache) => {
+              CustomUpdateQuery<RegisterMutation, MeQuery>(
+                cache,
+                { query: MeDocument },
+                _result,
+                (result, query) => {
+                  if (result.register.errors) {
+                    return query;
+                  }
+                  return {
+                    me: result.register.user,
+                  };
+                },
+              );
+            },
+          },
+        },
+      }),
       multipartFetchExchange,
       errorExchange,
       ssrExchange,

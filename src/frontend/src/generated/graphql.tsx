@@ -131,6 +131,26 @@ export type LoginMutation = {
   };
 };
 
+export type RegisterMutationVariables = Exact<{
+  options: UserRegisterInput;
+  image: Scalars['Upload'];
+}>;
+
+export type RegisterMutation = {
+  __typename?: 'Mutation';
+  register: {
+    __typename?: 'UserResponse';
+    errors?:
+      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
+      | null
+      | undefined;
+    user?:
+      | { __typename?: 'User'; id: number; email: string }
+      | null
+      | undefined;
+  };
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
@@ -173,6 +193,20 @@ export const LoginDocument = gql`
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+}
+export const RegisterDocument = gql`
+  mutation Register($options: UserRegisterInput!, $image: Upload!) {
+    register(options: $options, image: $image) {
+      ...UserResponseFragment
+    }
+  }
+  ${UserResponseFragmentFragmentDoc}
+`;
+
+export function useRegisterMutation() {
+  return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(
+    RegisterDocument,
+  );
 }
 export const MeDocument = gql`
   query Me {
