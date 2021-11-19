@@ -4,6 +4,7 @@ import asyncHandler from 'express-async-handler';
 import User from '../models/userModel';
 import { IRequest } from '../types';
 import generateToken from '../utils/generateToken';
+import { validateRegister } from '../validations/validateRegister';
 
 // @desc    login & get token
 // @route   POST /api/users/login
@@ -21,7 +22,14 @@ const login = asyncHandler(async (req: IRequest, res: Response) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(401).json({ message: 'Invalid email or password' });
+    res.status(400).json({
+      errors: [
+        {
+          field: 'email',
+          message: 'incorrect credentials',
+        },
+      ],
+    });
   }
 });
 
@@ -29,10 +37,23 @@ const login = asyncHandler(async (req: IRequest, res: Response) => {
 // @route   POST /api/users
 // @access  Public
 const register = asyncHandler(async (req: IRequest, res: Response) => {
+  const { email, password, firstName, lastName } = req.body;
   const userExists = await User.findOne({ email: req.body.email });
 
   if (userExists) {
-    res.status(400).json({ message: 'User already exists' });
+    res.status(401).json({
+      errors: [
+        {
+          field: 'email',
+          message: 'Email already taken',
+        },
+      ],
+    });
+  }
+
+  const errors = validateRegister(email, password, firstName, lastName);
+  if (errors) {
+    return { errors };
   }
   const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
@@ -49,8 +70,6 @@ const register = asyncHandler(async (req: IRequest, res: Response) => {
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
     });
-  } else {
-    res.status(400).json({ message: 'Invalid user data!' });
   }
 });
 

@@ -1,11 +1,11 @@
-export const validateRegister = (options: {
-  email: string;
-  password: string;
-  bio: string;
-  firstName: string;
-  lastName: string;
-}) => {
-  if (!options.email.includes('@')) {
+export const validateRegister = (
+  email: string,
+  password: string,
+  bio: string,
+  firstName: string,
+  lastName: string,
+) => {
+  if (!email.includes('@')) {
     return [
       {
         field: 'email',
@@ -13,7 +13,7 @@ export const validateRegister = (options: {
       },
     ];
   }
-  if (options.password.length <= 6) {
+  if (password.length <= 6) {
     return [
       {
         field: 'password',
@@ -21,7 +21,7 @@ export const validateRegister = (options: {
       },
     ];
   }
-  if (!options.bio) {
+  if (!bio) {
     return [
       {
         field: 'bio',
@@ -29,7 +29,7 @@ export const validateRegister = (options: {
       },
     ];
   }
-  if (!options.firstName) {
+  if (!firstName) {
     return [
       {
         field: 'firstName',
@@ -37,7 +37,7 @@ export const validateRegister = (options: {
       },
     ];
   }
-  if (!options.lastName) {
+  if (!lastName) {
     return [
       {
         field: 'lastName',
