@@ -2,7 +2,6 @@ import bcrypt from 'bcryptjs';
 import { Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel';
-import { IRequest } from '../types';
 import generateToken from '../utils/generateToken';
 import { validateRegister } from '../validations/validateRegister';
 
@@ -10,7 +9,7 @@ import { validateRegister } from '../validations/validateRegister';
 // @route   POST /api/users/login
 // @access  Public
 
-const login = asyncHandler(async (req: IRequest, res: Response) => {
+const login = asyncHandler(async (req, res: Response) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (user && (await bcrypt.compare(req.body.password, user.password))) {
@@ -36,8 +35,8 @@ const login = asyncHandler(async (req: IRequest, res: Response) => {
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
-const register = asyncHandler(async (req: IRequest, res: Response) => {
-  const { email, password, firstName, lastName } = req.body;
+const register = asyncHandler(async (req, res: Response) => {
+  const { email, password, firstName, lastName, bio } = req.body;
   const userExists = await User.findOne({ email: req.body.email });
 
   if (userExists) {
@@ -51,9 +50,11 @@ const register = asyncHandler(async (req: IRequest, res: Response) => {
     });
   }
 
-  const errors = validateRegister(email, password, firstName, lastName);
+  const errors = validateRegister(email, password, bio, firstName, lastName);
   if (errors) {
-    return { errors };
+    res.status(400).json({
+      errors,
+    });
   }
   const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
@@ -77,7 +78,7 @@ const register = asyncHandler(async (req: IRequest, res: Response) => {
 // @route   GET /api/users/profile
 // @access  Private
 
-const getProfile = asyncHandler(async (req: IRequest, res: Response) => {
+const getProfile = asyncHandler(async (req, res: Response) => {
   const user = await User.findById(req?.user?._id);
 
   if (user) {
@@ -94,7 +95,7 @@ const getProfile = asyncHandler(async (req: IRequest, res: Response) => {
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
-const updateProfile = asyncHandler(async (req: IRequest, res: Response) => {
+const updateProfile = asyncHandler(async (req, res: Response) => {
   const user = await User.findById(req?.user?._id);
 
   if (user) {
@@ -120,7 +121,7 @@ const updateProfile = asyncHandler(async (req: IRequest, res: Response) => {
 // @desc    Get all users
 // @route   GET /api/users
 // @access  Private/Admin
-const getUsers = asyncHandler(async (_: IRequest, res: Response) => {
+const getUsers = asyncHandler(async (_, res: Response) => {
   const users = await User.find({});
   res.status(200).json(users);
 });
@@ -128,7 +129,7 @@ const getUsers = asyncHandler(async (_: IRequest, res: Response) => {
 // @desc    Delete user
 // @route   DELETE /api/users/:id
 // @access  Private/Admin
-const deleteUser = asyncHandler(async (req: IRequest, res: Response) => {
+const deleteUser = asyncHandler(async (req, res: Response) => {
   const user = await User.findById(req.params.id);
   if (user) {
     await user.remove();
@@ -141,7 +142,7 @@ const deleteUser = asyncHandler(async (req: IRequest, res: Response) => {
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Private/Admin
-const getUser = asyncHandler(async (req: IRequest, res: Response) => {
+const getUser = asyncHandler(async (req, res: Response) => {
   const user = await User.findById(req.params.id).select('-password');
 
   if (user) {
@@ -154,7 +155,7 @@ const getUser = asyncHandler(async (req: IRequest, res: Response) => {
 // @desc    Update user
 // @route   PUT /api/users/:id
 // @access  Private/Admin
-const updateUser = asyncHandler(async (req: IRequest, res: Response) => {
+const updateUser = asyncHandler(async (req, res: Response) => {
   const user = await User.findById(req.params.id);
 
   if (user) {

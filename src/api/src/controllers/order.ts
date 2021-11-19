@@ -1,6 +1,5 @@
 import { Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import Order from '../models/orderModel';
 import { IRequest } from '../types';
 
 // @desc    Create new order

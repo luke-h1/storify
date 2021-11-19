@@ -6,8 +6,8 @@ import fileUpload from 'express-fileupload';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import { join, resolve } from 'path';
-import connect from './db/connect';
 import 'dotenv/config';
+import createConn from './db/createConn';
 import orderRoutes from './routes/order';
 import productRoutes from './routes/product';
 import uploadRoutes from './routes/upload';
@@ -15,7 +15,8 @@ import userRoutes from './routes/user';
 
 const main = async () => {
   const app = express();
-  connect();
+  const conn = await createConn()
+  await conn.runMigrations()
   app.use(compression());
   app.set('trust proxy', 1);
   app.use(express.json());
