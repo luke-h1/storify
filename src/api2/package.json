@@ -14,7 +14,7 @@
     "@prisma/client": "^3.3.0",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
-    "cookie-parser": "1.4.5",
+    "cookie-parser": "1.4.6",
     "cors": "^2.8.5",
     "csurf": "^1.11.0",
     "date-fns": "^2.25.0",
