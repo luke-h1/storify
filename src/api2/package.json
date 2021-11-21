@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "npx prisma generate && npx nodemon",
+    "watch": "tsc -w",
+    "dev": "npx prisma generate && cross-env NODE_ENV=development nodemon dist/main.js",
     "build": "tsc --noEmit",
     "generate": "prisma generate",
     "gen-env": "gen-env-types .env -o src/types/env.d.ts -e ."

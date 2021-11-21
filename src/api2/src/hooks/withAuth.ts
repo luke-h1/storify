@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import { getSessionUser } from '@lib/auth';
-import { AuthConstants } from '@lib/constants';
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { getSessionUser } from '../lib/auth';
+import { AuthConstants } from '../lib/constants';
 import { IRequest } from '../types/IRequest';
 
 export async function withAuth(

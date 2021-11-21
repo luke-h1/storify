@@ -1,17 +1,17 @@
 import { validateSchema } from '@casper124578/utils';
-import { withAuth } from '@hooks/withAuth';
-import { AuthConstants } from '@lib/constants';
-import { authenticateSchema } from '@schemas/auth';
 import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 import { Response, Router } from 'express';
 import { prisma } from '../db/prisma';
 import * as redis from '../db/redis';
+import { withAuth } from '../hooks/withAuth';
 import {
   createSessionToken,
   getSessionUser,
   setCookie,
   validateUserPassword,
 } from '../lib/auth';
+import { AuthConstants } from '../lib/constants';
+import { authenticateSchema } from '../schemas/auth';
 import { IRequest } from '../types/IRequest';
 
 const router = Router();

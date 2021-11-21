@@ -1,15 +1,14 @@
 import 'dotenv/config';
-import { logger } from '@utils/logger';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import csurf from 'csurf';
 import express from 'express';
 import fileUpload from 'express-fileupload';
-import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { fileSizeLimit, notFound } from './middlewares';
 import apiRouter from './routes/api';
+import { logger } from './utils/logger';
 
 const server = express();
 
@@ -17,7 +16,7 @@ server.disable('x-powered-by');
 server.use(cookieParser());
 server.use(
   cors({
-    origin: [process.env.CORS_ORIGIN_URL],
+    origin: process.env.CORS_ORIGIN_URL,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'OPTIONS', 'DELETE', 'HEAD'],
   }),
