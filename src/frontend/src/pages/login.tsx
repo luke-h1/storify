@@ -9,14 +9,9 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { Formik } from 'formik';
-import { withUrqlClient } from 'next-urql';
 import InputField from '../components/InputField';
-import { useLoginMutation } from '../generated/graphql';
-import { createurqlClient } from '../utils/createUrqlClient';
-import toErrorMap from '../utils/toErrorMap';
 
 const Login = () => {
-  const [, login] = useLoginMutation();
   return (
     <Flex
       minH="100vh"
@@ -34,10 +29,7 @@ const Login = () => {
         <Formik
           initialValues={{ email: '', password: '' }}
           onSubmit={async (values, { setErrors }) => {
-            const res = await login(values);
-            if (res.data?.login.errors) {
-              setErrors(toErrorMap(res.data.login.errors));
-            }
+            // do something
           }}
         >
           {({ isSubmitting }) => (
@@ -81,4 +73,4 @@ const Login = () => {
     </Flex>
   );
 };
-export default withUrqlClient(createurqlClient, { ssr: false })(Login);
+export default Login;
