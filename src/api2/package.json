@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "prisma generate && nodemon",
+    "dev": "npx prisma generate && nodemon",
     "build": "tsc --noEmit",
     "generate": "prisma generate",
     "gen-env": "gen-env-types .env -o src/env.d.ts -e ."
