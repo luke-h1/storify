@@ -4,14 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "npx prisma generate && nodemon",
+    "dev": "npx prisma generate && npx nodemon",
     "build": "tsc --noEmit",
     "generate": "prisma generate",
-    "gen-env": "gen-env-types .env -o src/env.d.ts -e ."
+    "gen-env": "gen-env-types .env -o src/types/env.d.ts -e ."
   },
   "dependencies": {
     "@casper124578/utils": "^1.4.0",
-    "@prisma/client": "^3.3.0",
+    "@prisma/client": "^3.5.0",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "cookie-parser": "1.4.5",
@@ -28,7 +28,6 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "gen-env-types": "^1.3.0", 
     "@types/bcryptjs": "^2.4.2",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.2",
@@ -42,8 +41,9 @@
     "@types/node": "^16.11.6",
     "esbuild": "^0.13.12",
     "esbuild-register": "^3.0.0",
+    "gen-env-types": "^1.3.0",
     "nodemon": "^2.0.14",
-    "prisma": "^3.3.0",
+    "prisma": "^3.5.0",
     "ts-node": "^10.4.0",
     "tsconfig-paths": "^3.11.0",
     "typescript": "^4.4.4"

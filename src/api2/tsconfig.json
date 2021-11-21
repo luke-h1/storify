@@ -15,7 +15,7 @@
       "@lib/*": ["./src/lib/*"],
       "@utils/*": ["./src/utils/*"],
       "@schemas/*": ["./src/schemas/*"],
-      "@t/*": ["./src/interfaces/*"]
+      "@t/*": ["./src/interfaces/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
