@@ -11,8 +11,6 @@
     "noImplicitReturns": false,
     "strict": true,
     "strictNullChecks": true,
-    "experimentalDecorators": true,
-    "strictPropertyInitialization": false,
     "baseUrl": "./",
     "jsx": "preserve",
     "lib": [
@@ -29,7 +27,6 @@
   },
   "exclude": ["node_modules"],
   "paths": {
-    "@common/*": ["./src/common/*"],
     "@api/*": ["./src/api/*"],
     "@frontend/*": ["./src/frontend/*"]
   }

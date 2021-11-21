@@ -68,6 +68,11 @@ model Product {
 
   orderId String
 
+  reviews Review[] @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  reviewId String
+
+
   createdAt DateTime @default(now()) @map("created_at")
 
   updatedAt DateTime @default(now()) @map("updated_at")
@@ -87,6 +92,10 @@ model Review {
   comment String
 
   user User[] @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  products Product[] @relation(fields: [productId], references: [id])
+
+  productId String?
 
   userId String
 }
