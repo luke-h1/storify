@@ -8,7 +8,8 @@
     "dev": "npx prisma generate && cross-env NODE_ENV=development nodemon dist/main.js",
     "build": "tsc --noEmit",
     "generate": "prisma generate",
-    "gen-env": "gen-env-types .env -o src/types/env.d.ts -e ."
+    "gen-env": "gen-env-types .env -o src/types/env.d.ts -e .",
+    "format:prisma": "npx prisma format"
   },
   "dependencies": {
     "@casper124578/utils": "^1.4.0",

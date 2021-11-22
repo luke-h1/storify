@@ -98,6 +98,15 @@ model Review {
   productId String?
 
   userId String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+
+
+
+  @@map("reviews")
 }
 
 model Order {
@@ -114,5 +123,42 @@ model Order {
   user User[] @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   userId String
+
+  Address Address[]
+
+  paymentMethod String
+
+  taxPrice Int @default(0)
+
+  shippingPrice Int @default(0)
+
+  totalPrice Int @default(0)
+
+  isPaid Boolean @default(false)
+
+  paidAt Int
+
+  isDelivered Boolean @default(false)
+
+  deliveredAt Int
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+
+
+
+  @@map("orders")
+}
+
+model Address {
+  id String @id @default(uuid())
+
+  address    String
+  city       String
+  postalCode String
+  Order      Order?  @relation(fields: [orderId], references: [id])
+  orderId    String?
 
 }
