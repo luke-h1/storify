@@ -5,16 +5,20 @@
   "license": "MIT",
   "scripts": {
     "watch": "tsc -w",
-    "dev": "npx prisma generate && cross-env NODE_ENV=development nodemon dist/main.js",
+    "dev": "cross-env NODE_ENV=development nodemon dist/main.js",
     "build": "tsc --noEmit",
-    "generate": "prisma generate",
-    "gen-env": "gen-env-types .env -o src/types/env.d.ts -e .",
-    "format:prisma": "npx prisma format"
+    "gen-env": "gen-env-types .env -o src/types/env.d.ts -e ."
   },
   "dependencies": {
     "@casper124578/utils": "^1.4.0",
     "@prisma/client": "^3.5.0",
     "bcryptjs": "^2.4.3",
+    "class-transformer": "0.5.1",
+    "cross-env": "7.0.3",
+    "pg": "^8.4.0",
+    "reflect-metadata": "^0.1.13",
+    "class-validator": "^0.13.1",
+    "typeorm": "0.2.40",
     "compression": "^1.7.4",
     "cookie-parser": "1.4.5",
     "cors": "^2.8.5",

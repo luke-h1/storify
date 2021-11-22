@@ -1,9 +1,8 @@
-import { User } from '@prisma/client';
 import { compareSync } from 'bcryptjs';
 import { CookieOptions, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { prisma } from '../db/prisma';
 import * as redis from '../db/redis';
+import { User } from '../entities/User';
 import { AuthConstants } from './constants';
 
 export function createSessionToken(userId: string) {
@@ -23,30 +22,15 @@ export function setCookie(token: string, res: Response) {
 }
 
 export async function validateUserPassword(userId: string, password: string) {
-  const data = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      password: true,
-    },
-  });
-  if (!data) {
+  const user = await User.findOne({ where: { id: userId } });
+  if (!user) {
     return false;
   }
-  return compareSync(password, data.password);
+  return compareSync(password, user.password);
 }
 
 export async function getUser(userId: string) {
-  return prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      id: true,
-      createdAt: true,
-      updatedAt: true,
-      name: true,
-      email: true,
-      products: { select: { name: true, id: true } },
-    },
-  });
+  return User.findOne({ where: { id: userId } });
 }
 
 /**

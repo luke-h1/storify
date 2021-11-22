@@ -1,8 +1,9 @@
 import { validateSchema } from '@casper124578/utils';
 import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 import { Response, Router } from 'express';
-import { prisma } from '../db/prisma';
+import { getConnection } from 'typeorm';
 import * as redis from '../db/redis';
+import { User } from '../entities/User';
 import { withAuth } from '../hooks/withAuth';
 import {
   createSessionToken,
@@ -17,13 +18,14 @@ import { IRequest } from '../types/IRequest';
 const router = Router();
 
 router.post('/register', async (req, res) => {
-  const { email, name, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const [error] = await validateSchema(authenticateSchema(true), {
+    firstName,
+    lastName,
     email,
-    name,
     password,
   });
 
@@ -33,7 +35,7 @@ router.post('/register', async (req, res) => {
       status: 'error',
     });
   }
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await User.find({ where: { email } });
 
   if (user) {
     return res.status(404).json({
@@ -44,13 +46,32 @@ router.post('/register', async (req, res) => {
 
   const hash = hashSync(password, genSaltSync(15));
 
-  const createdUser = await prisma.user.create({
-    data: {
-      name,
-      email,
-      password: hash,
-    },
-  });
+  let createdUser;
+  try {
+    const result = await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(User)
+      .values({
+        firstName,
+        lastName,
+        email,
+        password: hash,
+        isAdmin: false,
+      })
+      .returning('*')
+      .execute();
+
+    // eslint-disable-next-line prefer-destructuring
+    createdUser = result.raw[0];
+  } catch (e) {
+    if (e.code === '23505') {
+      res.status(400).json({
+        message: 'user already exists',
+        status: 'error',
+      });
+    }
+  }
 
   const token = createSessionToken(createdUser.id);
   setCookie(token, res);
@@ -73,11 +94,7 @@ router.post('/login', async (req, res) => {
       status: 'error',
     });
   }
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
+  const user = await User.findOne({ where: { email } });
 
   if (!user) {
     return res.status(400).json({
@@ -133,7 +150,8 @@ router.put('/user', withAuth, async (req: IRequest, res: Response) => {
   }
 
   const validPassword = await validateUserPassword(
-    req.userId,
+    // bug here?
+    req.body.userId,
     req.body.password,
   );
 
@@ -144,24 +162,20 @@ router.put('/user', withAuth, async (req: IRequest, res: Response) => {
     });
   }
 
-  const user = await prisma.user.update({
-    where: {
-      id: req.userId,
-    },
-    data: {
-      email: req.body.email,
-      name: req.body.name,
-    },
-    select: {
-      id: true,
-      createdAt: true,
-      name: true,
-      email: true,
-      products: { select: { name: true, id: true } },
-    },
-  });
-  await redis.set(req.userId, JSON.stringify(user));
-  return res.json({ user });
+  const result = await getConnection()
+    .createQueryBuilder()
+    .insert()
+    .into(User)
+    .values({
+      firstName: body.firstName,
+      lastName: body.lastName,
+    })
+    .returning('*')
+    .execute();
+  const updatedUser = result.raw[0];
+
+  await redis.set(req.userId, JSON.stringify(updatedUser));
+  return res.json({ updatedUser });
 });
 
 router.post('/logout', withAuth, async (req: IRequest, res: Response) => {
