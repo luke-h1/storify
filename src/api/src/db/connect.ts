@@ -1,21 +1,14 @@
-/* eslint-disable no-console */
-import mongoose from 'mongoose';
+import { join } from 'path';
+import { createConnection } from 'typeorm';
 
-const connect = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      autoIndex: true,
-      maxPoolSize: 50,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-      family: 4,
-    });
-    console.log(`Connected to database ${conn.connection.host}`);
+const connect = () =>
+  createConnection({
+    type: 'postgres',
+    url: process.env.DATABASE_URL,
+    logging: true,
+    migrations: [join(__dirname, './migrations/*')],
+    entities: [join(__dirname, './entities/*')],
+    synchronize: true,
+  });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (e: any) {
-    console.error(e.message);
-    process.exit(1);
-  }
-};
 export default connect;

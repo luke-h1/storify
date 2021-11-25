@@ -65,6 +65,10 @@
         }
       }
     ],
+    "import/no-cycle": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "max-classes-per-file": "off",
+    "class-methods-use-this": "off",
     "import/prefer-default-export": "off",
     "no-unsafe-finally": "off",
     "no-underscore-dangle": [
