@@ -8,9 +8,12 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import loginSchema from '@storify/common/src/schemas/loginSchema';
 import { Formik, Form } from 'formik';
+import { withUrqlClient } from 'next-urql';
 import InputField from '../../components/InputField';
 import { useLoginMutation } from '../../generated/graphql';
+import { createurqlClient } from '../../utils/createUrqlClient';
 import toErrorMap from '../../utils/toErrorMap';
 
 const Login = () => {
@@ -37,6 +40,7 @@ const Login = () => {
               setErrors(toErrorMap(res.data.login.errors));
             }
           }}
+          validationSchema={loginSchema}
         >
           {({ isSubmitting }) => (
             <Form>
@@ -81,4 +85,4 @@ const Login = () => {
     </Flex>
   );
 };
-export default Login;
+export default withUrqlClient(createurqlClient, { ssr: false })(Login);
