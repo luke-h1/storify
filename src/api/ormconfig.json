@@ -1,0 +1,11 @@
+
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "storify",
+  "password": "storify",
+  "database": "storify",
+  "entities": ["dist/entities/*.js"],
+  "migrations": ["dist/migrations/*.js"]
+}

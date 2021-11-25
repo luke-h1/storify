@@ -49,8 +49,6 @@ const main = async () => {
       resave: false,
     }),
   );
-  // health check endpoint
-  // https://API_URL/.well-known/apollo/server-health
 
   const apolloServer = new ApolloServer({
     debug: !isProd,

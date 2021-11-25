@@ -10,7 +10,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Review } from './Review';
 import { User } from './User';
 
 @ObjectType()
@@ -27,10 +26,6 @@ export class Product extends BaseEntity {
   @ManyToOne(() => User, u => u.products)
   @JoinColumn({ name: 'creatorId' })
   creator: User;
-
-  @Field(() => [Review])
-  @Column()
-  reviews: Review[];
 
   @Field(() => String)
   @Column()

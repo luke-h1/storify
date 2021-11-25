@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import bcrypt from 'bcryptjs';
-import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import {
   Arg,
   Ctx,
@@ -18,7 +17,6 @@ import { User } from '../entities/User';
 import { UserRegisterInput } from '../inputs/user/UserRegisterInput';
 import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from '../shared/constants';
 import { MyContext } from '../types/MyContext';
-import { upload } from '../utils/s3';
 import { validateRegister } from '../validations/register';
 
 @ObjectType()
@@ -160,8 +158,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg('options') options: UserRegisterInput,
-    @Arg('image', () => GraphQLUpload, { nullable: true }) image: FileUpload,
-    @Ctx() { req, res }: MyContext,
+    @Ctx() { req }: MyContext,
   ): Promise<UserResponse> {
     const errors = validateRegister(options);
     if (errors) {
@@ -169,26 +166,8 @@ export class UserResolver {
     }
     const hashedPassword = await bcrypt.hash(options.password, 12);
     let user;
-    const singleUpload = upload.single('image');
 
     try {
-      const s3img = singleUpload(req, res, function (e) {
-        if (e) {
-          return {
-            errors: [
-              {
-                field: 'image',
-                message: `Problem uploading image ${e}`,
-              },
-            ],
-          };
-        }
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const uploadedImage = req?.file?.location;
-        console.log(uploadedImage);
-      });
-
       const result = await getConnection()
         .createQueryBuilder()
         .insert()
@@ -196,11 +175,8 @@ export class UserResolver {
         .values({
           firstName: options.firstName,
           lastName: options.lastName,
-          bio: options.bio,
           email: options.email,
           password: hashedPassword,
-          image: '',
-          s3ImageFileName: '',
         })
         .returning('*')
         .execute();
@@ -218,7 +194,6 @@ export class UserResolver {
           ],
         };
       }
-      console.error(e);
     }
     req.session.userId = user.id;
     return {
@@ -263,21 +238,26 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   logout(@Ctx() { req, res }: MyContext) {
-    // eslint-disable-next-line consistent-return
-    return new Promise((resolve) => req.session.destroy((e: unknown) => {
-      res.clearCookie(COOKIE_NAME);
-      if (e) {
-        resolve(false);
-        return {
-          errors: [
-            {
-              field: '',
-              message: `Problem logging out ${e}`
-            }
-          ]
+    // eslint-disable-next-line no-promise-executor-return
+    return new Promise(resolve =>
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      // eslint-disable-next-line consistent-return
+      req.session.destroy((e: never) => {
+        res.clearCookie(COOKIE_NAME);
+        if (e) {
+          resolve(false);
+          return {
+            errors: [
+              {
+                field: '',
+                message: `Problem logging out ${e}`,
+              },
+            ],
+          };
         }
-      }
-      resolve(true);
-    }));
+        resolve(true);
+      }),
+    );
   }
 }

@@ -17,29 +17,21 @@ export const validateRegister = (options: UserRegisterInput) => {
       },
     ];
   }
-  if (!options.bio) {
-    return [
-      {
-        field: 'bio',
-        message: "Bio is a required field"
-      }
-    ]
-  }
   if (!options.firstName) {
     return [
       {
         field: 'firstName',
-        message: "First name is a required field"
-      }
-    ]
+        message: 'First name is a required field',
+      },
+    ];
   }
   if (!options.lastName) {
     return [
       {
         field: 'lastName',
-        message: "Last name is a required field"
-      }
-    ]
+        message: 'Last name is a required field',
+      },
+    ];
   }
 
   return null;

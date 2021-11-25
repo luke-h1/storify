@@ -1,5 +1,5 @@
-mutation Register($options: UserRegisterInput!, $image: Upload!) {
-  register(options: $options, image: $image) {
+mutation Register($options: UserRegisterInput!) {
+  register(options: $options) {
     ...UserResponseFragment
   }
 }

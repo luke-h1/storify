@@ -20,8 +20,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
 };
 
 export type FieldError = {
@@ -54,7 +52,6 @@ export type MutationLoginArgs = {
 };
 
 export type MutationRegisterArgs = {
-  image?: InputMaybe<Scalars['Upload']>;
   options: UserRegisterInput;
 };
 
@@ -70,14 +67,13 @@ export type User = {
   firstName: Scalars['String'];
   fullName: Scalars['String'];
   id: Scalars['Int'];
-  image: Scalars['String'];
   isAdmin: Scalars['String'];
   lastName: Scalars['String'];
+  role: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
 export type UserRegisterInput = {
-  bio: Scalars['String'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -137,7 +133,6 @@ export type LogoutMutation = { __typename?: 'Mutation'; logout: boolean };
 
 export type RegisterMutationVariables = Exact<{
   options: UserRegisterInput;
-  image: Scalars['Upload'];
 }>;
 
 export type RegisterMutation = {
@@ -210,8 +205,8 @@ export function useLogoutMutation() {
   );
 }
 export const RegisterDocument = gql`
-  mutation Register($options: UserRegisterInput!, $image: Upload!) {
-    register(options: $options, image: $image) {
+  mutation Register($options: UserRegisterInput!) {
+    register(options: $options) {
       ...UserResponseFragment
     }
   }

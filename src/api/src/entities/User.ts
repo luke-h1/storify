@@ -17,7 +17,7 @@ import { Review } from './Review';
 export class User extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
-  id!: number;
+  id: number;
 
   @Field()
   @Column()
@@ -34,9 +34,6 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
-  @Column('text', { nullable: true })
-  bio: string | null;
-
   @OneToMany(() => Product, p => p.creator)
   products: Product[];
 
@@ -44,15 +41,12 @@ export class User extends BaseEntity {
   reviews: Review[];
 
   @Field(() => String)
-  @Column()
-  image: string;
-
-  @Column()
-  s3ImageFileName: string;
+  @Column({ default: false })
+  isAdmin: Boolean;
 
   @Field(() => String)
-  @Column()
-  isAdmin: Boolean;
+  @Column({ default: 'user' })
+  role: 'user' | 'admin' | 'seller';
 
   @Field(() => String)
   @CreateDateColumn({ type: 'timestamp with time zone' })

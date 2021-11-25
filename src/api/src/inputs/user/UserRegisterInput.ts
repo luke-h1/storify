@@ -1,6 +1,5 @@
 import { InputType, Field } from 'type-graphql';
-import { UsernamePasswordInput } from "./UsernamePasswordInput";
-
+import { UsernamePasswordInput } from './UsernamePasswordInput';
 
 @InputType()
 export class UserRegisterInput extends UsernamePasswordInput {
@@ -9,7 +8,4 @@ export class UserRegisterInput extends UsernamePasswordInput {
 
   @Field()
   lastName: string;
-  
-  @Field()
-  bio: string;
 }

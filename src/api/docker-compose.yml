@@ -21,5 +21,7 @@ services:
     command: --port 6379
     expose:
       - "6379"
+    volumes: 
+      - .dbdata:/var/lib/redis 
     ports: 
       - 6379:6379

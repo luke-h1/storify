@@ -7,3 +7,4 @@ src/api/.env
 src/api/data/images/
 .env
 .DS_Store
+.data
