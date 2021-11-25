@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-console */
 import bcrypt from 'bcryptjs';
 import {
@@ -238,11 +239,9 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   logout(@Ctx() { req, res }: MyContext) {
-    // eslint-disable-next-line no-promise-executor-return
     return new Promise(resolve =>
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      // eslint-disable-next-line consistent-return
       req.session.destroy((e: never) => {
         res.clearCookie(COOKIE_NAME);
         if (e) {

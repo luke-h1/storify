@@ -1,11 +1,8 @@
+/* eslint-ignore */
 import 'dotenv-safe/config';
 import { S3 } from 'aws-sdk';
-import { ReadStream } from 'fs';
-import multer from 'multer';
-import multerS3 from 'multer-s3';
-import { v4 } from 'uuid';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// import multer from 'multer';
+// import multerS3 from 'multer-s3';
 
 export type S3Object = {
   Etag: string;
@@ -39,27 +36,27 @@ export const S3DefaultParams = {
   ],
 };
 
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-    cb(null, true);
-  } else {
-    cb(new Error('Invalid file type, only JPEG and PNG is allowed!'), false);
-  }
-};
+// const fileFilter = (_req, file, cb) => {
+//   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+//     cb(null, true);
+//   } else {
+//     cb(new Error('Invalid file type, only JPEG and PNG is allowed!'), false);
+//   }
+// };
 
-export const upload = multer({
-  fileFilter,
-  storage: multerS3({
-    acl: 'public-read',
-    s3: Bucket,
-    bucket: 'bwm-ng-dev',
-    metadata(req, file, cb) {
-      cb(null, { fieldName: 'TESTING_METADATA' });
-    },
-    key(req, file, cb) {
-      cb(null, Date.now().toString());
-    },
-  }),
-});
+// export const upload = multer({
+//   fileFilter,
+//   storage: multerS3({
+//     acl: 'public-read',
+//     s3: Bucket,
+//     bucket: 'bwm-ng-dev',
+//     metadata(_req, _file, cb) {
+//       cb(null, { fieldName: 'TESTING_METADATA' });
+//     },
+//     key(_req, _file, cb) {
+//       cb(null, Date.now().toString());
+//     },
+//   }),
+// });
 
-module.exports = upload;
+// module.exports = upload;
