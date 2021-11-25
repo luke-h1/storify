@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const flowRight = require('lodash/fp/flowRight');
+const withTranspileModules = require('next-transpile-modules');
+
+const nextConfig = {
   reactStrictMode: true,
-}
+};
+
+module.exports = flowRight(withTranspileModules(['@storify/common']))(
+  nextConfig,
+);
