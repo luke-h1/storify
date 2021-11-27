@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import {
   Box,
   Flex,
@@ -20,29 +20,40 @@ import {
 } from '@chakra-ui/react';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
-import { MeQuery, useLogoutMutation, useMeQuery } from '../generated/graphql';
+import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { createurqlClient } from '../utils/createUrqlClient';
 import { isServer } from '../utils/isServer';
 
-const unauthenticatedLinks = ['Products', 'Categories'];
+const unauthenticatedLinks: { id: number; text: string; slug: string }[] = [
+  {
+    id: 1,
+    text: 'Products',
+    slug: '/products',
+  },
+  {
+    id: 2,
+    text: 'About',
+    slug: '/about',
+  },
+];
 
-const authenticatedLinks = ['Dashboard', 'my products', 'products', 'profile'];
-
-const NavLink = ({ children }: { children: ReactNode }) => (
-  <ChakraLink
-    px={2}
-    py={1}
-    rounded="md"
-    _hover={{
-      textDecoration: 'none',
-      bg: useColorModeValue('gray.200', 'gray.700'),
-    }}
-    href="#"
-  >
-    {children}
-  </ChakraLink>
-);
+const authenticatedLinks: { id: number; text: string; slug: string }[] = [
+  {
+    id: 1,
+    text: 'Dashboard',
+    slug: '/dashboard',
+  },
+  {
+    id: 2,
+    text: 'Products',
+    slug: '/products',
+  },
+  {
+    id: 3,
+    text: 'Profile',
+    slug: '/profile',
+  },
+];
 
 const Nav = () => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
@@ -71,10 +82,34 @@ const Nav = () => {
           <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>
             {data?.me
               ? authenticatedLinks.map(link => (
-                  <NavLink key={link}>{link}</NavLink>
+                  <ChakraLink
+                    key={link.id}
+                    px={2}
+                    py={1}
+                    rounded="md"
+                    _hover={{
+                      textDecoration: 'none',
+                      bg: useColorModeValue('gray.200', 'gray.700'),
+                    }}
+                    href={link.slug}
+                  >
+                    {link.text}
+                  </ChakraLink>
                 ))
               : unauthenticatedLinks.map(link => (
-                  <NavLink key={link}>{link}</NavLink>
+                  <ChakraLink
+                    key={link.id}
+                    px={2}
+                    py={1}
+                    rounded="md"
+                    _hover={{
+                      textDecoration: 'none',
+                      bg: useColorModeValue('gray.200', 'gray.700'),
+                    }}
+                    href={link.slug}
+                  >
+                    {link.text}
+                  </ChakraLink>
                 ))}
           </HStack>
         </HStack>
@@ -97,28 +132,28 @@ const Nav = () => {
             </Button>
           )}
           {!data?.me && (
-            <Button
-              onClick={() => router.push('/auth/login')}
-              variant="solid"
-              colorScheme="teal"
-              size="sm"
-              type="button"
-              mr={4}
-            >
-              Login
-            </Button>
-          )}
-          {!data?.me && (
-            <Button
-              onClick={() => router.push('/auth/register')}
-              variant="solid"
-              colorScheme="blue"
-              size="sm"
-              type="button"
-              mr={4}
-            >
-              Register
-            </Button>
+            <>
+              <Button
+                onClick={() => router.push('/auth/login')}
+                variant="solid"
+                colorScheme="teal"
+                size="sm"
+                type="button"
+                mr={4}
+              >
+                Login
+              </Button>
+              <Button
+                onClick={() => router.push('/auth/register')}
+                variant="solid"
+                colorScheme="blue"
+                size="sm"
+                type="button"
+                mr={4}
+              >
+                Register
+              </Button>
+            </>
           )}
           <Menu>
             <MenuButton
@@ -146,10 +181,34 @@ const Nav = () => {
           <Stack as="nav" spacing={4}>
             {data?.me
               ? authenticatedLinks.map(link => (
-                  <NavLink key={link}>{link}</NavLink>
+                  <ChakraLink
+                    key={link.id}
+                    px={2}
+                    py={1}
+                    rounded="md"
+                    _hover={{
+                      textDecoration: 'none',
+                      bg: useColorModeValue('gray.200', 'gray.700'),
+                    }}
+                    href={link.slug}
+                  >
+                    {link.text}
+                  </ChakraLink>
                 ))
               : unauthenticatedLinks.map(link => (
-                  <NavLink key={link}>{link}</NavLink>
+                  <ChakraLink
+                    key={link.id}
+                    px={2}
+                    py={1}
+                    rounded="md"
+                    _hover={{
+                      textDecoration: 'none',
+                      bg: useColorModeValue('gray.200', 'gray.700'),
+                    }}
+                    href={link.slug}
+                  >
+                    {link.text}
+                  </ChakraLink>
                 ))}
           </Stack>
         </Box>
