@@ -108,6 +108,18 @@ const Nav = () => {
               Login
             </Button>
           )}
+          {!data?.me && (
+            <Button
+              onClick={() => router.push('/auth/register')}
+              variant="solid"
+              colorScheme="blue"
+              size="sm"
+              type="button"
+              mr={4}
+            >
+              Register
+            </Button>
+          )}
           <Menu>
             <MenuButton
               as={Button}

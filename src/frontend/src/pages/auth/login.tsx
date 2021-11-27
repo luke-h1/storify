@@ -35,6 +35,7 @@ const Login = () => {
             to enjoy all of our cool <Link color="blue.400">features</Link> ✌️
           </Text>
         </Stack>
+
         <Formik
           initialValues={{ email: '', password: '' }}
           onSubmit={async (values, { setErrors }) => {

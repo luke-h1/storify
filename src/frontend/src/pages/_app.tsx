@@ -8,12 +8,12 @@ const toastStyles: React.CSSProperties = {
   maxWidth: '95%',
   padding: '0.5rem 0.8rem',
   fontSize: '1rem',
-  zIndex: 111,
+  marginTop: '5rem',
   background: 'var(--modal-bg)',
   color: 'var(--dark)',
 };
 
-function MyApp({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <ChakraProvider>
       <Toaster
@@ -29,5 +29,5 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Component {...pageProps} />
     </ChakraProvider>
   );
-}
-export default MyApp;
+};
+export default App;
