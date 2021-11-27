@@ -18,7 +18,7 @@
     "migrate:up": "typeorm migration:run"
   },
   "dependencies": {
-    "cloudinary": "1.23.0",
+    "cloudinary": "1.27.1",
     "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^27.0.1",
     "@types/multer-s3": "2.7.11",
