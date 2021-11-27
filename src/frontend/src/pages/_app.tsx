@@ -8,7 +8,7 @@ const toastStyles: React.CSSProperties = {
   maxWidth: '95%',
   padding: '0.5rem 0.8rem',
   fontSize: '1rem',
-
+  zIndex: 111,
   background: 'var(--modal-bg)',
   color: 'var(--dark)',
 };
@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           },
         }}
       />
-      <Nav />
+      <Nav {...pageProps} />
       <Component {...pageProps} />
     </ChakraProvider>
   );
