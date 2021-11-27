@@ -11,12 +11,15 @@ import {
 import loginSchema from '@storify/common/src/schemas/loginSchema';
 import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
+import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import InputField from '../../components/InputField';
 import { useLoginMutation } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import toErrorMap from '../../utils/toErrorMap';
 
 const Login = () => {
+  const router = useRouter();
   const [, login] = useLoginMutation();
   return (
     <Flex
@@ -39,6 +42,11 @@ const Login = () => {
             if (res.data?.login.errors) {
               setErrors(toErrorMap(res.data.login.errors));
             }
+            toast.success('Logged in!');
+
+            setTimeout(() => {
+              router.push('/');
+            }, 700);
           }}
           validationSchema={loginSchema}
         >
