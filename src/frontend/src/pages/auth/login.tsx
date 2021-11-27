@@ -62,7 +62,11 @@ const Login = () => {
               >
                 <Stack spacing={4}>
                   <InputField label="email" name="email" />
-                  <InputField label="password" name="password" />
+                  <InputField
+                    label="password"
+                    name="password"
+                    type="password"
+                  />
 
                   <Stack spacing={10}>
                     <Stack

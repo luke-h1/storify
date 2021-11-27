@@ -78,7 +78,11 @@ const Register = () => {
                   <InputField label="Last Name" name="lastName" />
 
                   <InputField label="email" name="email" />
-                  <InputField label="password" name="password" />
+                  <InputField
+                    label="password"
+                    name="password"
+                    type="password"
+                  />
 
                   <Stack spacing={10}>
                     <Stack
