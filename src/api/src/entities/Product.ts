@@ -33,6 +33,10 @@ export class Product extends BaseEntity {
 
   @Field(() => String)
   @Column()
+  image: string;
+
+  @Field(() => String)
+  @Column()
   brand: string;
 
   @Field(() => String)
