@@ -10,7 +10,6 @@ import helmet from 'helmet';
 import connect from './db/connect';
 import { fileSizeLimit, notFound } from './middlewares';
 import apiRouter from './routes/api';
-import { logger } from './utils/logger';
 
 const main = async () => {
   const server = express();
@@ -39,10 +38,7 @@ const main = async () => {
   server.use(notFound);
 
   server.listen(process.env.PORT, () => {
-    logger.log(
-      'API',
-      `Server listening on http://localhost:${process.env.PORT}`,
-    );
+    console.log(`Server listening on http://localhost:${process.env.PORT}`);
   });
 };
 // eslint-disable-next-line no-console

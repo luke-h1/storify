@@ -9,6 +9,16 @@ import { Provider as ReduxProvider } from 'react-redux';
 import '@src/styles/nprogress.scss';
 import { useStore } from '../store/store';
 
+const toastStyles: React.CSSProperties = {
+  minWidth: '300px',
+  maxWidth: '95%',
+  padding: '0.5rem 0.8rem',
+  fontSize: '1rem',
+
+  background: 'var(--modal-bg)',
+  color: 'var(--dark)',
+};
+
 const App: NextPage<AppProps> = ({ Component, pageProps }) => {
   const store = useStore(pageProps?.initialReduxState);
 
@@ -32,6 +42,16 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
 
   return (
     <ChakraProvider>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: toastStyles,
+          error: {
+            style: { fontWeight: 500 },
+          },
+        }}
+      />
+
       <ReduxProvider store={store}>
         <Component {...pageProps} />
       </ReduxProvider>

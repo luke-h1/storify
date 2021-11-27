@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { AppProps } from 'next/app';
 import { useMemo } from 'react';
 import { applyMiddleware, createStore, Store } from 'redux';
@@ -16,8 +15,8 @@ function initStore(initState: Record<string, unknown>): Store {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const initializeStore = (preloadState: any = {}) => {
+  // eslint-disable-next-line no-underscore-dangle
   let _store = store ?? initStore(preloadState);
 
   if (preloadState && store) {
@@ -25,14 +24,19 @@ export const initializeStore = (preloadState: any = {}) => {
       ...store.getState(),
       ...preloadState,
     });
+
     store = undefined;
   }
+
   if (typeof window === 'undefined') return _store;
   if (!store) store = _store;
+
   return _store;
 };
+
 export function useStore(initState: AppProps) {
   // eslint-disable-next-line no-shadow
   const store = useMemo(() => initializeStore(initState), [initState]);
+
   return store;
 }

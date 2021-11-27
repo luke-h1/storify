@@ -1,5 +1,5 @@
 import { validateSchema } from '@casper124578/utils';
-import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
+import bcrypt, { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 import { Response, Router } from 'express';
 import { getConnection } from 'typeorm';
 import * as redis from '../db/redis';
@@ -20,31 +20,7 @@ const router = Router();
 router.post('/register', async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const [error] = await validateSchema(authenticateSchema(true), {
-    firstName,
-    lastName,
-    email,
-    password,
-  });
-
-  if (error) {
-    return res.status(400).json({
-      error: error.message,
-      status: 'error',
-    });
-  }
-  const user = await User.find({ where: { email } });
-
-  if (user) {
-    return res.status(404).json({
-      error: 'Email already in use',
-      status: 'error',
-    });
-  }
-
-  const hash = hashSync(password, genSaltSync(15));
+  const hashedPassword = await bcrypt.hash(password, 12);
 
   let createdUser;
   try {
@@ -56,7 +32,7 @@ router.post('/register', async (req, res) => {
         firstName,
         lastName,
         email,
-        password: hash,
+        password: hashedPassword,
         isAdmin: false,
       })
       .returning('*')
