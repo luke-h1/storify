@@ -1,6 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
+import Nav from '../components/Nav';
 
 const toastStyles: React.CSSProperties = {
   minWidth: '300px',
@@ -24,6 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           },
         }}
       />
+      <Nav />
       <Component {...pageProps} />
     </ChakraProvider>
   );
