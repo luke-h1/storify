@@ -16,6 +16,7 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
+  Text,
 } from '@chakra-ui/react';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
@@ -78,18 +79,7 @@ const Nav = () => {
           </HStack>
         </HStack>
         <Flex alignItems="center">
-          {data?.me && (
-            <Button
-              variant="solid"
-              colorScheme="teal"
-              size="sm"
-              type="button"
-              mr={4}
-              leftIcon={<AddIcon />}
-            >
-              {data?.me.email}
-            </Button>
-          )}
+          {data?.me && <Text mr={5}>Hello {data?.me.firstName} 👋</Text>}
           {data?.me && (
             <Button
               onClick={async () => {

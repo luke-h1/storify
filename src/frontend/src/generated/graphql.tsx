@@ -96,6 +96,7 @@ export type UserFragmentFragment = {
   __typename?: 'User';
   id: number;
   email: string;
+  firstName: string;
 };
 
 export type UserResponseFragmentFragment = {
@@ -104,7 +105,10 @@ export type UserResponseFragmentFragment = {
     | Array<{ __typename?: 'FieldError'; field: string; message: string }>
     | null
     | undefined;
-  user?: { __typename?: 'User'; id: number; email: string } | null | undefined;
+  user?:
+    | { __typename?: 'User'; id: number; email: string; firstName: string }
+    | null
+    | undefined;
 };
 
 export type LoginMutationVariables = Exact<{
@@ -121,7 +125,7 @@ export type LoginMutation = {
       | null
       | undefined;
     user?:
-      | { __typename?: 'User'; id: number; email: string }
+      | { __typename?: 'User'; id: number; email: string; firstName: string }
       | null
       | undefined;
   };
@@ -144,7 +148,7 @@ export type RegisterMutation = {
       | null
       | undefined;
     user?:
-      | { __typename?: 'User'; id: number; email: string }
+      | { __typename?: 'User'; id: number; email: string; firstName: string }
       | null
       | undefined;
   };
@@ -154,7 +158,10 @@ export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
   __typename?: 'Query';
-  me?: { __typename?: 'User'; id: number; email: string } | null | undefined;
+  me?:
+    | { __typename?: 'User'; id: number; email: string; firstName: string }
+    | null
+    | undefined;
 };
 
 export const ErrorFragmentDoc = gql`
@@ -167,6 +174,7 @@ export const UserFragmentFragmentDoc = gql`
   fragment UserFragment on User {
     id
     email
+    firstName
   }
 `;
 export const UserResponseFragmentFragmentDoc = gql`
