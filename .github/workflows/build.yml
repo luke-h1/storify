@@ -40,3 +40,6 @@ jobs:
 
       - name: build common
         run: yarn workspace @storify/common build 
+
+      - name: build frontend
+        run: yarn workspace @storify/frontend build 
