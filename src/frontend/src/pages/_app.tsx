@@ -2,6 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
 import Nav from '../components/Nav';
+import Wrapper from '../components/Wrapper';
 
 const toastStyles: React.CSSProperties = {
   minWidth: '300px',
@@ -9,8 +10,8 @@ const toastStyles: React.CSSProperties = {
   padding: '0.5rem 0.8rem',
   fontSize: '1rem',
   marginTop: '5rem',
-  background: 'var(--modal-bg)',
-  color: 'var(--dark)',
+  background: '#f2f2f2',
+  color: '#222222',
 };
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -26,7 +27,9 @@ const App = ({ Component, pageProps }: AppProps) => {
         }}
       />
       <Nav {...pageProps} />
-      <Component {...pageProps} />
+      <Wrapper>
+        <Component {...pageProps} />
+      </Wrapper>
     </ChakraProvider>
   );
 };
