@@ -10,13 +10,16 @@ import {
 } from '@chakra-ui/react';
 import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
+import { useRouter } from 'next/router';
 import React from 'react';
+import { toast } from 'react-hot-toast';
 import InputField from '../../components/InputField';
 import { useRegisterMutation } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import toErrorMap from '../../utils/toErrorMap';
 
 const Register = () => {
+  const router = useRouter();
   const [, register] = useRegisterMutation();
   return (
     <Flex
@@ -48,12 +51,19 @@ const Register = () => {
                 password: values.password,
               },
             });
+
             if (res.data?.register.errors) {
               setErrors(toErrorMap(res.data.register.errors));
             }
+
+            toast.success('Succesfully registered!');
+
+            setTimeout(() => {
+              router.push('/');
+            }, 700);
           }}
         >
-          {({ isSubmitting, setFieldValue }) => (
+          {({ isSubmitting }) => (
             <Form>
               <Box
                 rounded="lg"

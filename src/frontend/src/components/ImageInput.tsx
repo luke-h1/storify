@@ -11,18 +11,16 @@ interface Props {
 
 const ImageInput = ({ setFieldValue }: Props) => {
   return (
-    <>
-      <Input
-        placeholder="Image"
-        type="file"
-        accept="image/*"
-        onChange={({ target: { validity, files } }) => {
-          if (validity.valid && files) {
-            setFieldValue('image', files[0]);
-          }
-        }}
-      />
-    </>
+    <Input
+      placeholder="Image"
+      type="file"
+      accept="image/*"
+      onChange={({ target: { validity, files } }) => {
+        if (validity.valid && files) {
+          setFieldValue('image', files[0]);
+        }
+      }}
+    />
   );
 };
 
