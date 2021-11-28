@@ -1,1 +1,1 @@
-declare module 'cloudinary-react';
+declare module 'cloudinary';
