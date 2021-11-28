@@ -37,8 +37,8 @@ export type ImageSignature = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
-  createImageSignature: ImageSignature;
   createProduct: Product;
+  createSignature: ImageSignature;
   deleteProduct: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
@@ -174,6 +174,17 @@ export type CreateProductMutation = {
     brand: string;
     category: string;
     descriptionSnippet: string;
+  };
+};
+
+export type CreateSignatureMutationVariables = Exact<{ [key: string]: never }>;
+
+export type CreateSignatureMutation = {
+  __typename?: 'Mutation';
+  createSignature: {
+    __typename?: 'ImageSignature';
+    signature: string;
+    timestamp: number;
   };
 };
 
@@ -320,6 +331,21 @@ export function useCreateProductMutation() {
     CreateProductMutation,
     CreateProductMutationVariables
   >(CreateProductDocument);
+}
+export const CreateSignatureDocument = gql`
+  mutation CreateSignature {
+    createSignature {
+      signature
+      timestamp
+    }
+  }
+`;
+
+export function useCreateSignatureMutation() {
+  return Urql.useMutation<
+    CreateSignatureMutation,
+    CreateSignatureMutationVariables
+  >(CreateSignatureDocument);
 }
 export const DeleteProductDocument = gql`
   mutation DeleteProduct($id: Int!) {

@@ -1,6 +1,8 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
+import React from 'react';
 import { Toaster } from 'react-hot-toast';
+import Nav from '../components/Nav';
 import Wrapper from '../components/Wrapper';
 
 const toastStyles: React.CSSProperties = {
@@ -16,6 +18,7 @@ const toastStyles: React.CSSProperties = {
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <ChakraProvider>
+      <Nav pageProps={pageProps} />
       <Toaster
         position="top-right"
         toastOptions={{
@@ -25,7 +28,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           },
         }}
       />
-      <Wrapper>
+      <Wrapper variant="regular">
         <Component {...pageProps} />
       </Wrapper>
     </ChakraProvider>

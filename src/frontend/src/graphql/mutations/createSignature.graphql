@@ -1,0 +1,6 @@
+mutation CreateSignature {
+  createSignature {
+    signature
+    timestamp
+  }
+}
