@@ -28,9 +28,18 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type ImageSignature = {
+  __typename?: 'ImageSignature';
+  signature: Scalars['String'];
+  timestamp: Scalars['Int'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
+  createImageSignature: ImageSignature;
+  createProduct: Product;
+  deleteProduct: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
@@ -40,6 +49,14 @@ export type Mutation = {
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
+};
+
+export type MutationCreateProductArgs = {
+  input: ProductCreateInput;
+};
+
+export type MutationDeleteProductArgs = {
+  id: Scalars['Int'];
 };
 
 export type MutationForgotPasswordArgs = {
@@ -55,9 +72,40 @@ export type MutationRegisterArgs = {
   options: UserRegisterInput;
 };
 
+export type Product = {
+  __typename?: 'Product';
+  brand: Scalars['String'];
+  category: Scalars['String'];
+  createdAt: Scalars['String'];
+  creator: User;
+  creatorId: Scalars['Float'];
+  description: Scalars['String'];
+  descriptionSnippet: Scalars['String'];
+  id: Scalars['Int'];
+  image: Scalars['String'];
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  updatedAt: Scalars['String'];
+};
+
+export type ProductCreateInput = {
+  brand: Scalars['String'];
+  category: Scalars['String'];
+  description: Scalars['String'];
+  image: Scalars['String'];
+  name: Scalars['String'];
+  price: Scalars['Float'];
+};
+
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
+  product?: Maybe<Product>;
+  products: Array<Product>;
+};
+
+export type QueryProductArgs = {
+  id: Scalars['Int'];
 };
 
 export type User = {
@@ -109,6 +157,33 @@ export type UserResponseFragmentFragment = {
     | { __typename?: 'User'; id: number; email: string; firstName: string }
     | null
     | undefined;
+};
+
+export type CreateProductMutationVariables = Exact<{
+  input: ProductCreateInput;
+}>;
+
+export type CreateProductMutation = {
+  __typename?: 'Mutation';
+  createProduct: {
+    __typename?: 'Product';
+    id: number;
+    image: string;
+    name: string;
+    price: number;
+    brand: string;
+    category: string;
+    descriptionSnippet: string;
+  };
+};
+
+export type DeleteProductMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteProductMutation = {
+  __typename?: 'Mutation';
+  deleteProduct: boolean;
 };
 
 export type LoginMutationVariables = Exact<{
@@ -164,6 +239,43 @@ export type MeQuery = {
     | undefined;
 };
 
+export type ProductQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type ProductQuery = {
+  __typename?: 'Query';
+  product?:
+    | {
+        __typename?: 'Product';
+        id: number;
+        brand: string;
+        category: string;
+        description: string;
+        image: string;
+        price: number;
+        name: string;
+      }
+    | null
+    | undefined;
+};
+
+export type ProductsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ProductsQuery = {
+  __typename?: 'Query';
+  products: Array<{
+    __typename?: 'Product';
+    brand: string;
+    category: string;
+    descriptionSnippet: string;
+    image: string;
+    name: string;
+    price: number;
+    creator: { __typename?: 'User'; fullName: string };
+  }>;
+};
+
 export const ErrorFragmentDoc = gql`
   fragment Error on FieldError {
     field
@@ -189,6 +301,38 @@ export const UserResponseFragmentFragmentDoc = gql`
   ${ErrorFragmentDoc}
   ${UserFragmentFragmentDoc}
 `;
+export const CreateProductDocument = gql`
+  mutation CreateProduct($input: ProductCreateInput!) {
+    createProduct(input: $input) {
+      id
+      image
+      name
+      price
+      brand
+      category
+      descriptionSnippet
+    }
+  }
+`;
+
+export function useCreateProductMutation() {
+  return Urql.useMutation<
+    CreateProductMutation,
+    CreateProductMutationVariables
+  >(CreateProductDocument);
+}
+export const DeleteProductDocument = gql`
+  mutation DeleteProduct($id: Int!) {
+    deleteProduct(id: $id)
+  }
+`;
+
+export function useDeleteProductMutation() {
+  return Urql.useMutation<
+    DeleteProductMutation,
+    DeleteProductMutationVariables
+  >(DeleteProductDocument);
+}
 export const LoginDocument = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -239,4 +383,46 @@ export function useMeQuery(
   options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {},
 ) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+}
+export const ProductDocument = gql`
+  query Product($id: Int!) {
+    product(id: $id) {
+      id
+      brand
+      category
+      brand
+      description
+      image
+      price
+      name
+    }
+  }
+`;
+
+export function useProductQuery(
+  options: Omit<Urql.UseQueryArgs<ProductQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<ProductQuery>({ query: ProductDocument, ...options });
+}
+export const ProductsDocument = gql`
+  query Products {
+    products {
+      brand
+      category
+      brand
+      descriptionSnippet
+      image
+      name
+      price
+      creator {
+        fullName
+      }
+    }
+  }
+`;
+
+export function useProductsQuery(
+  options: Omit<Urql.UseQueryArgs<ProductsQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<ProductsQuery>({ query: ProductsDocument, ...options });
 }

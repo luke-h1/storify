@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import 'reflect-metadata';
+import { ApolloServerPluginInlineTrace } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import compression from 'compression';
 import connectRedis from 'connect-redis';
@@ -51,6 +52,7 @@ const main = async () => {
   );
 
   const apolloServer = new ApolloServer({
+    plugins: [ApolloServerPluginInlineTrace()],
     debug: !isProd,
     schema: await createSchema(),
     context: ({ req, res }) => ({

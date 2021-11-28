@@ -104,6 +104,15 @@ export const createurqlClient = (
                 () => ({ me: null }),
               );
             },
+            createProduct: (_result, args, cache) => {
+              invalidateAllProducts(cache);
+            },
+            deleteProduct: (_result, args, cache) => {
+              cache.invalidate({
+                __typename: 'Product',
+                id: (args as DeleteProductMutationVariables).id,
+              });
+            },
           },
         },
       }),
