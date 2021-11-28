@@ -68,7 +68,7 @@ const Nav = () => {
   }
 
   return (
-    <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+    <Box bg="#fff" px={4}>
       <Flex h={16} alignItems="center" justifyContent="space-between">
         <IconButton
           size="md"
@@ -89,7 +89,7 @@ const Nav = () => {
                     rounded="md"
                     _hover={{
                       textDecoration: 'none',
-                      bg: useColorModeValue('gray.200', 'gray.700'),
+                      bg: '#fff',
                     }}
                     href={link.slug}
                   >

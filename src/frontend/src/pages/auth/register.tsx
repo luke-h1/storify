@@ -6,7 +6,6 @@ import {
   Button,
   Heading,
   Text,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
@@ -22,12 +21,7 @@ const Register = () => {
   const router = useRouter();
   const [, register] = useRegisterMutation();
   return (
-    <Flex
-      minH="100vh"
-      align="center"
-      justify="center"
-      bg={useColorModeValue('gray.50', 'gray.800')}
-    >
+    <Flex minH="100vh" align="center" justify="center" bg="#fff">
       <Stack spacing={8} mx="auto" maxW="lg" py={12} px={6}>
         <Stack align="center">
           <Heading fontSize="4xl">Register today</Heading>
@@ -65,14 +59,7 @@ const Register = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <Box
-                rounded="lg"
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                bg={useColorModeValue('white', 'gray.700')}
-                boxShadow="lg"
-                py={8}
-                px={8}
-              >
+              <Box rounded="lg" bg="#fff" boxShadow="lg" py={8} px={8}>
                 <Stack spacing={5}>
                   <InputField label="First Name" name="firstName" />
                   <InputField label="Last Name" name="lastName" />
@@ -90,7 +77,6 @@ const Register = () => {
                       align="start"
                       justify="space-between"
                     >
-                      {/* <Checkbox>Remember me</Checkbox> */}
                       <Link color="blue.400">Already a user?</Link>
                     </Stack>
                     <Button

@@ -6,7 +6,6 @@ import {
   Button,
   Heading,
   Text,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import loginSchema from '@storify/common/src/schemas/loginSchema';
 import { Formik, Form } from 'formik';
@@ -22,12 +21,7 @@ const Login = () => {
   const router = useRouter();
   const [, login] = useLoginMutation();
   return (
-    <Flex
-      minH="100vh"
-      align="center"
-      justify="center"
-      bg={useColorModeValue('gray.50', 'gray.800')}
-    >
+    <Flex minH="100vh" align="center" justify="center" bg="#fff">
       <Stack spacing={8} mx="auto" maxW="lg" py={12} px={6}>
         <Stack align="center">
           <Heading fontSize="4xl">Sign in to your account</Heading>
@@ -54,13 +48,7 @@ const Login = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <Box
-                rounded="lg"
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                bg={useColorModeValue('white', 'gray.700')}
-                boxShadow="lg"
-                p={8}
-              >
+              <Box rounded="lg" bg="#fff" boxShadow="lg" p={8}>
                 <Stack spacing={4}>
                   <InputField label="email" name="email" />
                   <InputField
@@ -75,7 +63,6 @@ const Login = () => {
                       align="start"
                       justify="space-between"
                     >
-                      {/* <Checkbox>Remember me</Checkbox> */}
                       <Link color="blue.400">Forgot password?</Link>
                     </Stack>
                     <Button
