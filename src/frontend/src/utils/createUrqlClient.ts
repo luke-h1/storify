@@ -17,6 +17,7 @@ import {
   LoginMutation,
   RegisterMutation,
   LogoutMutation,
+  DeleteProductMutationVariables,
 } from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
