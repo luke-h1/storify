@@ -1,4 +1,3 @@
-import { isAuth } from 'src/middleware/isAuth';
 import {
   ObjectType,
   Field,
@@ -7,6 +6,7 @@ import {
   UseMiddleware,
   Mutation,
 } from 'type-graphql';
+import { isAuth } from '../middleware/isAuth';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cloudinary = require('cloudinary').v2;
 

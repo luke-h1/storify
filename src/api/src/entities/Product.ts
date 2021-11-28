@@ -49,15 +49,7 @@ export class Product extends BaseEntity {
 
   @Field(() => Number)
   @Column()
-  numReviews: number;
-
-  @Field(() => Number)
-  @Column()
   price: number;
-
-  @Field(() => Number)
-  @Column()
-  countInStock: number;
 
   @Field(() => String)
   @CreateDateColumn()
