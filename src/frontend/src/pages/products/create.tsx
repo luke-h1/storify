@@ -1,26 +1,15 @@
-import {
-  Flex,
-  Box,
-  Heading,
-  Stack,
-  Input,
-  Button,
-  Link,
-} from '@chakra-ui/react';
+import { Flex, Box, Heading, Stack, Input, Button } from '@chakra-ui/react';
 import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import InputField from '../../components/InputField';
-import Nav from '../../components/Nav';
 import {
   useCreateProductMutation,
   useCreateSignatureMutation,
 } from '../../generated/graphql';
 import { useIsAuth } from '../../hooks/useIsAuth';
 import { createurqlClient } from '../../utils/createUrqlClient';
-import toErrorMap from '../../utils/toErrorMap';
-import register from '../auth/register';
 
 const CreateProductPage = () => {
   const [previewImage, setPreviewImage] = useState<string>('');
