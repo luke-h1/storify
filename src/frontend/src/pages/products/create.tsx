@@ -12,6 +12,7 @@ import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import InputField from '../../components/InputField';
+import Nav from '../../components/Nav';
 import {
   useCreateProductMutation,
   useCreateSignatureMutation,
@@ -28,8 +29,8 @@ const CreateProductPage = () => {
   const [, createProduct] = useCreateProductMutation();
   const [, createSignature] = useCreateSignatureMutation();
   return (
-    <Flex minH="100vh" align="center" justify="center" bg="#fff">
-      <Stack spacing={8} mx="auto" maxW="lg" py={12} px={6}>
+    <Flex align="center" justify="center" bg="#fff">
+      <Stack spacing={3} mx="auto" maxW="lg" py={12} px={6}>
         <Stack align="center">
           <Heading fontSize="4xl">Create a new product</Heading>
         </Stack>
@@ -43,7 +44,7 @@ const CreateProductPage = () => {
             price: 0,
           }}
           onSubmit={async (values, { setErrors }) => {
-            const { data: signatureData } = await createImageSignature();
+            const { data: signatureData } = await createSignature();
             console.log(signatureData);
             // do stuff
             //   if (res.data?.register.errors) {
@@ -68,8 +69,6 @@ const CreateProductPage = () => {
                     placeholder="tech"
                   />
 
-                  <InputField label="Price" name="price" placeholder="1000" />
-
                   <Input
                     id="image"
                     name="image"
@@ -88,14 +87,14 @@ const CreateProductPage = () => {
                     }}
                   />
 
+                  <InputField label="Price" name="price" placeholder="1000" />
+
                   <Stack spacing={10}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
                       align="start"
                       justify="space-between"
-                    >
-                      <Link color="blue.400">Already a user?</Link>
-                    </Stack>
+                    />
                     <Button
                       bg="blue.400"
                       color="white"

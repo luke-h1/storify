@@ -57,18 +57,14 @@ const authenticatedLinks: { id: number; text: string; slug: string }[] = [
 
 const Nav = () => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
-  const [{ data, fetching }] = useMeQuery({
+  const [{ data }] = useMeQuery({
     pause: isServer(),
   });
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  if (fetching) {
-    return null;
-  }
-
   return (
-    <Box bg="#fff" px={4}>
+    <Box bg="#fff" px={4} mb={5}>
       <Flex h={16} alignItems="center" justifyContent="space-between">
         <IconButton
           size="md"

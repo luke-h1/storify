@@ -1,5 +1,8 @@
 import { Box } from '@chakra-ui/react';
+import { withUrqlClient } from 'next-urql';
 import React from 'react';
+import { createurqlClient } from '../utils/createUrqlClient';
+import Nav from './Nav';
 
 export type WrapperVariant = 'small' | 'regular';
 
@@ -10,10 +13,10 @@ interface WrapperProps {
 const Wrapper: React.FC<WrapperProps> = ({ children, variant = 'regular' }) => {
   return (
     <Box
+      mb={8}
       bg="#fff"
-      mt={8}
       mx="auto"
-      maxW={variant === 'regular' ? '800px' : '400px'}
+      maxW={variant === 'regular' ? '1250px' : '800px'}
       w="100%"
     >
       {children}
