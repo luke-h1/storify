@@ -29,7 +29,7 @@ const errorExchange: Exchange =
       forward(ops$),
       tap(({ error }) => {
         if (error?.message.includes('Not authenticated')) {
-          Router.replace('/login');
+          Router.push('/auth/login');
         }
         toast.error(error?.message as string);
         if (error?.networkError) {
