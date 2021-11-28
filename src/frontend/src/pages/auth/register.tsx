@@ -54,13 +54,13 @@ const Register = () => {
 
             if (res.data?.register.errors) {
               setErrors(toErrorMap(res.data.register.errors));
+            } else {
+              toast.success('Succesfully registered!');
+
+              setTimeout(() => {
+                router.push('/');
+              }, 700);
             }
-
-            toast.success('Succesfully registered!');
-
-            setTimeout(() => {
-              router.push('/');
-            }, 700);
           }}
         >
           {({ isSubmitting }) => (

@@ -1,7 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
-import Nav from '../components/Nav';
 import Wrapper from '../components/Wrapper';
 
 const toastStyles: React.CSSProperties = {
@@ -26,7 +25,6 @@ const App = ({ Component, pageProps }: AppProps) => {
           },
         }}
       />
-      <Nav {...pageProps} />
       <Wrapper>
         <Component {...pageProps} />
       </Wrapper>

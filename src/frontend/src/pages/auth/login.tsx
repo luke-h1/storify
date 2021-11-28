@@ -42,12 +42,13 @@ const Login = () => {
             const res = await login(values);
             if (res.data?.login.errors) {
               setErrors(toErrorMap(res.data.login.errors));
-            }
-            toast.success('Logged in!');
+            } else {
+              toast.success('Logged in!');
 
-            setTimeout(() => {
-              router.push('/');
-            }, 700);
+              setTimeout(() => {
+                router.push('/');
+              }, 700);
+            }
           }}
           validationSchema={loginSchema}
         >

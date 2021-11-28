@@ -14,7 +14,7 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "tsc": "tsc --noEmit",
     "gen-env": "gen-env-types .env -o src/types/env.d.ts -e .",
-    "migrate:gen": "typeorm migration:generate -n <NAME>",
+    "migrate:gen": "sh scripts/migrate.sh",
     "migrate:up": "typeorm migration:run"
   },
   "dependencies": {
