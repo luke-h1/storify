@@ -3,6 +3,7 @@ import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import ImageInput from '../../components/ImageInput';
 import InputField from '../../components/InputField';
 import {
   useCreateProductMutation,
@@ -10,6 +11,30 @@ import {
 } from '../../generated/graphql';
 import { useIsAuth } from '../../hooks/useIsAuth';
 import { createurqlClient } from '../../utils/createUrqlClient';
+
+interface IUploadImageResponse {
+  // eslint-disable-next-line camelcase
+  secure_url: string;
+}
+
+async function uploadImage(
+  image: File,
+  signature: string,
+  timestamp: number,
+): Promise<IUploadImageResponse> {
+  const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
+  const formData = new FormData();
+  formData.append('file', image);
+  formData.append('signature', signature);
+  formData.append('timestamp', timestamp.toString());
+  formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_KEY);
+
+  const response = await fetch(url, {
+    method: 'POST',
+    body: formData,
+  });
+  return response.json();
+}
 
 const CreateProductPage = () => {
   const [previewImage, setPreviewImage] = useState<string>('');
@@ -28,13 +53,31 @@ const CreateProductPage = () => {
             name: '',
             image: '',
             brand: '',
-            categoriy: '',
+            category: '',
             description: '',
             price: 0,
           }}
           onSubmit={async (values, { setErrors }) => {
             const { data: signatureData } = await createSignature();
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const { signature, timestamp } = signatureData!.createSignature;
+
+            const imageData = await uploadImage(
+              values.image as unknown as File,
+              signature,
+              timestamp,
+            );
             console.log(signatureData);
+            await createProduct({
+              input: {
+                image: imageData.secure_url,
+                brand: values.brand,
+                category: values.category,
+                description: values.description,
+                name: values.name,
+                price: values.price,
+              },
+            });
             // do stuff
             //   if (res.data?.register.errors) {
             //     setErrors(toErrorMap(res.data.register.errors));
@@ -46,7 +89,7 @@ const CreateProductPage = () => {
             //   }
           }}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, setFieldValue }) => (
             <Form>
               <Box rounded="lg" bg="#fff" boxShadow="lg" py={8} px={8}>
                 <Stack spacing={5}>
@@ -58,26 +101,24 @@ const CreateProductPage = () => {
                     placeholder="tech"
                   />
 
-                  <Input
-                    id="image"
-                    name="image"
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      if (e?.target?.files?.[0]) {
-                        const file = e.target.files[0];
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setPreviewImage(reader.result as string);
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-
                   <InputField label="Price" name="price" placeholder="1000" />
 
+                  <ImageInput
+                    name="image"
+                    label="image"
+                    setFieldValue={setFieldValue}
+                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    //   if (e?.target?.files?.[0]) {
+                    //     const file = e.target.files[0];
+                    //     setFieldValue('image', file)
+                    //     const reader = new FileReader();
+                    //     reader.onloadend = () => {
+                    //       setPreviewImage(reader.result as string);
+                    //     };
+                    //     reader.readAsDataURL(file);
+                    //   }
+                    // }}
+                  />
                   <Stack spacing={10}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
