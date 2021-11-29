@@ -33,20 +33,9 @@ const CreateProductPage = () => {
             price: 0,
           }}
           onSubmit={async (values, { setErrors }) => {
-            const { data: signatureData } = await createSignature();
-            console.log(signatureData);
-            // do stuff
-            //   if (res.data?.register.errors) {
-            //     setErrors(toErrorMap(res.data.register.errors));
-            //   } else {
-            //     toast.success('Succesfully registered!');
-            //     setTimeout(() => {
-            //       router.push('/');
-            //     }, 700);
-            //   }
           }}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, setFieldValue }) => (
             <Form>
               <Box rounded="lg" bg="#fff" boxShadow="lg" py={8} px={8}>
                 <Stack spacing={5}>
@@ -64,14 +53,9 @@ const CreateProductPage = () => {
                     type="file"
                     accept="image/*"
                     style={{ display: 'none' }}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      if (e?.target?.files?.[0]) {
-                        const file = e.target.files[0];
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setPreviewImage(reader.result as string);
-                        };
-                        reader.readAsDataURL(file);
+                    onChange={({ target: { validity, files } }) => {
+                      if (validity.valid && files) {
+                        setFieldValue('image', files[0]);
                       }
                     }}
                   />

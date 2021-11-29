@@ -36,6 +36,12 @@ export class Product extends BaseEntity {
   image: string;
 
   @Field(() => String)
+  publicId(): String {
+    const parts = this.image.split("/");
+    return parts[parts.length - 1];
+  }
+  
+  @Field(() => String)
   @Column()
   brand: string;
 
