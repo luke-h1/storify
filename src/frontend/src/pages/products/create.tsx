@@ -59,25 +59,26 @@ const CreateProductPage = () => {
           }}
           onSubmit={async (values, { setErrors }) => {
             const { data: signatureData } = await createSignature();
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const { signature, timestamp } = signatureData!.createSignature;
+            if (signatureData) {
+              const { signature, timestamp } =
+                signatureData.createImageSignature;
+              const imageData = await uploadImage(
+                values.image as unknown as File,
+                signature,
+                timestamp,
+              );
+              await createProduct({
+                input: {
+                  image: imageData.secure_url,
+                  brand: values.brand,
+                  category: values.category,
+                  description: values.description,
+                  name: values.name,
+                  price: values.price,
+                },
+              });
+            }
 
-            const imageData = await uploadImage(
-              values.image as unknown as File,
-              signature,
-              timestamp,
-            );
-            console.log(signatureData);
-            await createProduct({
-              input: {
-                image: imageData.secure_url,
-                brand: values.brand,
-                category: values.category,
-                description: values.description,
-                name: values.name,
-                price: values.price,
-              },
-            });
             // do stuff
             //   if (res.data?.register.errors) {
             //     setErrors(toErrorMap(res.data.register.errors));
@@ -101,9 +102,31 @@ const CreateProductPage = () => {
                     placeholder="tech"
                   />
 
-                  <InputField label="Price" name="price" placeholder="1000" />
+                  <InputField
+                    label="Price"
+                    name="price"
+                    placeholder="1000"
+                    type="number"
+                  />
 
-                  <ImageInput
+                  <Input
+                    placeholder="Image"
+                    type="file"
+                    accept="image/*"
+                    onChange={({ target: { validity, files } }) => {
+                      if (validity.valid && files) {
+                        setFieldValue('image', files[0]);
+                        const file = files[0];
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          console.log(reader.result);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+
+                  {/* <ImageInput
                     name="image"
                     label="image"
                     setFieldValue={setFieldValue}
@@ -118,7 +141,7 @@ const CreateProductPage = () => {
                     //     reader.readAsDataURL(file);
                     //   }
                     // }}
-                  />
+                  /> */}
                   <Stack spacing={10}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}

@@ -1,5 +1,5 @@
 mutation CreateSignature {
-  createSignature {
+  createImageSignature {
     signature
     timestamp
   }

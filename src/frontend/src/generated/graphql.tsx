@@ -37,8 +37,8 @@ export type ImageSignature = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
+  createImageSignature: ImageSignature;
   createProduct: Product;
-  createSignature: ImageSignature;
   deleteProduct: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
@@ -85,6 +85,7 @@ export type Product = {
   image: Scalars['String'];
   name: Scalars['String'];
   price: Scalars['Float'];
+  publicId: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
@@ -181,7 +182,7 @@ export type CreateSignatureMutationVariables = Exact<{ [key: string]: never }>;
 
 export type CreateSignatureMutation = {
   __typename?: 'Mutation';
-  createSignature: {
+  createImageSignature: {
     __typename?: 'ImageSignature';
     signature: string;
     timestamp: number;
@@ -334,7 +335,7 @@ export function useCreateProductMutation() {
 }
 export const CreateSignatureDocument = gql`
   mutation CreateSignature {
-    createSignature {
+    createImageSignature {
       signature
       timestamp
     }
