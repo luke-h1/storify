@@ -278,6 +278,7 @@ export type ProductsQuery = {
   __typename?: 'Query';
   products: Array<{
     __typename?: 'Product';
+    id: number;
     brand: string;
     category: string;
     descriptionSnippet: string;
@@ -434,6 +435,7 @@ export function useProductQuery(
 export const ProductsDocument = gql`
   query Products {
     products {
+      id
       brand
       category
       brand
