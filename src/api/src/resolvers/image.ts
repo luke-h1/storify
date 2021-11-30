@@ -3,11 +3,9 @@ import {
   Field,
   Int,
   Resolver,
-  UseMiddleware,
   Mutation,
   Authorized,
 } from 'type-graphql';
-import { isAuth } from '../middleware/isAuth';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cloudinary = require('cloudinary').v2;
 
@@ -22,7 +20,7 @@ class ImageSignature {
 
 @Resolver()
 export class ImageResolver {
-  // @Authorized()
+  @Authorized()
   @Mutation(() => ImageSignature)
   createImageSignature(): ImageSignature {
     const timestamp = Math.round(new Date().getTime() / 1000);

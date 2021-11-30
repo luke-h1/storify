@@ -1,5 +1,6 @@
 import {
   Arg,
+  Authorized,
   Ctx,
   FieldResolver,
   Int,
@@ -7,13 +8,11 @@ import {
   Query,
   Resolver,
   Root,
-  UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Product } from '../entities/Product';
 import { User } from '../entities/User';
 import { ProductCreateInput } from '../inputs/product/ProductCreateInput';
-import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 
 @Resolver(Product)
@@ -45,7 +44,7 @@ export class productResolver {
   }
 
   @Mutation(() => Product)
-  @UseMiddleware(isAuth)
+  @Authorized()
   async createProduct(
     @Arg('input') input: ProductCreateInput,
     @Ctx() { req }: MyContext,
@@ -64,7 +63,7 @@ export class productResolver {
   }
 
   @Mutation(() => Boolean)
-  @UseMiddleware(isAuth)
+  @Authorized()
   async deleteProduct(
     @Arg('id', () => Int) id: number,
     @Ctx() { req }: MyContext,
