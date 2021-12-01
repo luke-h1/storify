@@ -4,15 +4,10 @@ import {
   Link,
   Image,
   Text,
-  Divider,
   HStack,
   Tag,
-  Wrap,
   WrapItem,
   SpaceProps,
-  useColorModeValue,
-  Container,
-  VStack,
 } from '@chakra-ui/react';
 import React from 'react';
 import { Product } from '../generated/graphql';
@@ -58,7 +53,17 @@ export const BlogAuthor: React.FC<BlogAuthorProps> = ({ name, date }) => {
 };
 
 interface Props {
-  product: Product;
+  product: {
+    __typename?: 'Product' | undefined;
+    id: number;
+    brand: string;
+    category: string;
+    descriptionSnippet: string;
+    image: string;
+    name: string;
+    price: number;
+    creator: { __typename?: 'User' | undefined; fullName: string };
+  };
 }
 
 const ProductCard = ({ product }: Props) => {
@@ -90,7 +95,7 @@ const ProductCard = ({ product }: Props) => {
           </Link>
         </Heading>
         <Text as="p" fontSize="md" marginTop="2">
-          {product.description}
+          {product.descriptionSnippet}
         </Text>
         <BlogAuthor
           name={product.creator.fullName}
