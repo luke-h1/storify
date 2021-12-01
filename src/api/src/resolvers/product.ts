@@ -62,6 +62,29 @@ export class productResolver {
     return result.raw[0];
   }
 
+  @Mutation(() => Product, { nullable: true })
+  @Authorized()
+  async updateProduct(
+    @Arg('id', () => Int) id: number,
+    @Arg('input') input: ProductCreateInput,
+    @Ctx() { req }: MyContext,
+  ): Promise<Product | null> {
+    const result = await getConnection()
+      .createQueryBuilder()
+      .update(Product)
+      .set({
+        ...input,
+        creatorId: req.session.userId,
+      })
+      .where('id = :id and "creatorId" = :creatorId', {
+        id,
+        creatorId: req.session.userId,
+      })
+      .returning('*')
+      .execute();
+    return result.raw[0];
+  }
+
   @Mutation(() => Boolean)
   @Authorized()
   async deleteProduct(

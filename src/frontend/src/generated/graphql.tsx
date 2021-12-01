@@ -44,6 +44,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   register: UserResponse;
+  updateProduct?: Maybe<Product>;
 };
 
 export type MutationChangePasswordArgs = {
@@ -70,6 +71,11 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   options: UserRegisterInput;
+};
+
+export type MutationUpdateProductArgs = {
+  id: Scalars['Int'];
+  input: ProductCreateInput;
 };
 
 export type Product = {
@@ -241,6 +247,29 @@ export type RegisterMutation = {
   };
 };
 
+export type UpdateProductMutationVariables = Exact<{
+  input: ProductCreateInput;
+  updateProductId: Scalars['Int'];
+}>;
+
+export type UpdateProductMutation = {
+  __typename?: 'Mutation';
+  updateProduct?:
+    | {
+        __typename?: 'Product';
+        id: number;
+        image: string;
+        brand: string;
+        category: string;
+        description: string;
+        price: number;
+        publicId: string;
+        creator: { __typename?: 'User'; fullName: string };
+      }
+    | null
+    | undefined;
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
@@ -397,6 +426,29 @@ export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(
     RegisterDocument,
   );
+}
+export const UpdateProductDocument = gql`
+  mutation UpdateProduct($input: ProductCreateInput!, $updateProductId: Int!) {
+    updateProduct(input: $input, id: $updateProductId) {
+      id
+      image
+      brand
+      category
+      description
+      price
+      publicId
+      creator {
+        fullName
+      }
+    }
+  }
+`;
+
+export function useUpdateProductMutation() {
+  return Urql.useMutation<
+    UpdateProductMutation,
+    UpdateProductMutationVariables
+  >(UpdateProductDocument);
 }
 export const MeDocument = gql`
   query Me {
