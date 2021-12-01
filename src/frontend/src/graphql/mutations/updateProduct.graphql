@@ -1,5 +1,5 @@
-mutation UpdateProduct($input: ProductCreateInput!, $updateProductId: Int!) {
-  updateProduct(input: $input, id: $updateProductId) {
+mutation UpdateProduct($input: ProductCreateInput!, $id: Int!) {
+  updateProduct(input: $input, id: $id) {
     id
     image
     brand

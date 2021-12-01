@@ -249,7 +249,7 @@ export type RegisterMutation = {
 
 export type UpdateProductMutationVariables = Exact<{
   input: ProductCreateInput;
-  updateProductId: Scalars['Int'];
+  id: Scalars['Int'];
 }>;
 
 export type UpdateProductMutation = {
@@ -428,8 +428,8 @@ export function useRegisterMutation() {
   );
 }
 export const UpdateProductDocument = gql`
-  mutation UpdateProduct($input: ProductCreateInput!, $updateProductId: Int!) {
-    updateProduct(input: $input, id: $updateProductId) {
+  mutation UpdateProduct($input: ProductCreateInput!, $id: Int!) {
+    updateProduct(input: $input, id: $id) {
       id
       image
       brand

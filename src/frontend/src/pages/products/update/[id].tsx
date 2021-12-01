@@ -1,16 +1,26 @@
-import { Flex, Box, Heading, Stack, Input, Button } from '@chakra-ui/react';
+import {
+  Flex,
+  Box,
+  Heading,
+  Stack,
+  Input,
+  Button,
+  Text,
+  Image,
+} from '@chakra-ui/react';
 import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import ImageInput from '../../components/ImageInput';
-import InputField from '../../components/InputField';
+import InputField from '../../../components/InputField';
 import {
-  useCreateProductMutation,
   useCreateSignatureMutation,
-} from '../../generated/graphql';
-import { useIsAuth } from '../../hooks/useIsAuth';
-import { createurqlClient } from '../../utils/createUrqlClient';
+  useUpdateProductMutation,
+  useProductQuery,
+} from '../../../generated/graphql';
+import useGetIntId from '../../../hooks/useGetIntId';
+import { useIsAuth } from '../../../hooks/useIsAuth';
+import { createurqlClient } from '../../../utils/createUrqlClient';
 
 interface IUploadImageResponse {
   // eslint-disable-next-line camelcase
@@ -36,12 +46,24 @@ async function uploadImage(
   return response.json();
 }
 
-const CreateProductPage = () => {
+const UpdateProductPage = () => {
   const [previewImage, setPreviewImage] = useState<string>('');
+  const intId = useGetIntId();
+  const [{ data, fetching }] = useProductQuery({
+    pause: intId === -1,
+    variables: {
+      id: intId,
+    },
+  });
   const router = useRouter();
   useIsAuth();
-  const [, createProduct] = useCreateProductMutation();
+  const [, updateProduct] = useUpdateProductMutation();
   const [, createSignature] = useCreateSignatureMutation();
+
+  if (!data?.product) {
+    return <p>no product</p>;
+  }
+
   return (
     <Flex align="center" justify="center" bg="#fff">
       <Stack spacing={3} mx="auto" maxW="lg" py={12} px={6}>
@@ -50,49 +72,47 @@ const CreateProductPage = () => {
         </Stack>
         <Formik
           initialValues={{
-            name: '',
-            image: '',
-            brand: '',
-            category: '',
-            description: '',
-            price: 0,
+            name: data?.product?.name,
+            image: data?.product?.image,
+            brand: data?.product?.brand,
+            category: data?.product?.category,
+            description: data?.product?.description,
+            price: data?.product?.price,
           }}
           onSubmit={async (values, { setErrors }) => {
-            const { data: signatureData } = await createSignature();
-            if (signatureData) {
-              const { signature, timestamp } =
-                signatureData.createImageSignature;
-              const imageData = await uploadImage(
-                values.image as unknown as File,
-                signature,
-                timestamp,
-              );
-              await createProduct({
-                input: {
-                  image: imageData.secure_url,
-                  brand: values.brand,
-                  category: values.category,
-                  description: values.description,
-                  name: values.name,
-                  price: values.price,
-                },
-              });
-            }
+            let image = data?.product?.image as unknown as string;
 
-            // do stuff
-            //   if (res.data?.register.errors) {
-            //     setErrors(toErrorMap(res.data.register.errors));
-            //   } else {
-            //     toast.success('Succesfully registered!');
-            //     setTimeout(() => {
-            //       router.push('/');
-            //     }, 700);
-            //   }
+            // user wants to update an image
+            if (values.image) {
+              const { data: signatureData } = await createSignature();
+              if (signatureData) {
+                const { signature, timestamp } =
+                  signatureData.createImageSignature;
+                const imageData = await uploadImage(
+                  values.image as unknown as File,
+                  signature,
+                  timestamp,
+                );
+                image = imageData.secure_url;
+              }
+            }
+            await updateProduct({
+              id: intId,
+              input: {
+                brand: values.brand,
+                category: values.category,
+                description: values.description,
+                image,
+                name: values.name,
+                price: values.price,
+              },
+            });
           }}
         >
           {({ isSubmitting, setFieldValue }) => (
             <Form>
               <Box rounded="lg" bg="#fff" boxShadow="lg" py={8} px={8}>
+                <Text>Updating {data?.product?.name}</Text>
                 <Stack spacing={5}>
                   <InputField label="Name" name="name" placeholder="iphone" />
                   <InputField label="Brand" name="brand" placeholder="apple" />
@@ -125,23 +145,21 @@ const CreateProductPage = () => {
                       }
                     }}
                   />
-
-                  {/* <ImageInput
-                    name="image"
-                    label="image"
-                    setFieldValue={setFieldValue}
-                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    //   if (e?.target?.files?.[0]) {
-                    //     const file = e.target.files[0];
-                    //     setFieldValue('image', file)
-                    //     const reader = new FileReader();
-                    //     reader.onloadend = () => {
-                    //       setPreviewImage(reader.result as string);
-                    //     };
-                    //     reader.readAsDataURL(file);
-                    //   }
-                    // }}
-                  /> */}
+                  {previewImage && (
+                    <Box>
+                      <Image
+                        transform="scale(1.0)"
+                        src={previewImage}
+                        alt="some text"
+                        objectFit="contain"
+                        width="100%"
+                        transition="0.3s ease-in-out"
+                        _hover={{
+                          transform: 'scale(1.05)',
+                        }}
+                      />
+                    </Box>
+                  )}
                   <Stack spacing={10}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
@@ -157,7 +175,7 @@ const CreateProductPage = () => {
                       type="submit"
                       disabled={isSubmitting}
                     >
-                      Sign up
+                      Update product
                     </Button>
                   </Stack>
                 </Stack>
@@ -170,5 +188,5 @@ const CreateProductPage = () => {
   );
 };
 export default withUrqlClient(createurqlClient, { ssr: false })(
-  CreateProductPage,
+  UpdateProductPage,
 );

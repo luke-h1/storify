@@ -1,5 +1,4 @@
 /* eslint-disable import/no-cycle */
-import slugify from 'slugify';
 import { Field, Int, ObjectType } from 'type-graphql';
 import {
   Entity,
@@ -31,14 +30,6 @@ export class Product extends BaseEntity {
   @Field(() => String)
   @Column()
   name: string;
-
-  @Field(() => String)
-  slug(): String {
-    return slugify(this.name, {
-      strict: true,
-      lower: true,
-    });
-  }
 
   @Field(() => String)
   @Column()

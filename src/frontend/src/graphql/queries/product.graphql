@@ -5,7 +5,7 @@ query Product($id: Int!) {
     category
     brand
     description
-    image
+    image 
     price
     name
   }
