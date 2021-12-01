@@ -33,7 +33,6 @@ export class Product extends BaseEntity {
   name: string;
 
   @Field(() => String)
-  @Column()
   slug(): String {
     return slugify(this.name, {
       strict: true,

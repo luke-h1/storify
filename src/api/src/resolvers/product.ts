@@ -31,7 +31,7 @@ export class productResolver {
   async products(): Promise<Product[]> {
     const products = await getConnection().query(
       `
-      SELECT p.* FROM "products" p 
+      SELECT p.* FROM "products" p
       ORDER BY p."createdAt" DESC
       `,
     );
