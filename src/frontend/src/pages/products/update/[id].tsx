@@ -78,7 +78,7 @@ const UpdateProductPage = () => {
             name: data?.product?.name,
             image: data?.product?.image,
             brand: data?.product?.brand,
-            categories: [data?.product?.categories],
+            categories: data?.product?.categories,
             description: data?.product?.description,
             price: data?.product?.price,
           }}
