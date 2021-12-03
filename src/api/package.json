@@ -5,8 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist && docker container prune",
-    "clean:docker": "docker container prune",
+    "clean": "rm -rf dist && docker-compose down && rm -rf .dbdata",
     "watch": "tsc -w",
     "dev": "cross-env NODE_ENV=development nodemon dist/index.js",
     "start": "NODE_ENV=production node dist/index.js",

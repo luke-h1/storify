@@ -8,6 +8,6 @@ const createConn = async () =>
     logging: true,
     migrations: [join(__dirname, '../migrations/*')],
     entities: [join(__dirname, '../entities/*')],
-    synchronize: true,
+    synchronize: process.env.NODE_ENV !== 'production',
   });
 export default createConn;
