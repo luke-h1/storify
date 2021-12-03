@@ -81,7 +81,7 @@ export type MutationUpdateProductArgs = {
 export type Product = {
   __typename?: 'Product';
   brand: Scalars['String'];
-  category: Scalars['String'];
+  categories: Array<Scalars['String']>;
   createdAt: Scalars['String'];
   creator: User;
   creatorId: Scalars['Float'];
@@ -97,7 +97,7 @@ export type Product = {
 
 export type ProductCreateInput = {
   brand: Scalars['String'];
-  category: Scalars['String'];
+  categories: Array<Scalars['String']>;
   description: Scalars['String'];
   image: Scalars['String'];
   name: Scalars['String'];
@@ -179,7 +179,7 @@ export type CreateProductMutation = {
     name: string;
     price: number;
     brand: string;
-    category: string;
+    categories: Array<string>;
     descriptionSnippet: string;
   };
 };
@@ -260,7 +260,7 @@ export type UpdateProductMutation = {
         id: number;
         image: string;
         brand: string;
-        category: string;
+        categories: Array<string>;
         description: string;
         price: number;
         publicId: string;
@@ -291,7 +291,7 @@ export type ProductQuery = {
         __typename?: 'Product';
         id: number;
         brand: string;
-        category: string;
+        categories: Array<string>;
         description: string;
         image: string;
         price: number;
@@ -309,7 +309,7 @@ export type ProductsQuery = {
     __typename?: 'Product';
     id: number;
     brand: string;
-    category: string;
+    categories: Array<string>;
     descriptionSnippet: string;
     image: string;
     name: string;
@@ -351,7 +351,7 @@ export const CreateProductDocument = gql`
       name
       price
       brand
-      category
+      categories
       descriptionSnippet
     }
   }
@@ -433,7 +433,7 @@ export const UpdateProductDocument = gql`
       id
       image
       brand
-      category
+      categories
       description
       price
       publicId
@@ -469,7 +469,7 @@ export const ProductDocument = gql`
     product(id: $id) {
       id
       brand
-      category
+      categories
       brand
       description
       image
@@ -489,7 +489,7 @@ export const ProductsDocument = gql`
     products {
       id
       brand
-      category
+      categories
       brand
       descriptionSnippet
       image

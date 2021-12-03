@@ -78,7 +78,7 @@ const UpdateProductPage = () => {
             name: data?.product?.name,
             image: data?.product?.image,
             brand: data?.product?.brand,
-            category: data?.product?.category,
+            categories: [data?.product?.categories],
             description: data?.product?.description,
             price: data?.product?.price,
           }}
@@ -103,7 +103,7 @@ const UpdateProductPage = () => {
               id: intId,
               input: {
                 brand: values.brand,
-                category: values.category,
+                categories: values.categories,
                 description: values.description,
                 image,
                 name: values.name,
@@ -123,9 +123,19 @@ const UpdateProductPage = () => {
                   <InputField label="Name" name="name" placeholder="iphone" />
                   <InputField label="Brand" name="brand" placeholder="apple" />
                   <InputField
-                    label="Category"
-                    name="category"
-                    placeholder="tech"
+                    name="categories[0]"
+                    placeholder="category"
+                    label="category"
+                  />
+                  <InputField
+                    name="categories[1]"
+                    placeholder="category 2"
+                    label="category 2"
+                  />
+                  <InputField
+                    name="categories[2]"
+                    placeholder="category 3 "
+                    label="category 3"
                   />
 
                   <InputField

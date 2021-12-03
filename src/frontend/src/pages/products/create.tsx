@@ -1,9 +1,20 @@
-import { Flex, Box, Heading, Stack, Input, Button } from '@chakra-ui/react';
+import {
+  Flex,
+  Box,
+  Heading,
+  Stack,
+  Input,
+  Button,
+  Image,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+} from '@chakra-ui/react';
+import productCreateSchema from '@storify/common/src/schemas/productCreateSchema';
 import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import ImageInput from '../../components/ImageInput';
 import InputField from '../../components/InputField';
 import {
   useCreateProductMutation,
@@ -49,11 +60,12 @@ const CreateProductPage = () => {
           <Heading fontSize="4xl">Create a new product</Heading>
         </Stack>
         <Formik
+          validationSchema={productCreateSchema}
           initialValues={{
             name: '',
             image: '',
             brand: '',
-            category: '',
+            categories: [''],
             description: '',
             price: 0,
           }}
@@ -67,27 +79,18 @@ const CreateProductPage = () => {
                 signature,
                 timestamp,
               );
-              await createProduct({
+              const res = await createProduct({
                 input: {
                   image: imageData.secure_url,
                   brand: values.brand,
-                  category: values.category,
+                  categories: values.categories,
                   description: values.description,
                   name: values.name,
                   price: values.price,
                 },
               });
+              router.push(`/products/${res.data?.createProduct.id}`);
             }
-
-            // do stuff
-            //   if (res.data?.register.errors) {
-            //     setErrors(toErrorMap(res.data.register.errors));
-            //   } else {
-            //     toast.success('Succesfully registered!');
-            //     setTimeout(() => {
-            //       router.push('/');
-            //     }, 700);
-            //   }
           }}
         >
           {({ isSubmitting, setFieldValue }) => (
@@ -97,11 +100,27 @@ const CreateProductPage = () => {
                   <InputField label="Name" name="name" placeholder="iphone" />
                   <InputField label="Brand" name="brand" placeholder="apple" />
                   <InputField
-                    label="Category"
-                    name="category"
-                    placeholder="tech"
+                    label="description"
+                    name="description"
+                    placeholder="informative description of the product"
+                    textarea
                   />
 
+                  <InputField
+                    name="categories[0]"
+                    placeholder="category"
+                    label="category"
+                  />
+                  <InputField
+                    name="categories[1]"
+                    placeholder="category 2"
+                    label="category 2"
+                  />
+                  <InputField
+                    name="categories[2]"
+                    placeholder="category 3"
+                    label="category 3"
+                  />
                   <InputField
                     label="Price"
                     name="price"
@@ -125,23 +144,22 @@ const CreateProductPage = () => {
                       }
                     }}
                   />
+                  {previewImage && (
+                    <Box>
+                      <Image
+                        transform="scale(1.0)"
+                        src={previewImage}
+                        alt="some text"
+                        objectFit="contain"
+                        width="100%"
+                        transition="0.3s ease-in-out"
+                        _hover={{
+                          transform: 'scale(1.05)',
+                        }}
+                      />
+                    </Box>
+                  )}
 
-                  {/* <ImageInput
-                    name="image"
-                    label="image"
-                    setFieldValue={setFieldValue}
-                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    //   if (e?.target?.files?.[0]) {
-                    //     const file = e.target.files[0];
-                    //     setFieldValue('image', file)
-                    //     const reader = new FileReader();
-                    //     reader.onloadend = () => {
-                    //       setPreviewImage(reader.result as string);
-                    //     };
-                    //     reader.readAsDataURL(file);
-                    //   }
-                    // }}
-                  /> */}
                   <Stack spacing={10}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
@@ -157,7 +175,7 @@ const CreateProductPage = () => {
                       type="submit"
                       disabled={isSubmitting}
                     >
-                      Sign up
+                      Create Product
                     </Button>
                   </Stack>
                 </Stack>

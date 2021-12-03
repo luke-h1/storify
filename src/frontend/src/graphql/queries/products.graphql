@@ -2,7 +2,7 @@ query Products {
   products {
     id
     brand
-    category
+    categories
     brand
     descriptionSnippet
     image

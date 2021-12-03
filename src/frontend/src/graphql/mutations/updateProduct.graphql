@@ -3,7 +3,7 @@ mutation UpdateProduct($input: ProductCreateInput!, $id: Int!) {
     id
     image
     brand
-    category
+    categories
     description
     price
     publicId
