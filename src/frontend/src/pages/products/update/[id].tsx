@@ -12,6 +12,7 @@ import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import InputField from '../../../components/InputField';
 import {
   useCreateSignatureMutation,
@@ -68,7 +69,9 @@ const UpdateProductPage = () => {
     <Flex align="center" justify="center" bg="#fff">
       <Stack spacing={3} mx="auto" maxW="lg" py={12} px={6}>
         <Stack align="center">
-          <Heading fontSize="4xl">Create a new product</Heading>
+          <Heading fontSize="4xl">
+            Updating product: <Text color="#63B3ED">{data?.product?.name}</Text>
+          </Heading>
         </Stack>
         <Formik
           initialValues={{
@@ -96,7 +99,7 @@ const UpdateProductPage = () => {
                 image = imageData.secure_url;
               }
             }
-            await updateProduct({
+            const res = await updateProduct({
               id: intId,
               input: {
                 brand: values.brand,
@@ -107,12 +110,15 @@ const UpdateProductPage = () => {
                 price: values.price,
               },
             });
+            if (res.data?.updateProduct) {
+              toast.success(`Updated product ${values.name}`);
+              router.push('/');
+            }
           }}
         >
           {({ isSubmitting, setFieldValue }) => (
             <Form>
               <Box rounded="lg" bg="#fff" boxShadow="lg" py={8} px={8}>
-                <Text>Updating {data?.product?.name}</Text>
                 <Stack spacing={5}>
                   <InputField label="Name" name="name" placeholder="iphone" />
                   <InputField label="Brand" name="brand" placeholder="apple" />
