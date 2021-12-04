@@ -27,6 +27,14 @@ export class OrderItem extends BaseEntity {
   @Column()
   quantity: number;
 
+  @Field(() => Number)
+  @Column()
+  sellerRevenue: number; // sellers get 95% profit
+
+  @Field(() => Number)
+  @Column()
+  purchaseFee: number; // 5% fee by using this site
+
   @Field(() => Order)
   @ManyToOne(() => Order, order => order.orderItems)
   @JoinColumn({ name: 'order_id' })

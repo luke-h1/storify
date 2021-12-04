@@ -17,19 +17,19 @@ export class Order extends BaseEntity {
 
   @Column()
   @Exclude()
-  firstName: string;
+  firstName: string; // person who made the order
 
   @Column()
   @Exclude()
-  lastName: string;
+  lastName: string; // person who made the order
 
   @Field(() => String)
   @Column()
-  email: string;
+  email: string; // email of seller
 
   @Field(() => String)
   @Column()
-  TransactionId: string;
+  TransactionId: string; // stripe payment ID
 
   @Field(() => String)
   @Column()
@@ -47,9 +47,9 @@ export class Order extends BaseEntity {
   @Column()
   zip: string;
 
-  @Field(() => String)
+  @Field(() => Boolean)
   @Column()
-  complete: string;
+  complete: boolean; // true when order is finished
 
   @Field(() => [OrderItem])
   @OneToMany(() => OrderItem, orderItem => orderItem.order)
