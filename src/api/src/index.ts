@@ -1,6 +1,9 @@
 /* eslint-disable no-console */
 import 'reflect-metadata';
-import { ApolloServerPluginInlineTrace } from 'apollo-server-core';
+import {
+  ApolloServerPluginInlineTrace,
+  ApolloServerPluginLandingPageDisabled,
+} from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import compression from 'compression';
 import connectRedis from 'connect-redis';
@@ -51,9 +54,17 @@ const main = async () => {
     }),
   );
 
+  const plugins = [];
+
+  if (isProd) {
+    plugins.push(ApolloServerPluginLandingPageDisabled());
+  } else {
+    plugins.push(ApolloServerPluginInlineTrace());
+  }
+
   const apolloServer = new ApolloServer({
-    plugins: [ApolloServerPluginInlineTrace()],
-    debug: !isProd,
+    plugins,
+    debug: !!isProd,
     schema: await createSchema(),
     context: ({ req, res }) => ({
       req,
