@@ -1,12 +1,10 @@
 node_modules
 .vercel
 .dbdata
-.data
 tmp
 dist
 src/api/.env
 src/api/data/images/
 .env
 .DS_Store
-yarn-error.log
-lerna-debug.log
+.data

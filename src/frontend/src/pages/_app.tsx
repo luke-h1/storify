@@ -1,45 +1,20 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
-import Router from 'next/router';
-import NProgress from 'nprogress';
-import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { Provider as ReduxProvider } from 'react-redux';
-import '@src/styles/nprogress.scss';
-import { useStore } from '../store/store';
+import Nav from '../components/Nav';
+import Wrapper from '../components/Wrapper';
 
 const toastStyles: React.CSSProperties = {
   minWidth: '300px',
   maxWidth: '95%',
   padding: '0.5rem 0.8rem',
   fontSize: '1rem',
-
-  background: 'var(--modal-bg)',
-  color: 'var(--dark)',
+  marginTop: '5rem',
+  background: '#f2f2f2',
+  color: '#222222',
 };
 
-const App: NextPage<AppProps> = ({ Component, pageProps }) => {
-  const store = useStore(pageProps?.initialReduxState);
-
-  useEffect(() => {
-    function startHandler() {
-      NProgress.start();
-    }
-    function doneHandler() {
-      NProgress.done();
-    }
-    Router.events.on('routeChangeStart', startHandler);
-    Router.events.on('routeChangeComplete', doneHandler);
-    Router.events.on('routeChangeError', doneHandler);
-
-    return () => {
-      Router.events.off('routeChangeStart', startHandler);
-      Router.events.off('routeChangeComplete', doneHandler);
-      Router.events.off('routeChangeError', doneHandler);
-    };
-  });
-
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <ChakraProvider>
       <Toaster
@@ -51,10 +26,10 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
           },
         }}
       />
-
-      <ReduxProvider store={store}>
+      <Nav {...pageProps} />
+      <Wrapper variant="regular">
         <Component {...pageProps} />
-      </ReduxProvider>
+      </Wrapper>
     </ChakraProvider>
   );
 };

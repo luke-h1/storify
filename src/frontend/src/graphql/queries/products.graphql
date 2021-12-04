@@ -1,0 +1,15 @@
+query Products {
+  products {
+    id
+    brand
+    categories
+    brand
+    descriptionSnippet
+    image
+    name
+    price
+    creator {
+      fullName
+    }
+  }
+}

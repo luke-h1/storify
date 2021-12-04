@@ -24,7 +24,7 @@
     "@next/eslint-plugin-next": "^12.0.3",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
     "@typescript-eslint/parser": "^5.3.0",
-    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb": "^19.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.2",
@@ -47,7 +47,7 @@
     "build": "lerna run build",
     "tsc": "lerna run tsc",
     "new-version": "lerna version --conventional-commits --yes",
-    "lint": "eslint --ext .ts,.tsx,.js,.jsx src --quiet --fix",
+    "lint": "lerna run lint",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,scss,html}\"",
     "format:check": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx,css,scss,html}\""
   },

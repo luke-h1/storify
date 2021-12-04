@@ -1,0 +1,14 @@
+mutation UpdateProduct($input: ProductCreateInput!, $id: Int!) {
+  updateProduct(input: $input, id: $id) {
+    id
+    image
+    brand
+    categories
+    description
+    price
+    publicId
+    creator {
+      fullName
+    }
+  }
+}

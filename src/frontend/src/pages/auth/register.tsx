@@ -6,22 +6,22 @@ import {
   Button,
   Heading,
   Text,
-  useColorModeValue,
 } from '@chakra-ui/react';
-import { register } from '@src/store/actions/auth';
-import { Form, Formik } from 'formik';
+import { Formik, Form } from 'formik';
+import { withUrqlClient } from 'next-urql';
+import { useRouter } from 'next/router';
 import React from 'react';
-import { connect } from 'react-redux';
+import { toast } from 'react-hot-toast';
 import InputField from '../../components/InputField';
+import { useRegisterMutation } from '../../generated/graphql';
+import { createurqlClient } from '../../utils/createUrqlClient';
+import toErrorMap from '../../utils/toErrorMap';
 
 const Register = () => {
+  const router = useRouter();
+  const [, register] = useRegisterMutation();
   return (
-    <Flex
-      minH="100vh"
-      align="center"
-      justify="center"
-      bg={useColorModeValue('gray.50', 'gray.800')}
-    >
+    <Flex minH="100vh" align="center" justify="center" bg="#fff">
       <Stack spacing={8} mx="auto" maxW="lg" py={12} px={6}>
         <Stack align="center">
           <Heading fontSize="4xl">Register today</Heading>
@@ -37,38 +37,38 @@ const Register = () => {
             lastName: '',
           }}
           onSubmit={async (values, { setErrors }) => {
-            const { firstName, lastName, email, password } = values;
-            register(email, firstName, lastName, password);
+            const res = await register({
+              options: {
+                firstName: values.firstName,
+                lastName: values.lastName,
+                email: values.email,
+                password: values.password,
+              },
+            });
+
+            if (res.data?.register.errors) {
+              setErrors(toErrorMap(res.data.register.errors));
+            } else {
+              toast.success('Succesfully registered!');
+
+              setTimeout(() => {
+                router.push('/');
+              }, 700);
+            }
           }}
         >
-          {({ isSubmitting, setFieldValue }) => (
+          {({ isSubmitting }) => (
             <Form>
-              <Box
-                rounded="lg"
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                bg={useColorModeValue('white', 'gray.700')}
-                boxShadow="lg"
-                py={8}
-                px={8}
-              >
+              <Box rounded="lg" bg="#fff" boxShadow="lg" py={8} px={8}>
                 <Stack spacing={5}>
-                  <InputField
-                    label="First Name"
-                    name="firstName"
-                    placeholder="First name"
-                  />
-                  <InputField
-                    label="Last Name"
-                    name="lastName"
-                    placeholder="Last name"
-                  />
+                  <InputField label="First Name" name="firstName" />
+                  <InputField label="Last Name" name="lastName" />
 
-                  <InputField label="email" name="email" placeholder="Email" />
+                  <InputField label="email" name="email" />
                   <InputField
                     label="password"
                     name="password"
                     type="password"
-                    placeholder="password"
                   />
 
                   <Stack spacing={10}>
@@ -80,14 +80,12 @@ const Register = () => {
                       <Link color="blue.400">Already a user?</Link>
                     </Stack>
                     <Button
-                      as="button"
                       bg="blue.400"
                       color="white"
                       _hover={{
                         bg: 'blue.500',
                       }}
                       type="submit"
-                      isLoading={isSubmitting}
                       disabled={isSubmitting}
                     >
                       Sign up
@@ -102,4 +100,4 @@ const Register = () => {
     </Flex>
   );
 };
-export default connect(null, { register })(Register);
+export default withUrqlClient(createurqlClient, { ssr: false })(Register);
