@@ -48,9 +48,9 @@ const SingleProductPage = () => {
 
   const handleDelete = async () => {
     await deleteProduct({ id: data?.product?.id as number });
-    router.push('/');
+    toast.success('Deleted product!');
     setTimeout(() => {
-      toast.success('Deleted product!');
+      router.push('/');
     }, 700);
   };
 
