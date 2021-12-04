@@ -16,7 +16,7 @@ import { ProductCreateInput } from '../inputs/product/ProductCreateInput';
 import { MyContext } from '../types/MyContext';
 
 @Resolver(Product)
-export class productResolver {
+export class ProductResolver {
   @FieldResolver(() => String)
   descriptionSnippet(@Root() product: Product) {
     return product.description.slice(0, 50);

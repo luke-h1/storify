@@ -4,7 +4,7 @@ import { Order } from '../entities/Order';
 import { CreateOrderInput } from '../inputs/order/CreateOrderInput';
 
 @Resolver(Order)
-export class orderResolver {
+export class OrderResolver {
   @Query(() => [Order])
   async orders(): Promise<Order[]> {
     const orders = await getConnection().query(
@@ -16,9 +16,9 @@ export class orderResolver {
     return orders;
   }
 
-  @Mutation(() => Order)
-  @Authorized()
-  async createOrder(@Arg('input') input: CreateOrderInput): Promise<Order[]> {
-    // user..
-  }
+  // @Mutation(() => Order)
+  // @Authorized()
+  // async createOrder(@Arg('input') input: CreateOrderInput): Promise<Order[]> {
+  //   // user..
+  // }
 }

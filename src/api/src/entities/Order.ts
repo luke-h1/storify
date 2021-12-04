@@ -5,9 +5,12 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Link } from './Link';
 import { OrderItem } from './OrderItem';
 
 @Entity('orders')
@@ -29,6 +32,10 @@ export class Order extends BaseEntity {
 
   @Field(() => String)
   @Column()
+  code: string;
+
+  @Field(() => String)
+  @Column({ nullable: true })
   TransactionId: string; // stripe payment ID
 
   @Field(() => String)
@@ -48,8 +55,17 @@ export class Order extends BaseEntity {
   zip: string;
 
   @Field(() => Boolean)
-  @Column()
+  @Column({ default: false })
   complete: boolean; // true when order is finished
+
+  @ManyToOne(() => Link, link => link.orders, {
+    createForeignKeyConstraints: false,
+  })
+  @JoinColumn({
+    referencedColumnName: 'code',
+    name: 'code',
+  })
+  link: Link;
 
   @Field(() => [OrderItem])
   @OneToMany(() => OrderItem, orderItem => orderItem.order)
