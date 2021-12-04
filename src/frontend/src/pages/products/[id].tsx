@@ -1,12 +1,20 @@
-import { useColorModeValue } from '@chakra-ui/color-mode';
 import {
   Flex,
   chakra,
+  Table,
   Box,
   Stack,
   Image,
   Button,
   ButtonGroup,
+  TableCaption,
+  Tbody,
+  Td,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+  Select,
 } from '@chakra-ui/react';
 import { withUrqlClient } from 'next-urql';
 import Link from 'next/link';
@@ -70,10 +78,15 @@ const SingleProductPage = () => {
           mb={6}
         >
           <chakra.span display="block">{data?.product.name}</chakra.span>
-          <chakra.span display="block" color="#000">
-            £{data?.product.price}
-          </chakra.span>
         </chakra.h2>
+        <Table variant="simple" mb={4}>
+          <Tbody>
+            <Tr>
+              <Td>Price</Td>
+              <Td>£{data?.product.price}</Td>
+            </Tr>
+          </Tbody>
+        </Table>
         <chakra.p mb={6} fontSize={{ base: 'lg', md: 'xl' }} color="#000">
           {data?.product.description}
         </chakra.p>
@@ -84,23 +97,25 @@ const SingleProductPage = () => {
           mt={4}
           spacing={2}
         >
-          <Box display="inline-flex" rounded="md" shadow="md">
-            <chakra.a
-              display="inline-flex"
-              alignItems="center"
-              justifyContent="center"
-              px={5}
-              py={3}
-              border="solid transparent"
-              fontWeight="bold"
-              w="full"
-              rounded="md"
-              color="#000"
-              bg="#68D391"
-            >
-              Buy
-            </chakra.a>
-          </Box>
+          <Table variant="simple">
+            <Tbody>
+              <Tr>
+                <Td>Price</Td>
+                <Td>£{data?.product.price}</Td>
+              </Tr>
+              <Tr>
+                <Td>Qty</Td>
+                <Select>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </Select>
+              </Tr>
+            </Tbody>
+            <Button as="a" colorScheme="blue" mt={4}>
+              Add to cart
+            </Button>
+          </Table>
         </Stack>
         <Box>
           {data?.product.creator.id === user?.me?.id && (
