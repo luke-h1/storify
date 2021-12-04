@@ -6,9 +6,12 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Cart } from './Cart';
+import { Order } from './Order';
 import { Product } from './Product';
 import { Review } from './Review';
 
@@ -39,6 +42,14 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Review, r => r.creator)
   reviews: Review[];
+
+  @Field(() => [Order])
+  @OneToMany(() => Order, order => order.userId)
+  orderId: Order[];
+
+  @Field(() => Cart)
+  @OneToOne(() => Cart, cart => cart.userId)
+  cartId = Cart;
 
   @Field(() => String)
   @Column({ default: false })
