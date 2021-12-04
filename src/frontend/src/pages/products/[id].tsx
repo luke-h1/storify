@@ -1,15 +1,31 @@
 import { useColorModeValue } from '@chakra-ui/color-mode';
-import { Flex, chakra, Box, Stack, Image } from '@chakra-ui/react';
+import {
+  Flex,
+  chakra,
+  Box,
+  Stack,
+  Image,
+  Button,
+  ButtonGroup,
+} from '@chakra-ui/react';
 import { withUrqlClient } from 'next-urql';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
+import router, { useRouter } from 'next/router';
 import React from 'react';
+import { toast } from 'react-hot-toast';
 import { BlogTags } from '../../components/ProductCard';
-import { useProductQuery } from '../../generated/graphql';
+import {
+  useProductQuery,
+  useMeQuery,
+  useDeleteProductMutation,
+} from '../../generated/graphql';
 import useGetIntId from '../../hooks/useGetIntId';
 import { createurqlClient } from '../../utils/createUrqlClient';
 
 const SingleProductPage = () => {
   const intId = useGetIntId();
+  const [{ data: user }] = useMeQuery();
+  const [, deleteProduct] = useDeleteProductMutation();
   const [{ data, fetching }] = useProductQuery({
     pause: intId === -1,
     variables: {
@@ -20,6 +36,19 @@ const SingleProductPage = () => {
   if (!data?.product) {
     return <p>no product</p>;
   }
+
+  if (fetching && !data) {
+    return <p>loading</p>;
+  }
+
+  const handleDelete = async () => {
+    await deleteProduct({ id: data?.product?.id as number });
+    router.push('/');
+    setTimeout(() => {
+      toast.success('Deleted product!');
+    }, 700);
+  };
+
   return (
     <Flex
       direction={{ base: 'column', md: 'row' }}
@@ -73,6 +102,25 @@ const SingleProductPage = () => {
             </chakra.a>
           </Box>
         </Stack>
+        <Box>
+          {data?.product.creator.id === user?.me?.id && (
+            <>
+              <hr />
+              <ButtonGroup>
+                <Link href={`/products/update/${data?.product.id}`}>
+                  <a>
+                    <Button colorScheme="blue" mt={4}>
+                      Update product
+                    </Button>
+                  </a>
+                </Link>
+                <Button as="a" colorScheme="red" mt={4} onClick={handleDelete}>
+                  Delete product
+                </Button>
+              </ButtonGroup>
+            </>
+          )}
+        </Box>
       </Box>
       <Box w={{ base: 'full', md: 10 / 12 }} mx="auto" textAlign="center">
         <Image

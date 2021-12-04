@@ -296,6 +296,7 @@ export type ProductQuery = {
         image: string;
         price: number;
         name: string;
+        creator: { __typename?: 'User'; id: number };
       }
     | null
     | undefined;
@@ -475,6 +476,9 @@ export const ProductDocument = gql`
       image
       price
       name
+      creator {
+        id
+      }
     }
   }
 `;

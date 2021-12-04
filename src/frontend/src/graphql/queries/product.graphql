@@ -8,5 +8,8 @@ query Product($id: Int!) {
     image 
     price
     name
+    creator {
+      id
+    }
   }
 }

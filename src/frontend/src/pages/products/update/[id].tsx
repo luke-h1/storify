@@ -13,6 +13,7 @@ import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import uploadImage from 'src/frontend/src/utils/uploadImage';
 import InputField from '../../../components/InputField';
 import {
   useCreateSignatureMutation,
@@ -22,30 +23,6 @@ import {
 import useGetIntId from '../../../hooks/useGetIntId';
 import { useIsAuth } from '../../../hooks/useIsAuth';
 import { createurqlClient } from '../../../utils/createUrqlClient';
-
-interface IUploadImageResponse {
-  // eslint-disable-next-line camelcase
-  secure_url: string;
-}
-
-async function uploadImage(
-  image: File,
-  signature: string,
-  timestamp: number,
-): Promise<IUploadImageResponse> {
-  const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
-  const formData = new FormData();
-  formData.append('file', image);
-  formData.append('signature', signature);
-  formData.append('timestamp', timestamp.toString());
-  formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_KEY);
-
-  const response = await fetch(url, {
-    method: 'POST',
-    body: formData,
-  });
-  return response.json();
-}
 
 const UpdateProductPage = () => {
   const [previewImage, setPreviewImage] = useState<string>('');
@@ -63,6 +40,10 @@ const UpdateProductPage = () => {
 
   if (!data?.product) {
     return <p>no product</p>;
+  }
+
+  if (fetching && !data) {
+    return <p>loading</p>;
   }
 
   return (
