@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Input } from '@chakra-ui/react';
 import React from 'react';
 
@@ -7,6 +8,7 @@ interface Props {
 
   setFieldValue: (
     field: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value: any,
     shouldValidate?: boolean | undefined,
   ) => void;

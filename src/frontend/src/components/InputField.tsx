@@ -19,6 +19,7 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
 const InputField: React.FC<InputFieldProps> = ({
   label,
   textarea,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   size: _,
   ...props
 }) => {

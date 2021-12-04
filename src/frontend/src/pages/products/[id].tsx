@@ -7,18 +7,14 @@ import {
   Image,
   Button,
   ButtonGroup,
-  TableCaption,
   Tbody,
   Td,
-  Tfoot,
-  Th,
-  Thead,
   Tr,
   Select,
 } from '@chakra-ui/react';
 import { withUrqlClient } from 'next-urql';
 import Link from 'next/link';
-import router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { toast } from 'react-hot-toast';
 import { BlogTags } from '../../components/ProductCard';
@@ -31,6 +27,7 @@ import useGetIntId from '../../hooks/useGetIntId';
 import { createurqlClient } from '../../utils/createUrqlClient';
 
 const SingleProductPage = () => {
+  const router = useRouter();
   const intId = useGetIntId();
   const [{ data: user }] = useMeQuery();
   const [, deleteProduct] = useDeleteProductMutation();

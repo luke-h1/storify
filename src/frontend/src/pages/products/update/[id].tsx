@@ -13,7 +13,6 @@ import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import uploadImage from 'src/frontend/src/utils/uploadImage';
 import InputField from '../../../components/InputField';
 import {
   useCreateSignatureMutation,
@@ -23,6 +22,7 @@ import {
 import useGetIntId from '../../../hooks/useGetIntId';
 import { useIsAuth } from '../../../hooks/useIsAuth';
 import { createurqlClient } from '../../../utils/createUrqlClient';
+import uploadImage from '../../../utils/uploadImage';
 
 const UpdateProductPage = () => {
   const [previewImage, setPreviewImage] = useState<string>('');
@@ -63,7 +63,7 @@ const UpdateProductPage = () => {
             description: data?.product?.description,
             price: data?.product?.price,
           }}
-          onSubmit={async (values, { setErrors }) => {
+          onSubmit={async values => {
             let image = data?.product?.image as unknown as string;
 
             // user wants to update an image

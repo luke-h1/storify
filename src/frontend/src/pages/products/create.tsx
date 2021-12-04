@@ -6,9 +6,6 @@ import {
   Input,
   Button,
   Image,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
 } from '@chakra-ui/react';
 import productCreateSchema from '@storify/common/src/schemas/productCreateSchema';
 import { Formik, Form } from 'formik';
@@ -69,7 +66,7 @@ const CreateProductPage = () => {
             description: '',
             price: 0,
           }}
-          onSubmit={async (values, { setErrors }) => {
+          onSubmit={async values => {
             const { data: signatureData } = await createSignature();
             if (signatureData) {
               const { signature, timestamp } =
