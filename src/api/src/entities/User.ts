@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Order } from './Order';
 import { Product } from './Product';
 import { Review } from './Review';
 
@@ -36,6 +37,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Product, p => p.creator)
   products: Product[];
+
+  @OneToMany(() => Order, o => o.creator)
+  orders: Order[];
 
   @OneToMany(() => Review, r => r.creator)
   reviews: Review[];

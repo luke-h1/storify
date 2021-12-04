@@ -1,14 +1,14 @@
-/* eslint-disable import/no-cycle */
 import { Field } from 'type-graphql';
 import {
   Entity,
   BaseEntity,
   PrimaryGeneratedColumn,
   Column,
-  JoinColumn,
-  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToMany,
 } from 'typeorm';
-import { Order } from './Order';
+import { Product } from './Product';
 
 @Entity('order_items')
 export class OrderItem extends BaseEntity {
@@ -17,26 +17,24 @@ export class OrderItem extends BaseEntity {
 
   @Field(() => String)
   @Column()
-  productTitle: string;
+  name: string;
+
+  @Field(() => Number)
+  @Column()
+  qty: number;
 
   @Field(() => Number)
   @Column()
   price: number;
 
-  @Field(() => Number)
-  @Column()
-  quantity: number;
+  @ManyToMany(() => Product)
+  products: Product[];
 
-  @Field(() => Number)
-  @Column()
-  sellerRevenue: number; // sellers get 95% profit
+  @Field(() => String)
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
 
-  @Field(() => Number)
-  @Column()
-  purchaseFee: number; // 5% fee by using this site
-
-  @Field(() => Order)
-  @ManyToOne(() => Order, order => order.orderItems)
-  @JoinColumn({ name: 'order_id' })
-  order: Order;
+  @Field(() => String)
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 }

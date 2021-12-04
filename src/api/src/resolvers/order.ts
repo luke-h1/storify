@@ -1,24 +1,27 @@
-import { Arg, Authorized, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, Authorized, Ctx, Mutation, Resolver } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Order } from '../entities/Order';
-import { CreateOrderInput } from '../inputs/order/CreateOrderInput';
+import { OrderCreateInput } from '../inputs/order/OrderCreateInput.ts';
+import { MyContext } from '../types/MyContext';
 
 @Resolver(Order)
 export class OrderResolver {
-  @Query(() => [Order])
-  async orders(): Promise<Order[]> {
-    const orders = await getConnection().query(
-      `
-        SELECT o.* FROM "orders" o 
-        ORDER BY o."createdAt" DESC
-      `,
-    );
-    return orders;
+  @Mutation(() => Order)
+  @Authorized()
+  async createOrder(
+    @Arg('input') input: OrderCreateInput,
+    @Ctx() { req }: MyContext,
+  ): Promise<Order> {
+    const result = await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(Order)
+      .values({
+        ...input,
+        creatorId: req.session.userId,
+      })
+      .returning('*')
+      .execute();
+    return result.raw[0];
   }
-
-  // @Mutation(() => Order)
-  // @Authorized()
-  // async createOrder(@Arg('input') input: CreateOrderInput): Promise<Order[]> {
-  //   // user..
-  // }
 }
