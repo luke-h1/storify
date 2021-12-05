@@ -59,17 +59,17 @@ const adminLinks: { id: number; text: string; slug: string }[] = [
   {
     id: 1,
     text: 'Users',
-    slug: 'admin/users',
+    slug: '/admin/users',
   },
   {
     id: 2,
     text: 'Orders',
-    slug: 'admin/orders',
+    slug: '/admin/orders',
   },
   {
     id: 3,
     text: 'Products',
-    slug: 'admin/products',
+    slug: '/admin/products',
   },
 ];
 
