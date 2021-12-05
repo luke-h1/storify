@@ -30,9 +30,13 @@ export class OrderItem extends BaseEntity {
   @Column()
   qty: number;
 
+  @Field(() => Int)
+  @Column()
+  orderId: number;
+
   @Field(() => Order)
-  @ManyToOne(() => Order)
-  @JoinColumn({ name: 'order_id' })
+  @ManyToOne(() => Order, order => order.orderItems)
+  @JoinColumn({ name: 'orderId' })
   order: Order;
 
   @Field(() => String)

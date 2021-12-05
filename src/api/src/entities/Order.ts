@@ -62,8 +62,12 @@ export class Order extends BaseEntity {
 
   @Field(() => [OrderItem])
   @OneToMany(() => OrderItem, orderItem => orderItem.order)
-  @Column({ array: true, type: 'varchar' })
   orderItems: OrderItem[];
+
+  @Field(() => Int)
+  get total(): number {
+    return this.orderItems.reduce((s, i) => s + i.price, 0);
+  }
 
   @Field(() => String)
   @CreateDateColumn({ type: 'timestamp with time zone' })

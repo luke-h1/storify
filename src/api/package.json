@@ -14,7 +14,8 @@
     "tsc": "tsc --noEmit",
     "gen-env": "gen-env-types .env -o src/types/env.d.ts -e .",
     "migrate:gen": "sh scripts/migrate.sh",
-    "migrate:up": "typeorm migration:run"
+    "migrate:up": "typeorm migration:run",
+    "seed:db": "sh scripts/seed-db.sh"
   },
   "dependencies": {
     "stripe": "8.191.0",

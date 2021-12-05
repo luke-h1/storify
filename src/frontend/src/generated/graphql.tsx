@@ -28,6 +28,11 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type IdQty = {
+  productId: Scalars['Int'];
+  qty: Scalars['Int'];
+};
+
 export type ImageSignature = {
   __typename?: 'ImageSignature';
   signature: Scalars['String'];
@@ -38,6 +43,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
   createImageSignature: ImageSignature;
+  createOrder: Order;
   createProduct: Product;
   deleteProduct: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
@@ -50,6 +56,10 @@ export type Mutation = {
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
+};
+
+export type MutationCreateOrderArgs = {
+  input: OrderCreateInput;
 };
 
 export type MutationCreateProductArgs = {
@@ -76,6 +86,47 @@ export type MutationRegisterArgs = {
 export type MutationUpdateProductArgs = {
   id: Scalars['Int'];
   input: ProductCreateInput;
+};
+
+export type Order = {
+  __typename?: 'Order';
+  address: Scalars['String'];
+  city: Scalars['String'];
+  country: Scalars['String'];
+  createdAt: Scalars['String'];
+  creatorId: Scalars['Float'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  id: Scalars['Int'];
+  lastName: Scalars['String'];
+  orderItems: Array<OrderItem>;
+  postCode: Scalars['String'];
+  total: Scalars['Int'];
+  transactionId: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type OrderCreateInput = {
+  address: Scalars['String'];
+  city: Scalars['String'];
+  country: Scalars['String'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  postCode: Scalars['String'];
+  products: Array<IdQty>;
+};
+
+export type OrderItem = {
+  __typename?: 'OrderItem';
+  createdAt: Scalars['String'];
+  id: Scalars['Int'];
+  order: Order;
+  orderId: Scalars['Int'];
+  price: Scalars['Int'];
+  productTitle: Scalars['String'];
+  qty: Scalars['Int'];
+  updatedAt: Scalars['String'];
 };
 
 export type Product = {
@@ -107,6 +158,7 @@ export type ProductCreateInput = {
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
+  orders: Array<Order>;
   product?: Maybe<Product>;
   products: Array<Product>;
 };
@@ -304,6 +356,26 @@ export type MeQuery = {
     | undefined;
 };
 
+export type OrdersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type OrdersQuery = {
+  __typename?: 'Query';
+  orders: Array<{
+    __typename?: 'Order';
+    id: number;
+    firstName: string;
+    total: number;
+    orderItems: Array<{
+      __typename?: 'OrderItem';
+      id: number;
+      price: number;
+      productTitle: string;
+      qty: number;
+      orderId: number;
+    }>;
+  }>;
+};
+
 export type ProductQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -489,6 +561,28 @@ export function useMeQuery(
   options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {},
 ) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+}
+export const OrdersDocument = gql`
+  query Orders {
+    orders {
+      id
+      firstName
+      total
+      orderItems {
+        id
+        price
+        productTitle
+        qty
+        orderId
+      }
+    }
+  }
+`;
+
+export function useOrdersQuery(
+  options: Omit<Urql.UseQueryArgs<OrdersQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<OrdersQuery>({ query: OrdersDocument, ...options });
 }
 export const ProductDocument = gql`
   query Product($id: Int!) {

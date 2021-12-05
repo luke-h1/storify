@@ -1,29 +1,19 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
 import Stripe from 'stripe';
-import {
-  Arg,
-  Authorized,
-  Ctx,
-  Mutation,
-  Query,
-  Resolver,
-  UseMiddleware,
-} from 'type-graphql';
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Order } from '../entities/Order';
 import { OrderItem } from '../entities/OrderItem';
 import { Product } from '../entities/Product';
 import { OrderCreateInput } from '../inputs/order/OrderCreateInput';
-import { isAdmin } from '../middleware/isAdmin';
 import { MyContext } from '../types/MyContext';
 
 @Resolver(Order)
 export class OrderResolver {
   @Query(() => [Order])
-  @UseMiddleware(isAdmin)
   async orders() {
-    return Order.find({ relations: ['order_items'] });
+    return Order.find({ relations: ['orderItems'] });
   }
 
   @Mutation(() => Order)
