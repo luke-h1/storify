@@ -1,4 +1,4 @@
-import { InputType, Field, Int, InterfaceType, ObjectType } from 'type-graphql';
+import { InputType, Field, Int } from 'type-graphql';
 
 @InputType()
 class IdQty {

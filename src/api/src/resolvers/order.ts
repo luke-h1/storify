@@ -54,6 +54,7 @@ export class OrderResolver {
         const product = await Product.findOne({ id: i.productId });
 
         if (!product) {
+          // eslint-disable-next-line no-console
           console.log('no product');
         }
 
