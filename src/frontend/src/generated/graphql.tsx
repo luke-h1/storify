@@ -122,7 +122,7 @@ export type User = {
   firstName: Scalars['String'];
   fullName: Scalars['String'];
   id: Scalars['Int'];
-  isAdmin: Scalars['String'];
+  isAdmin: Scalars['Boolean'];
   lastName: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -151,6 +151,7 @@ export type UserFragmentFragment = {
   id: number;
   email: string;
   firstName: string;
+  isAdmin: boolean;
 };
 
 export type UserResponseFragmentFragment = {
@@ -160,7 +161,13 @@ export type UserResponseFragmentFragment = {
     | null
     | undefined;
   user?:
-    | { __typename?: 'User'; id: number; email: string; firstName: string }
+    | {
+        __typename?: 'User';
+        id: number;
+        email: string;
+        firstName: string;
+        isAdmin: boolean;
+      }
     | null
     | undefined;
 };
@@ -217,7 +224,13 @@ export type LoginMutation = {
       | null
       | undefined;
     user?:
-      | { __typename?: 'User'; id: number; email: string; firstName: string }
+      | {
+          __typename?: 'User';
+          id: number;
+          email: string;
+          firstName: string;
+          isAdmin: boolean;
+        }
       | null
       | undefined;
   };
@@ -240,7 +253,13 @@ export type RegisterMutation = {
       | null
       | undefined;
     user?:
-      | { __typename?: 'User'; id: number; email: string; firstName: string }
+      | {
+          __typename?: 'User';
+          id: number;
+          email: string;
+          firstName: string;
+          isAdmin: boolean;
+        }
       | null
       | undefined;
   };
@@ -274,7 +293,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never }>;
 export type MeQuery = {
   __typename?: 'Query';
   me?:
-    | { __typename?: 'User'; id: number; email: string; firstName: string }
+    | {
+        __typename?: 'User';
+        id: number;
+        email: string;
+        firstName: string;
+        isAdmin: boolean;
+      }
     | null
     | undefined;
 };
@@ -329,6 +354,7 @@ export const UserFragmentFragmentDoc = gql`
     id
     email
     firstName
+    isAdmin
   }
 `;
 export const UserResponseFragmentFragmentDoc = gql`

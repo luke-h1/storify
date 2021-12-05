@@ -44,7 +44,7 @@ export class User extends BaseEntity {
   @OneToMany(() => Review, r => r.creator)
   reviews: Review[];
 
-  @Field(() => String)
+  @Field(() => Boolean)
   @Column({ default: false })
   isAdmin: Boolean;
 

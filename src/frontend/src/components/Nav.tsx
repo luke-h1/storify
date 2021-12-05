@@ -55,6 +55,24 @@ const authenticatedLinks: { id: number; text: string; slug: string }[] = [
   },
 ];
 
+const adminLinks: { id: number; text: string; slug: string }[] = [
+  {
+    id: 1,
+    text: 'Users',
+    slug: 'admin/users',
+  },
+  {
+    id: 2,
+    text: 'Orders',
+    slug: 'admin/orders',
+  },
+  {
+    id: 3,
+    text: 'Products',
+    slug: 'admin/products',
+  },
+];
+
 const Nav = () => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const [{ data }] = useMeQuery({
@@ -76,7 +94,7 @@ const Nav = () => {
         <HStack spacing={8} alignItems="center">
           <Box>Logo</Box>
           <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>
-            {data?.me
+            {data?.me && !data?.me.isAdmin
               ? authenticatedLinks.map(link => (
                   <ChakraLink
                     key={link.id}
@@ -107,6 +125,23 @@ const Nav = () => {
                     {link.text}
                   </ChakraLink>
                 ))}
+            {data?.me &&
+              data?.me.isAdmin &&
+              adminLinks.map(link => (
+                <ChakraLink
+                  key={link.id}
+                  px={2}
+                  py={1}
+                  rounded="md"
+                  _hover={{
+                    textDecoration: 'none',
+                    bg: useColorModeValue('gray.200', 'gray.700'),
+                  }}
+                  href={link.slug}
+                >
+                  {link.text}
+                </ChakraLink>
+              ))}
           </HStack>
         </HStack>
         <Flex alignItems="center">
