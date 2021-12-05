@@ -19,7 +19,7 @@ import { User } from '../entities/User';
         where: { id: randomInt(2, 31) },
       });
       if (!user) {
-        throw new Error('not users found');
+        throw new Error('user not found');
       }
 
       const product = await productRepository.save({
