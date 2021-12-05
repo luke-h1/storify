@@ -1,14 +1,14 @@
 query Orders {
   orders {
     id
-    firstName
-    lastName
+    firstName    
+    total
     orderItems {
       id
       price
       productTitle
       qty
-      
+      orderId
     }
   }
 }

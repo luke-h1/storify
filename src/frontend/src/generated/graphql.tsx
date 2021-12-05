@@ -101,6 +101,7 @@ export type Order = {
   lastName: Scalars['String'];
   orderItems: Array<OrderItem>;
   postCode: Scalars['String'];
+  total: Scalars['Int'];
   transactionId: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -363,13 +364,14 @@ export type OrdersQuery = {
     __typename?: 'Order';
     id: number;
     firstName: string;
-    lastName: string;
+    total: number;
     orderItems: Array<{
       __typename?: 'OrderItem';
       id: number;
       price: number;
       productTitle: string;
       qty: number;
+      orderId: number;
     }>;
   }>;
 };
@@ -565,12 +567,13 @@ export const OrdersDocument = gql`
     orders {
       id
       firstName
-      lastName
+      total
       orderItems {
         id
         price
         productTitle
         qty
+        orderId
       }
     }
   }
