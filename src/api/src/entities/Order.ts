@@ -1,13 +1,14 @@
-/* eslint-disable import/no-cycle */
 import { Field, Int, ObjectType } from 'type-graphql';
 import {
-  BaseEntity,
-  Column,
   Entity,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
   JoinColumn,
   ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { OrderItem } from './OrderItem';
 import { User } from './User';
@@ -17,17 +18,58 @@ import { User } from './User';
 export class Order extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
+
+  @Field(() => String)
+  @Column()
+  firstName: string;
+
+  @Field(() => String)
+  @Column()
+  lastName: string;
+
+  @Field(() => String)
+  @Column()
+  email: string;
+
+  @Field(() => String)
+  @Column()
+  address: string;
+
+  @Field(() => String)
+  @Column()
+  country: string;
+
+  @Field(() => String)
+  @Column()
+  city: string;
+
+  @Field(() => String)
+  @Column()
+  postCode: string;
+
+  @Field(() => String)
+  @Column({ nullable: true })
+  transactionId: string;
+
+  @Field()
+  @Column()
+  creatorId: number;
+
+  @ManyToOne(() => User, u => u.orders)
+  @JoinColumn({ name: 'creatorId' })
+  creator: User;
 
   @Field(() => [OrderItem])
-  @OneToMany(() => OrderItem, orderItem => orderItem.orderId)
-  orderItem: OrderItem[];
+  @OneToMany(() => OrderItem, orderItem => orderItem.order)
+  @Column({ array: true, type: 'varchar' })
+  orderItems: OrderItem[];
 
-  @Field(() => User)
-  @ManyToOne(() => User, user => user.orderId, {
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ referencedColumnName: 'id', name: 'userId' })
-  userId: User;
+  @Field(() => String)
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
+
+  @Field(() => String)
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 }

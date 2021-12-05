@@ -1,43 +1,45 @@
 import { Field, Int, ObjectType } from 'type-graphql';
 import {
-  Entity,
   BaseEntity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  CreateDateColumn,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Order } from './Order';
-import { Product } from './Product';
 
 @ObjectType()
 @Entity('order_items')
 export class OrderItem extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
-  id: number;
-
-  @Field(() => Int)
-  @Column('smallint')
-  quantity: number;
+  id!: number;
 
   @Field(() => String)
-  @Column('varchar', { length: 60 })
+  @Column()
   productTitle: string;
 
-  @Field(() => Order)
-  @ManyToOne(() => Order, order => order.orderItem, {
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'orderId' })
-  orderId: Order;
+  @Field(() => Int)
+  @Column()
+  price: number;
 
-  @Field(() => Product)
-  @ManyToOne(() => Product, product => product.cartItem, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn({ name: 'productId' })
-  productId: Product;
+  @Field(() => Int)
+  @Column()
+  qty: number;
+
+  @Field(() => Order)
+  @ManyToOne(() => Order)
+  @JoinColumn({ name: 'order_id' })
+  order: Order;
+
+  @Field(() => String)
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
+
+  @Field(() => String)
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 }

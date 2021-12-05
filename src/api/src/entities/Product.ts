@@ -9,10 +9,7 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
 } from 'typeorm';
-import { CartItem } from './CartItem';
-import { OrderItem } from './OrderItem';
 import { User } from './User';
 
 @ObjectType()
@@ -29,14 +26,6 @@ export class Product extends BaseEntity {
   @ManyToOne(() => User, u => u.products)
   @JoinColumn({ name: 'creatorId' })
   creator: User;
-
-  @Field(() => CartItem)
-  @OneToMany(() => CartItem, cartItem => cartItem.productId)
-  cartItem: CartItem[];
-
-  @Field(() => [OrderItem])
-  @OneToMany(() => OrderItem, orderItem => orderItem.productId)
-  orderItem: OrderItem[];
 
   @Field(() => String)
   @Column()

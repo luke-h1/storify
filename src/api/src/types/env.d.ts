@@ -7,5 +7,6 @@ declare namespace NodeJS {
     PORT: string;
     FRONTEND_URL: string;
     CLOUDINARY_SECRET: string;
+    STRIPE_SECRET_KEY: string;
   }
 }
