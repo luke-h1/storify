@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Order } from './Order';
 import { Product } from './Product';
 import { Review } from './Review';
 
@@ -17,7 +18,7 @@ import { Review } from './Review';
 export class User extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
-  id: number;
+  readonly id: number;
 
   @Field()
   @Column()
@@ -37,20 +38,19 @@ export class User extends BaseEntity {
   @OneToMany(() => Product, p => p.creator)
   products: Product[];
 
+  @OneToMany(() => Order, o => o.creator)
+  orders: Order[];
+
   @OneToMany(() => Review, r => r.creator)
   reviews: Review[];
 
-  @Field(() => String)
+  @Field(() => Boolean)
   @Column({ default: false })
   isAdmin: Boolean;
 
   @Field(() => String)
-  @Column({ default: 'user' })
-  role: 'user' | 'admin' | 'seller';
-
-  @Field(() => String)
   @CreateDateColumn({ type: 'timestamp with time zone' })
-  createdAt: Date;
+  readonly createdAt: Date;
 
   @Field(() => String)
   @UpdateDateColumn({ type: 'timestamp with time zone' })
