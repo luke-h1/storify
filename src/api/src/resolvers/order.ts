@@ -21,9 +21,8 @@ import { MyContext } from '../types/MyContext';
 @Resolver(Order)
 export class OrderResolver {
   @Query(() => [Order])
-  @UseMiddleware(isAdmin)
   async orders() {
-    return Order.find({ relations: ['order_items'] });
+    return Order.find({ relations: ['orderItems'] });
   }
 
   @Mutation(() => Order)
