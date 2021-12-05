@@ -12,7 +12,7 @@ import { User } from '../entities/User';
     const userRepository = getManager().getRepository(User);
     const hashedPassword = await bcrypt.hash('storify12345', 12);
 
-    for (let i = 0; i < 30; i += 1) {
+    for (let i = 0; i < 60; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const result = await userRepository.save({
         firstName: faker.name.firstName(),

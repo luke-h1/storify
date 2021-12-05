@@ -62,7 +62,7 @@ export class Order extends BaseEntity {
 
   @Field(() => [OrderItem])
   @OneToMany(() => OrderItem, orderItem => orderItem.order)
-  @Column({ array: true, type: 'varchar' })
+  // @Column({ array: true, type: 'varchar' })
   orderItems: OrderItem[];
 
   @Field(() => String)
