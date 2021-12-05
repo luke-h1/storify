@@ -7,6 +7,8 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from './User';
 
@@ -15,7 +17,7 @@ import { User } from './User';
 export class Review extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
-  id!: number;
+  readonly id!: number;
 
   @Field(() => String)
   @Column()
@@ -36,4 +38,12 @@ export class Review extends BaseEntity {
   @ManyToOne(() => User, u => u.reviews)
   @JoinColumn({ name: 'creatorId' })
   creator: User;
+
+  @Field(() => String)
+  @CreateDateColumn()
+  readonly createdAt: Date;
+
+  @Field(() => String)
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -1,5 +1,5 @@
-import { User } from 'src/entities/User';
 import { MiddlewareFn } from 'type-graphql';
+import { User } from '../entities/User';
 import { MyContext } from '../types/MyContext';
 
 export const isAdmin: MiddlewareFn<MyContext> = async ({ context }, next) => {

@@ -17,7 +17,7 @@ import { User } from './User';
 export class Product extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
-  id!: number;
+  readonly id!: number;
 
   @Field()
   @Column()
@@ -59,7 +59,7 @@ export class Product extends BaseEntity {
 
   @Field(() => String)
   @CreateDateColumn()
-  createdAt: Date;
+  readonly createdAt: Date;
 
   @Field(() => String)
   @UpdateDateColumn()

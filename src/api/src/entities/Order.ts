@@ -18,7 +18,7 @@ import { User } from './User';
 export class Order extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
-  id!: number;
+  readonly id!: number;
 
   @Field(() => String)
   @Column()
@@ -67,7 +67,7 @@ export class Order extends BaseEntity {
 
   @Field(() => String)
   @CreateDateColumn({ type: 'timestamp with time zone' })
-  createdAt: Date;
+  readonly createdAt: Date;
 
   @Field(() => String)
   @UpdateDateColumn({ type: 'timestamp with time zone' })

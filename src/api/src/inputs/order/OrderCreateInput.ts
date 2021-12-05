@@ -1,7 +1,7 @@
-import { InputType, Field, Int, InterfaceType } from 'type-graphql';
+import { InputType, Field, Int, InterfaceType, ObjectType } from 'type-graphql';
 
-@InterfaceType()
-abstract class OrderProducts {
+@ObjectType()
+abstract class ProductArrType {
   @Field(() => Int)
   productId: number;
 
@@ -32,9 +32,6 @@ export class OrderCreateInput {
   @Field()
   postCode: string;
 
-  @Field(() => [OrderProducts])
-  products: {
-    productId: number;
-    qty: number;
-  }[];
+  @Field(() => [ProductArrType])
+  products: ProductArrType[];
 }

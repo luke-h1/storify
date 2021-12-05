@@ -6,6 +6,7 @@ import {
   Authorized,
   Ctx,
   Mutation,
+  Query,
   Resolver,
   UseMiddleware,
 } from 'type-graphql';
@@ -19,7 +20,7 @@ import { MyContext } from '../types/MyContext';
 
 @Resolver(Order)
 export class OrderResolver {
-  @Mutation(() => [Order])
+  @Query(() => [Order])
   @UseMiddleware(isAdmin)
   async orders() {
     return Order.find({ relations: ['order_items'] });
