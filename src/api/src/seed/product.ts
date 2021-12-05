@@ -27,15 +27,14 @@ import { User } from '../entities/User';
         creatorId: user.id,
         brand: faker.commerce.product(),
         name: faker.commerce.productName(),
-        description: faker.lorem.words(10),
+        description: faker.commerce.productDescription(),
         categories: [
-          faker.lorem.words(2),
-          faker.lorem.words(2),
-          faker.lorem.words(2),
+          faker.commerce.department(),
+          faker.commerce.productAdjective(),
         ],
         price: randomInt(10, 3000),
         publicId: '',
-        image: 'https://picsum.photos/200/300.webp',
+        image: faker.image.animals(),
       });
       console.log(`Product created ${product.id}`);
     }
