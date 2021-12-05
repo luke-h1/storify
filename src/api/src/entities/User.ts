@@ -49,10 +49,6 @@ export class User extends BaseEntity {
   isAdmin: Boolean;
 
   @Field(() => String)
-  @Column({ default: 'user' })
-  role: 'user' | 'admin' | 'seller';
-
-  @Field(() => String)
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date;
 

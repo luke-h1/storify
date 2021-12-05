@@ -13,7 +13,7 @@ import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React from 'react';
 import toast from 'react-hot-toast';
-import InputField from '../../components/InputField';
+import InputField from '../../components/form/InputField';
 import { useLoginMutation } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import toErrorMap from '../../utils/toErrorMap';

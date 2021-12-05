@@ -90,7 +90,7 @@ export type Product = {
   id: Scalars['Int'];
   image: Scalars['String'];
   name: Scalars['String'];
-  price: Scalars['Float'];
+  price: Scalars['Int'];
   publicId: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -124,7 +124,6 @@ export type User = {
   id: Scalars['Int'];
   isAdmin: Scalars['String'];
   lastName: Scalars['String'];
-  role: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
