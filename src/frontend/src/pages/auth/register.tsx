@@ -12,7 +12,7 @@ import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { toast } from 'react-hot-toast';
-import InputField from '../../components/InputField';
+import InputField from '../../components/form/InputField';
 import { useRegisterMutation } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import toErrorMap from '../../utils/toErrorMap';
@@ -50,7 +50,6 @@ const Register = () => {
               setErrors(toErrorMap(res.data.register.errors));
             } else {
               toast.success('Succesfully registered!');
-
               setTimeout(() => {
                 router.push('/');
               }, 700);

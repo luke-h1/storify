@@ -66,6 +66,7 @@
       }
     ],
     "no-promise-executor-return": "off",
+    "import/no-cycle": "off",
     "react/function-component-definition": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "max-classes-per-file": "off",

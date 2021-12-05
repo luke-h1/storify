@@ -12,7 +12,7 @@ import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import InputField from '../../components/InputField';
+import InputField from '../../components/form/InputField';
 import {
   useCreateProductMutation,
   useCreateSignatureMutation,
