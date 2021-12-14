@@ -118,7 +118,6 @@ const SingleProductPage = () => {
                 price,
                 qty 
                 in local storage
-
             */}
             <Button as="a" colorScheme="blue" mt={4}>
               Add to cart
