@@ -16,6 +16,7 @@ export class OrderResolver {
     return Order.find({ relations: ['orderItems'] });
   }
 
+  // add to cart function
   @Mutation(() => Order)
   @Authorized()
   async createOrder(

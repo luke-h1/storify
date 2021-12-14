@@ -12,6 +12,7 @@ import {
   Tr,
   Select,
 } from '@chakra-ui/react';
+import { Formik } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -109,6 +110,16 @@ const SingleProductPage = () => {
                 </Select>
               </Tr>
             </Tbody>
+            {/* TODO: create context or custom hook here for cart 
+                will need to store:
+                product id,
+                name,
+                image,
+                price,
+                qty 
+                in local storage
+
+            */}
             <Button as="a" colorScheme="blue" mt={4}>
               Add to cart
             </Button>
