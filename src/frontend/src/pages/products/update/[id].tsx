@@ -101,8 +101,15 @@ const UpdateProductPage = () => {
             <Form>
               <Box rounded="lg" bg="#fff" boxShadow="lg" py={8} px={8}>
                 <Stack spacing={5}>
-                  <InputField label="Name" name="name" placeholder="iphone" />
-                  <InputField label="Brand" name="brand" placeholder="apple" />
+                  <InputField label="Name" name="name" placeholder="Iphone" />
+                  <InputField label="Brand" name="brand" placeholder="Apple" />
+                  <InputField
+                    label="Description"
+                    name="description"
+                    placeholder="informative description of the product"
+                    textarea
+                  />
+
                   <InputField
                     name="categories[0]"
                     placeholder="category"

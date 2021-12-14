@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { createConnection } from 'typeorm';
+import { Cart } from '../entities/Cart';
 import { Order } from '../entities/Order';
 import { OrderItem } from '../entities/OrderItem';
 import { Product } from '../entities/Product';
@@ -12,7 +13,7 @@ const createConn = async () =>
     url: process.env.DATABASE_URL,
     logging: true,
     migrations: [join(__dirname, '../migrations/*')],
-    entities: [User, Product, Order, OrderItem, Review],
+    entities: [User, Product, Order, OrderItem, Cart, Review],
     synchronize: true,
   });
 export default createConn;

@@ -36,16 +36,16 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
-  @OneToMany(() => Product, p => p.creator)
+  @OneToMany(() => Product, p => p.creator, { onDelete: 'CASCADE' })
   products: Product[];
 
-  @OneToMany(() => Order, o => o.creator)
+  @OneToMany(() => Order, o => o.creator, { onDelete: 'CASCADE' })
   orders: Order[];
 
-  @OneToMany(() => Cart, c => c.creator)
+  @OneToMany(() => Cart, c => c.creator, { onDelete: 'CASCADE' })
   cart: Cart[];
 
-  @OneToMany(() => Review, r => r.creator)
+  @OneToMany(() => Review, r => r.creator, { onDelete: 'CASCADE' })
   reviews: Review[];
 
   @Field(() => Boolean)
