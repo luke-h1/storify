@@ -1,4 +1,4 @@
-import { Arg, Ctx, Mutation, Resolver } from 'type-graphql';
+import { Arg, Ctx, Mutation, Resolver, Query } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Cart } from '../entities/Cart';
 import { CartCreateInput } from '../inputs/cart/CartCreateInput';
@@ -11,7 +11,7 @@ export class CartResolver {
     @Arg('input') input: CartCreateInput,
     @Ctx() { req }: MyContext,
   ): Promise<Boolean> {
-    // check product id
+    // TODO: add validation. check product id
     await getConnection()
       .createQueryBuilder()
       .insert()
@@ -23,5 +23,10 @@ export class CartResolver {
       .returning('*')
       .execute();
     return true;
+  }
+
+  @Query(() => Cart)
+  async myCart(@Ctx() { req }: MyContext): Promise<Cart[]> {
+    return Cart.find({ where: { creatorId: req.session.userId } });
   }
 }

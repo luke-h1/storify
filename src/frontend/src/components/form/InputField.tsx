@@ -1,7 +1,6 @@
 import {
   FormControl,
   FormLabel,
-  Input,
   FormErrorMessage,
   Textarea,
   ComponentWithAs,
@@ -34,6 +33,8 @@ const InputField: React.FC<InputFieldProps> = ({
   return (
     <FormControl isInvalid={!!error}>
       <FormLabel htmlFor={field.name}>{label}</FormLabel>
+      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/* @ts-ignore */}
       <InputOrTextarea {...field} {...props} id={field.name} />
       {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
