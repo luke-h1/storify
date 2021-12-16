@@ -39,19 +39,9 @@ const unauthenticatedLinks: { id: number; text: string; slug: string }[] = [
 
 const authenticatedLinks: { id: number; text: string; slug: string }[] = [
   {
-    id: 1,
-    text: 'Dashboard',
-    slug: '/dashboard',
-  },
-  {
-    id: 2,
-    text: 'Products',
-    slug: '/products',
-  },
-  {
     id: 3,
-    text: 'Profile',
-    slug: '/profile',
+    text: 'Cart',
+    slug: '/cart',
   },
 ];
 
@@ -92,7 +82,7 @@ const Nav = () => {
           onClick={isOpen ? onClose : onOpen}
         />
         <HStack spacing={8} alignItems="center">
-          <Box>Logo</Box>
+          {/* <Box>Logo</Box> */}
           <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>
             {data?.me && !data?.me.isAdmin
               ? authenticatedLinks.map(link => (

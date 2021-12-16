@@ -38,9 +38,9 @@ export class Cart extends BaseEntity {
   @Column()
   price: number;
 
-  @Field(() => String)
+  @Field(() => Number)
   @Column()
-  productId: string;
+  productId: number;
 
   @Field(() => Int)
   @Column()

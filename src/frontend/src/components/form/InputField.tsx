@@ -25,10 +25,11 @@ const InputField: React.FC<InputFieldProps> = ({
 }) => {
   let InputOrTextarea:
     | ComponentWithAs<'input', InputProps>
-    | ComponentWithAs<'textarea', InputProps> = Input;
+    | ComponentWithAs<'textarea', InputProps>;
   if (textarea) {
     InputOrTextarea = Textarea as ComponentWithAs<'textarea', InputProps>;
   }
+
   const [field, { error }] = useField(props);
   return (
     <FormControl isInvalid={!!error}>

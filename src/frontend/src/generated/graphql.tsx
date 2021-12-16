@@ -22,6 +22,14 @@ export type Scalars = {
   Float: number;
 };
 
+export type CartCreateInput = {
+  image: Scalars['String'];
+  name: Scalars['String'];
+  price: Scalars['Int'];
+  productId: Scalars['Int'];
+  qty: Scalars['Int'];
+};
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
@@ -42,6 +50,7 @@ export type ImageSignature = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
+  createCart: Scalars['Boolean'];
   createImageSignature: ImageSignature;
   createOrder: Order;
   createProduct: Product;
@@ -56,6 +65,10 @@ export type Mutation = {
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
+};
+
+export type MutationCreateCartArgs = {
+  input: CartCreateInput;
 };
 
 export type MutationCreateOrderArgs = {
@@ -222,6 +235,15 @@ export type UserResponseFragmentFragment = {
       }
     | null
     | undefined;
+};
+
+export type CreateCartMutationVariables = Exact<{
+  input: CartCreateInput;
+}>;
+
+export type CreateCartMutation = {
+  __typename?: 'Mutation';
+  createCart: boolean;
 };
 
 export type CreateProductMutationVariables = Exact<{
@@ -441,6 +463,17 @@ export const UserResponseFragmentFragmentDoc = gql`
   ${ErrorFragmentDoc}
   ${UserFragmentFragmentDoc}
 `;
+export const CreateCartDocument = gql`
+  mutation CreateCart($input: CartCreateInput!) {
+    createCart(input: $input)
+  }
+`;
+
+export function useCreateCartMutation() {
+  return Urql.useMutation<CreateCartMutation, CreateCartMutationVariables>(
+    CreateCartDocument,
+  );
+}
 export const CreateProductDocument = gql`
   mutation CreateProduct($input: ProductCreateInput!) {
     createProduct(input: $input) {
