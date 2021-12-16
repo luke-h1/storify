@@ -11,7 +11,7 @@ type SelectFieldProps = {
   label: string;
   name: string;
   textarea?: boolean;
-  children: React.ReactNode;
+  children: Element[];
 };
 
 const SelectField: React.FC<SelectFieldProps> = ({

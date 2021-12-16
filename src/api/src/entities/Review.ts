@@ -40,10 +40,10 @@ export class Review extends BaseEntity {
   creator: User;
 
   @Field(() => String)
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   readonly createdAt: Date;
 
   @Field(() => String)
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
   updatedAt: Date;
 }

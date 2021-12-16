@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import {
   Flex,
   chakra,
@@ -10,9 +11,12 @@ import {
   Tbody,
   Td,
   Tr,
+  FormControl,
+  FormLabel,
   Select,
 } from '@chakra-ui/react';
-import { Formik } from 'formik';
+
+import { Formik, Form, Field } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -23,6 +27,7 @@ import {
   useProductQuery,
   useMeQuery,
   useDeleteProductMutation,
+  useCreateCartMutation,
 } from '../../generated/graphql';
 import useGetIntId from '../../hooks/useGetIntId';
 import { createurqlClient } from '../../utils/createUrqlClient';
@@ -32,6 +37,7 @@ const SingleProductPage = () => {
   const intId = useGetIntId();
   const [{ data: user }] = useMeQuery();
   const [, deleteProduct] = useDeleteProductMutation();
+  const [, createCart] = useCreateCartMutation();
   const [{ data, fetching }] = useProductQuery({
     pause: intId === -1,
     variables: {
@@ -89,43 +95,8 @@ const SingleProductPage = () => {
           {data?.product.description}
         </chakra.p>
         <BlogTags tags={data?.product?.categories} marginTop="3" />
-        <Stack
-          direction={{ base: 'column', sm: 'row' }}
-          mb={{ base: 4, md: 8 }}
-          mt={4}
-          spacing={2}
-        >
-          <Table variant="simple">
-            <Tbody>
-              <Tr>
-                <Td>Price</Td>
-                <Td>£{data?.product.price}</Td>
-              </Tr>
-              <Tr>
-                <Td>Qty</Td>
-                <Select>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                </Select>
-              </Tr>
-            </Tbody>
-            {/* TODO: create context or custom hook here for cart 
-                will need to store:
-                product id,
-                name,
-                image,
-                price,
-                qty 
-                in local storage
-
-            */}
-            <Button as="a" colorScheme="blue" mt={4}>
-              Add to cart
-            </Button>
-          </Table>
-        </Stack>
-        <Box>
+        <Box mb={10} />
+        <Box mb={10} mt={5}>
           {data?.product.creator.id === user?.me?.id && (
             <>
               <hr />
@@ -144,6 +115,65 @@ const SingleProductPage = () => {
             </>
           )}
         </Box>
+        <Formik
+          initialValues={{
+            name: data?.product.name,
+            image: data?.product.image,
+            price: data?.product.price,
+            productId: data?.product.id,
+            qty: 0,
+          }}
+          onSubmit={async values => {
+            if (!data?.product) {
+              throw new Error('no product');
+            }
+
+            const res = await createCart({
+              input: {
+                image: data.product.image,
+                name: data.product.name,
+                price: data.product.price * values.qty,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                qty: parseInt(values.qty, 10),
+                productId: data.product.id,
+              },
+            });
+            if (res.data?.createCart) {
+              router.push('/');
+            }
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              {' '}
+              <Field
+                as={Select}
+                placeholder="Select option"
+                id="qty"
+                name="qty"
+                label="qty"
+                type="number"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </Field>
+              <Button
+                disabled={isSubmitting}
+                bg="blue.400"
+                color="white"
+                _hover={{
+                  bg: 'blue.500',
+                }}
+                type="submit"
+                mt={5}
+              >
+                Add to cart
+              </Button>
+            </Form>
+          )}
+        </Formik>
       </Box>
       <Box w={{ base: 'full', md: 10 / 12 }} mx="auto" textAlign="center">
         <Image

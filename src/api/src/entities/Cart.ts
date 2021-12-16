@@ -1,20 +1,19 @@
-/* eslint-disable import/no-cycle */
 import { Field, Int, ObjectType } from 'type-graphql';
 import {
-  Entity,
   BaseEntity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
-  JoinColumn,
   CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './User';
 
 @ObjectType()
-@Entity('products')
-export class Product extends BaseEntity {
+@Entity('cart')
+export class Cart extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
   readonly id!: number;
@@ -23,7 +22,7 @@ export class Product extends BaseEntity {
   @Column()
   creatorId: number;
 
-  @ManyToOne(() => User, u => u.products)
+  @ManyToOne(() => User, u => u.cart)
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 
@@ -35,27 +34,17 @@ export class Product extends BaseEntity {
   @Column()
   image: string;
 
-  @Field(() => String)
-  publicId(): String {
-    const parts = this.image.split('/');
-    return parts[parts.length - 1];
-  }
-
-  @Field(() => String)
-  @Column()
-  brand: string;
-
-  @Field(() => [String])
-  @Column({ array: true, type: 'varchar' })
-  categories: string[];
-
-  @Field(() => String)
-  @Column()
-  description: string;
-
   @Field(() => Int)
   @Column()
   price: number;
+
+  @Field(() => Number)
+  @Column()
+  productId: number;
+
+  @Field(() => Int)
+  @Column()
+  qty: number;
 
   @Field(() => String)
   @CreateDateColumn({ type: 'timestamp with time zone' })
