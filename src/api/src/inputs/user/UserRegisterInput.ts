@@ -8,4 +8,16 @@ export class UserRegisterInput extends UsernamePasswordInput {
 
   @Field()
   lastName: string;
+
+  @Field()
+  address: string;
+
+  @Field()
+  country: string;
+
+  @Field()
+  city: string;
+
+  @Field()
+  postCode: string;
 }

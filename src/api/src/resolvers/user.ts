@@ -225,8 +225,8 @@ export class UserResolver {
       return {
         errors: [
           {
-            field: 'password',
-            message: 'Incorrect credentials',
+            field: 'email',
+            message: 'Invalid email / password combination',
           },
         ],
       };
@@ -249,7 +249,6 @@ export class UserResolver {
           return {
             errors: [
               {
-                field: '',
                 message: `Problem logging out ${e}`,
               },
             ],

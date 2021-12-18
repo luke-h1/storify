@@ -1,18 +1,10 @@
-import {
-  Flex,
-  Box,
-  Stack,
-  Link,
-  Button,
-  Heading,
-  Text,
-} from '@chakra-ui/react';
+import { Flex, Box, Stack, Link, Button, Heading } from '@chakra-ui/react';
 import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { toast } from 'react-hot-toast';
-import InputField from '../../components/form/InputField';
+import InputField from '../../components/InputField';
 import { useRegisterMutation } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import toErrorMap from '../../utils/toErrorMap';
@@ -25,9 +17,6 @@ const Register = () => {
       <Stack spacing={8} mx="auto" maxW="lg" py={12} px={6}>
         <Stack align="center">
           <Heading fontSize="4xl">Register today</Heading>
-          <Text fontSize="lg" color="gray.600">
-            to enjoy all of our cool <Link color="blue.400">features</Link> ✌️
-          </Text>
         </Stack>
         <Formik
           initialValues={{

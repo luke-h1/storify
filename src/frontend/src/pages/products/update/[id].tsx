@@ -13,7 +13,7 @@ import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import InputField from '../../../components/form/InputField';
+import InputField from '../../../components/InputField';
 import {
   useCreateSignatureMutation,
   useUpdateProductMutation,
@@ -37,10 +37,6 @@ const UpdateProductPage = () => {
   useIsAuth();
   const [, updateProduct] = useUpdateProductMutation();
   const [, createSignature] = useCreateSignatureMutation();
-
-  if (!data?.product) {
-    return <p>no product</p>;
-  }
 
   if (fetching && !data) {
     return <p>loading</p>;
@@ -83,12 +79,12 @@ const UpdateProductPage = () => {
             const res = await updateProduct({
               id: intId,
               input: {
-                brand: values.brand,
-                categories: values.categories,
-                description: values.description,
+                brand: values.brand as string,
+                categories: values.categories as string[],
+                description: values.description as string,
                 image,
-                name: values.name,
-                price: values.price,
+                name: values.name as string,
+                price: values.price as number,
               },
             });
             if (res.data?.updateProduct) {
@@ -122,7 +118,7 @@ const UpdateProductPage = () => {
                   />
                   <InputField
                     name="categories[2]"
-                    placeholder="category 3 "
+                    placeholder="category 3"
                     label="category 3"
                   />
 

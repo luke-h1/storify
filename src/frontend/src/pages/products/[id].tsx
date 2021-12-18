@@ -4,15 +4,12 @@ import {
   chakra,
   Table,
   Box,
-  Stack,
   Image,
   Button,
   ButtonGroup,
   Tbody,
   Td,
   Tr,
-  FormControl,
-  FormLabel,
   Select,
 } from '@chakra-ui/react';
 
@@ -22,16 +19,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { toast } from 'react-hot-toast';
+import InputField from '../../components/InputField';
 import { BlogTags } from '../../components/ProductCard';
-import InputField from '../../components/form/InputField';
 import {
   useProductQuery,
   useMeQuery,
   useDeleteProductMutation,
+  useCreateOrderMutation,
 } from '../../generated/graphql';
 import useGetIntId from '../../hooks/useGetIntId';
 import { createurqlClient } from '../../utils/createUrqlClient';
-import { useCreateOrderMutation } from '../../generated/graphql';
 
 const SingleProductPage = () => {
   const router = useRouter();
@@ -46,16 +43,11 @@ const SingleProductPage = () => {
     },
   });
 
-  if (!data?.product) {
-    return <p>no product</p>;
-  }
-
   if (fetching && !data) {
     return <p>loading</p>;
   }
-
-  if (!user?.me) {
-    return <p>no user</p>;
+  if (!data?.product) {
+    return <p>no product</p>;
   }
 
   const handleDelete = async () => {
@@ -122,14 +114,14 @@ const SingleProductPage = () => {
         </Box>
         <Formik
           initialValues={{
-            qty: 0,
+            qty: 0.0,
             address: '',
             country: '',
             city: '',
             postCode: '',
           }}
           onSubmit={async values => {
-            const res = await createOrder({
+            await createOrder({
               input: {
                 address: values.address,
                 city: values.city,
@@ -139,10 +131,9 @@ const SingleProductPage = () => {
                 lastName: user?.me?.lastName as string,
                 postCode: values.postCode,
                 productId: data?.product?.id as number,
-                qty: parseInt((values.qty as unknown as string), 10) as number,
-              }
-            })
-            console.log(res.data)
+                qty: parseInt(values.qty as unknown as string, 10) as number,
+              },
+            });
           }}
         >
           {({ isSubmitting }) => (

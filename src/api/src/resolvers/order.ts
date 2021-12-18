@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
-import Stripe from 'stripe';
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Order } from '../entities/Order';
@@ -12,8 +11,11 @@ import { MyContext } from '../types/MyContext';
 @Resolver(Order)
 export class OrderResolver {
   @Query(() => [Order])
-  async orders() {
-    return Order.find({ relations: ['orderItems'] });
+  async orders(@Ctx() { req }: MyContext) {
+    return Order.find({
+      where: { creatorId: req.session.userId },
+      relations: ['orderItems'],
+    });
   }
 
   @Mutation(() => Order)
@@ -21,88 +23,42 @@ export class OrderResolver {
   async createOrder(
     @Arg('input') input: OrderCreateInput,
     @Ctx() { req }: MyContext,
-  ): Promise<Order> {
-    const queryRunner = getConnection().createQueryRunner();
-
+  ): Promise<boolean> {
     try {
-      const o = new Order();
-
-      o.creatorId = req.session.userId;
-      o.firstName = input.firstName;
-      o.lastName = input.lastName;
-      o.email = input.email;
-      o.address = input.address;
-      o.country = input.country;
-      o.city = input.city;
-      o.postCode = input.postCode;
-
-      const order = await queryRunner.manager.save(o);
-
-      const lineItems = [];
+      const orderResult = await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(Order)
+        .values({
+          ...input,
+          creatorId: req.session.userId,
+        })
+        .returning('*')
+        .execute();
 
       const product = await Product.findOne({ id: input.productId });
 
       if (!product) {
-        // eslint-disable-next-line no-console
-        console.log('no product');
+        throw new Error('No product!');
       }
 
-      const orderItem = new OrderItem();
+      await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(OrderItem)
+        .values({
+          order: orderResult.raw[0],
+          productTitle: product.name,
+          price: product.price,
+          qty: input.qty,
+        })
+        .returning('*')
+        .execute();
 
-      orderItem.order = order;
-      orderItem.productTitle = product?.name as string;
-      orderItem.price = product?.price as number;
-      orderItem.qty = input.qty;
-
-      await queryRunner.manager.save(orderItem);
-
-      lineItems.push({
-        name: product?.name,
-        description: product?.description,
-        image: product?.image,
-        amount: 100 * (product?.price as number),
-        currency: 'gbp',
-        quantity: input.qty,
-      });
-
-      // stripe
-      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-        apiVersion: '2020-08-27',
-        maxNetworkRetries: 5,
-      });
-      const source = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: lineItems,
-        success_url: `http://localhost:3000/checkout/success?source={CHECKOUT_SESSION_ID}`,
-        cancel_url: `http://localhost:3000/checkout/error`,
-      });
-      order.transactionId = source.id;
-
-      await queryRunner.manager.save(order);
-
-      await queryRunner.commitTransaction();
-      return order;
+      return true;
     } catch (e) {
-      await queryRunner.rollbackTransaction();
-    } finally {
-      await queryRunner.release();
+      console.error(e);
     }
+    return false;
   }
-
-
-
-  @Mutation(() => Order)
-  @Authorized()
-  async createOrder2(
-    @Arg('input') input: OrderCreateInput,
-    @Ctx() { req }: MyContext,
-  ): Promise<Order> {
-    try {
-      
-    } catch (e) {
-      console.error(e)
-    }
-
-  }
-
 }

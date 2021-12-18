@@ -10,7 +10,10 @@
     "gen": "graphql-codegen --config codegen.yml",
     "gen-env": "gen-env-types .env -o src/types/env.d.ts -e ."
   },
+  
   "dependencies": {
+    "@stripe/react-stripe-js": "1.7.0",
+    "@stripe/stripe-js": "1.22.0",
     "@chakra-ui/icons": "1.1.1",
     "@storify/common": "1.0.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.14.5",

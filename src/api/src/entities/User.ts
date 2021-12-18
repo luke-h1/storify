@@ -9,7 +9,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Cart } from './Cart';
 import { Order } from './Order';
 import { Product } from './Product';
 import { Review } from './Review';
