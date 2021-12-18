@@ -21,7 +21,7 @@ export class OrderResolver {
   async createOrder(
     @Arg('input') input: OrderCreateInput,
     @Ctx() { req }: MyContext,
-  ): Promise<boolean> {
+  ): Promise<Order> {
     const queryRunner = getConnection().createQueryRunner();
 
     try {
@@ -40,32 +40,30 @@ export class OrderResolver {
 
       const lineItems = [];
 
-      for (const i of input.products) {
-        const product = await Product.findOne({ id: i.productId });
+      const product = await Product.findOne({ id: input.productId });
 
-        if (!product) {
-          // eslint-disable-next-line no-console
-          console.log('no product');
-        }
-
-        const orderItem = new OrderItem();
-
-        orderItem.order = order;
-        orderItem.productTitle = product?.name as string;
-        orderItem.price = product?.price as number;
-        orderItem.qty = i.qty;
-
-        await queryRunner.manager.save(orderItem);
-
-        lineItems.push({
-          name: product?.name,
-          description: product?.description,
-          image: product?.image,
-          amount: 100 * (product?.price as number),
-          currency: 'gbp',
-          quantity: i.qty,
-        });
+      if (!product) {
+        // eslint-disable-next-line no-console
+        console.log('no product');
       }
+
+      const orderItem = new OrderItem();
+
+      orderItem.order = order;
+      orderItem.productTitle = product?.name as string;
+      orderItem.price = product?.price as number;
+      orderItem.qty = input.qty;
+
+      await queryRunner.manager.save(orderItem);
+
+      lineItems.push({
+        name: product?.name,
+        description: product?.description,
+        image: product?.image,
+        amount: 100 * (product?.price as number),
+        currency: 'gbp',
+        quantity: input.qty,
+      });
 
       // stripe
       const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -83,11 +81,28 @@ export class OrderResolver {
       await queryRunner.manager.save(order);
 
       await queryRunner.commitTransaction();
+      return order;
     } catch (e) {
       await queryRunner.rollbackTransaction();
     } finally {
       await queryRunner.release();
     }
-    return true;
   }
+
+
+
+  @Mutation(() => Order)
+  @Authorized()
+  async createOrder2(
+    @Arg('input') input: OrderCreateInput,
+    @Ctx() { req }: MyContext,
+  ): Promise<Order> {
+    try {
+      
+    } catch (e) {
+      console.error(e)
+    }
+
+  }
+
 }

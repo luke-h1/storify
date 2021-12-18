@@ -23,21 +23,22 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { toast } from 'react-hot-toast';
 import { BlogTags } from '../../components/ProductCard';
+import InputField from '../../components/form/InputField';
 import {
   useProductQuery,
   useMeQuery,
   useDeleteProductMutation,
-  useCreateCartMutation,
 } from '../../generated/graphql';
 import useGetIntId from '../../hooks/useGetIntId';
 import { createurqlClient } from '../../utils/createUrqlClient';
+import { useCreateOrderMutation } from '../../generated/graphql';
 
 const SingleProductPage = () => {
   const router = useRouter();
   const intId = useGetIntId();
   const [{ data: user }] = useMeQuery();
   const [, deleteProduct] = useDeleteProductMutation();
-  const [, createCart] = useCreateCartMutation();
+  const [, createOrder] = useCreateOrderMutation();
   const [{ data, fetching }] = useProductQuery({
     pause: intId === -1,
     variables: {
@@ -51,6 +52,10 @@ const SingleProductPage = () => {
 
   if (fetching && !data) {
     return <p>loading</p>;
+  }
+
+  if (!user?.me) {
+    return <p>no user</p>;
   }
 
   const handleDelete = async () => {
@@ -117,36 +122,48 @@ const SingleProductPage = () => {
         </Box>
         <Formik
           initialValues={{
-            name: data?.product.name,
-            image: data?.product.image,
-            price: data?.product.price,
-            productId: data?.product.id,
             qty: 0,
+            address: '',
+            country: '',
+            city: '',
+            postCode: '',
           }}
           onSubmit={async values => {
-            if (!data?.product) {
-              throw new Error('no product');
-            }
-
-            const res = await createCart({
+            const res = await createOrder({
               input: {
-                image: data.product.image,
-                name: data.product.name,
-                price: data.product.price * values.qty,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                qty: parseInt(values.qty, 10),
-                productId: data.product.id,
-              },
-            });
-            if (res.data?.createCart) {
-              router.push('/');
-            }
+                address: values.address,
+                city: values.city,
+                country: values.country,
+                email: user?.me?.email as string,
+                firstName: user?.me?.firstName as string,
+                lastName: user?.me?.lastName as string,
+                postCode: values.postCode,
+                productId: data?.product?.id as number,
+                qty: parseInt((values.qty as unknown as string), 10) as number,
+              }
+            })
+            console.log(res.data)
           }}
         >
           {({ isSubmitting }) => (
             <Form>
               {' '}
+              <InputField
+                name="address"
+                label="address"
+                placeholder="address"
+              />
+              <InputField
+                name="country"
+                label="country"
+                placeholder="country"
+              />
+              <InputField name="city" label="city" placeholder="city" />
+              <InputField
+                name="postCode"
+                label="postcode"
+                placeholder="postcode"
+              />
               <Field
                 as={Select}
                 placeholder="Select option"
@@ -169,7 +186,7 @@ const SingleProductPage = () => {
                 type="submit"
                 mt={5}
               >
-                Add to cart
+                Buy
               </Button>
             </Form>
           )}

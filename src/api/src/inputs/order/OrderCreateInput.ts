@@ -1,15 +1,6 @@
 import { InputType, Field, Int } from 'type-graphql';
 
 @InputType()
-class IdQty {
-  @Field(() => Int)
-  productId: number;
-
-  @Field(() => Int)
-  qty: number;
-}
-
-@InputType()
 export class OrderCreateInput {
   @Field()
   firstName: string;
@@ -32,6 +23,10 @@ export class OrderCreateInput {
   @Field()
   postCode: string;
 
-  @Field(() => [IdQty])
-  products: IdQty[];
+  @Field(() => Int)
+  productId: number;
+
+  @Field(() => Int)
+  qty: number;
+
 }
