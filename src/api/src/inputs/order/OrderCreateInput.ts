@@ -28,5 +28,4 @@ export class OrderCreateInput {
 
   @Field(() => Int)
   qty: number;
-
 }
