@@ -11,7 +11,6 @@ import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import 'dotenv-safe/config';
-import { graphqlUploadExpress } from 'graphql-upload';
 import createConn from './db/createConn';
 import redis from './db/redis';
 import { createUserLoader } from './loaders/createUserLoader';
@@ -31,7 +30,6 @@ const main = async () => {
       credentials: true,
     }),
   );
-  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
   const RedisStore = connectRedis(session);
   app.use(
@@ -46,7 +44,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: isProd,
-        domain: isProd ? '.url' : undefined,
+        domain: isProd ? 'deployed api URL' : undefined,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,
@@ -65,6 +63,7 @@ const main = async () => {
   const apolloServer = new ApolloServer({
     plugins,
     debug: !!isProd,
+    allowBatchedHttpRequests: true,
     schema: await createSchema(),
     context: ({ req, res }) => ({
       req,
@@ -77,7 +76,9 @@ const main = async () => {
   apolloServer.applyMiddleware({ app, cors: false });
 
   app.listen(process.env.PORT, () =>
-    console.log(`Server running on http://localhost:${process.env.PORT}`),
+    console.log(
+      `Server running on http://localhost:${process.env.PORT}/graphql`,
+    ),
   );
 };
 main().catch(e => console.error(e));
