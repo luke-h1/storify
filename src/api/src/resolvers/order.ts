@@ -16,7 +16,6 @@ export class OrderResolver {
     return Order.find({ relations: ['orderItems'] });
   }
 
-  // called after user has added a product to their cart
   @Mutation(() => Order)
   @Authorized()
   async createOrder(
