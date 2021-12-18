@@ -47,8 +47,6 @@
     "nodemailer": "^6.5.0",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
-    "slugify": "1.6.3",
-    "stripe": "8.191.0",
     "ts-jest": "^27.0.3",
     "type-graphql": "^1.1.1",
     "typeorm": "0.2.41",
