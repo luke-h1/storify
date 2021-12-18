@@ -12,6 +12,7 @@ import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import InputField from '../../components/InputField';
 import {
   useCreateProductMutation,
@@ -95,7 +96,10 @@ const CreateProductPage = () => {
                   price: values.price,
                 },
               });
-              router.push(`/products/${res.data?.createProduct.id}`);
+              if (res?.data?.createProduct) {
+                toast.success('Created product');
+                router.push(`/products/${res.data?.createProduct.id}`);
+              }
             }
           }}
         >

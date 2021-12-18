@@ -11,6 +11,7 @@ import {
   Td,
   Tr,
   Select,
+  Heading,
 } from '@chakra-ui/react';
 
 import { Formik, Form, Field } from 'formik';
@@ -117,6 +118,9 @@ const SingleProductPage = () => {
               </ButtonGroup>
             </>
           )}
+        </Box>
+        <Box mt={5} mb={10}>
+          <Heading as="h2">Buy / Checkout</Heading>
         </Box>
         <Formik<CreateOrderFormValues>
           initialValues={{

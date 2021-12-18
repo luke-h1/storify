@@ -3,13 +3,7 @@ import { cacheExchange, Resolver, Cache } from '@urql/exchange-graphcache';
 import { multipartFetchExchange } from '@urql/exchange-multipart-fetch';
 import Router from 'next/router';
 import { toast } from 'react-hot-toast';
-import {
-  dedupExchange,
-  Exchange,
-  fetchExchange,
-  ClientOptions,
-  stringifyVariables,
-} from 'urql';
+import { dedupExchange, Exchange, fetchExchange, ClientOptions } from 'urql';
 import { pipe, tap } from 'wonka';
 import {
   MeDocument,
@@ -44,6 +38,14 @@ function invalidateAllProducts(cache: Cache) {
   const fieldInfos = allFields.filter(info => info.fieldName === 'products');
   fieldInfos.forEach(fi => {
     cache.invalidate('Query', 'products', fi.arguments || {});
+  });
+}
+
+function invalidateAllOrders(cache: Cache) {
+  const allFields = cache.inspectFields('Query');
+  const fieldInfos = allFields.filter(info => info.fieldName === 'orders');
+  fieldInfos.forEach(fi => {
+    cache.invalidate('Query', 'orders', fi.arguments || {});
   });
 }
 
@@ -113,6 +115,9 @@ export const createurqlClient = (
                 __typename: 'Product',
                 id: (args as DeleteProductMutationVariables).id,
               });
+            },
+            createOrder: (_result, args, cache) => {
+              invalidateAllOrders(cache);
             },
           },
         },

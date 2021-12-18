@@ -30,27 +30,6 @@ export const BlogTags: React.FC<IBlogTags> = ({ tags, marginTop }) => {
   );
 };
 
-interface BlogAuthorProps {
-  date: Date;
-  name: string;
-}
-
-export const BlogAuthor: React.FC<BlogAuthorProps> = ({ name, date }) => {
-  return (
-    <HStack marginTop="2" spacing="2" display="flex" alignItems="center">
-      <Image
-        borderRadius="full"
-        boxSize="40px"
-        src="https://100k-faces.glitch.me/random-image"
-        alt={`Avatar of ${name}`}
-      />
-      <Text fontWeight="medium">{name}</Text>
-      <Text>—</Text>
-      <Text>{date.toLocaleDateString()}</Text>
-    </HStack>
-  );
-};
-
 interface Props {
   product: {
     __typename?: 'Product' | undefined;
@@ -95,10 +74,6 @@ const ProductCard = ({ product }: Props) => {
             <Text as="p" fontSize="md" marginTop="2">
               {product.descriptionSnippet}
             </Text>
-            <BlogAuthor
-              name={product.creator.fullName}
-              date={new Date('2021-04-06T19:01:27Z')}
-            />
           </Box>
         </a>
       </Link>
