@@ -252,15 +252,6 @@ export type UserResponseFragmentFragment = {
     | undefined;
 };
 
-export type CreateCartMutationVariables = Exact<{
-  input: CartCreateInput;
-}>;
-
-export type CreateCartMutation = {
-  __typename?: 'Mutation';
-  createCart: boolean;
-};
-
 export type CreateProductMutationVariables = Exact<{
   input: ProductCreateInput;
 }>;
@@ -494,17 +485,6 @@ export const UserResponseFragmentFragmentDoc = gql`
   ${ErrorFragmentDoc}
   ${UserFragmentFragmentDoc}
 `;
-export const CreateCartDocument = gql`
-  mutation CreateCart($input: CartCreateInput!) {
-    createCart(input: $input)
-  }
-`;
-
-export function useCreateCartMutation() {
-  return Urql.useMutation<CreateCartMutation, CreateCartMutationVariables>(
-    CreateCartDocument,
-  );
-}
 export const CreateProductDocument = gql`
   mutation CreateProduct($input: ProductCreateInput!) {
     createProduct(input: $input) {
