@@ -100,7 +100,6 @@ const CreateProductPage = () => {
                     label="description"
                     name="description"
                     placeholder="informative description of the product"
-                    textarea
                   />
 
                   <InputField

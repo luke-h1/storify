@@ -22,6 +22,19 @@ export type Scalars = {
   Float: number;
 };
 
+export type Cart = {
+  __typename?: 'Cart';
+  createdAt: Scalars['String'];
+  creatorId: Scalars['Float'];
+  id: Scalars['Int'];
+  image: Scalars['String'];
+  name: Scalars['String'];
+  price: Scalars['Int'];
+  productId: Scalars['Float'];
+  qty: Scalars['Int'];
+  updatedAt: Scalars['String'];
+};
+
 export type CartCreateInput = {
   image: Scalars['String'];
   name: Scalars['String'];
@@ -170,7 +183,9 @@ export type ProductCreateInput = {
 
 export type Query = {
   __typename?: 'Query';
+  carts: Array<Cart>;
   me?: Maybe<User>;
+  myCart: Cart;
   orders: Array<Order>;
   product?: Maybe<Product>;
   products: Array<Product>;
@@ -360,6 +375,22 @@ export type UpdateProductMutation = {
       }
     | null
     | undefined;
+};
+
+export type CartsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type CartsQuery = {
+  __typename?: 'Query';
+  carts: Array<{
+    __typename?: 'Cart';
+    createdAt: string;
+    id: number;
+    image: string;
+    name: string;
+    price: number;
+    productId: number;
+    qty: number;
+  }>;
 };
 
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
@@ -580,6 +611,25 @@ export function useUpdateProductMutation() {
     UpdateProductMutation,
     UpdateProductMutationVariables
   >(UpdateProductDocument);
+}
+export const CartsDocument = gql`
+  query Carts {
+    carts {
+      createdAt
+      id
+      image
+      name
+      price
+      productId
+      qty
+    }
+  }
+`;
+
+export function useCartsQuery(
+  options: Omit<Urql.UseQueryArgs<CartsQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<CartsQuery>({ query: CartsDocument, ...options });
 }
 export const MeDocument = gql`
   query Me {

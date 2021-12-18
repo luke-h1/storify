@@ -4,8 +4,13 @@ import { Cart } from '../entities/Cart';
 import { CartCreateInput } from '../inputs/cart/CartCreateInput';
 import { MyContext } from '../types/MyContext';
 
-@Resolver()
+@Resolver(Cart)
 export class CartResolver {
+  @Query(() => [Cart])
+  async carts(@Ctx() { req }: MyContext) {
+    return Cart.find({ where: { creatorId: req.session.userId } });
+  }
+
   @Mutation(() => Boolean)
   async createCart(
     @Arg('input') input: CartCreateInput,

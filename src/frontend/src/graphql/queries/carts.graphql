@@ -1,0 +1,11 @@
+query Carts {
+  carts {
+    createdAt
+    id
+    image
+    name
+    price
+    productId
+    qty
+  }
+}
