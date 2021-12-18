@@ -9,6 +9,17 @@ import { useRegisterMutation } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import toErrorMap from '../../utils/toErrorMap';
 
+interface FormValues {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  country: string;
+  city: string;
+  postCode: string;
+}
+
 const Register = () => {
   const router = useRouter();
   const [, register] = useRegisterMutation();
@@ -18,12 +29,16 @@ const Register = () => {
         <Stack align="center">
           <Heading fontSize="4xl">Register today</Heading>
         </Stack>
-        <Formik
+        <Formik<FormValues>
           initialValues={{
             email: '',
             password: '',
             firstName: '',
             lastName: '',
+            address: '',
+            country: '',
+            city: '',
+            postCode: '',
           }}
           onSubmit={async (values, { setErrors }) => {
             const res = await register({

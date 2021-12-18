@@ -24,6 +24,15 @@ import { useIsAuth } from '../../../hooks/useIsAuth';
 import { createurqlClient } from '../../../utils/createUrqlClient';
 import uploadImage from '../../../utils/uploadImage';
 
+interface FormValues {
+  brand: string;
+  categories: string[];
+  description: string;
+  image: string;
+  name: string;
+  price: number;
+}
+
 const UpdateProductPage = () => {
   const [previewImage, setPreviewImage] = useState<string>('');
   const intId = useGetIntId();
@@ -50,14 +59,14 @@ const UpdateProductPage = () => {
             Updating product: <Text color="#63B3ED">{data?.product?.name}</Text>
           </Heading>
         </Stack>
-        <Formik
+        <Formik<FormValues>
           initialValues={{
-            name: data?.product?.name,
-            image: data?.product?.image,
-            brand: data?.product?.brand,
-            categories: data?.product?.categories,
-            description: data?.product?.description,
-            price: data?.product?.price,
+            name: data?.product?.name as string,
+            image: data?.product?.image as string,
+            brand: data?.product?.brand as string,
+            categories: data?.product?.categories as string[],
+            description: data?.product?.description as string,
+            price: data?.product?.price as number,
           }}
           onSubmit={async values => {
             let image = data?.product?.image as unknown as string;

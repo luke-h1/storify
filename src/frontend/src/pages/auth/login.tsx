@@ -18,6 +18,11 @@ import { useLoginMutation } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import toErrorMap from '../../utils/toErrorMap';
 
+interface FormValues {
+  email: string;
+  password: string;
+}
+
 const Login = () => {
   const router = useRouter();
   const [, login] = useLoginMutation();
@@ -31,7 +36,7 @@ const Login = () => {
           </Text>
         </Stack>
 
-        <Formik
+        <Formik<FormValues>
           initialValues={{ email: '', password: '' }}
           onSubmit={async (values, { setErrors }) => {
             const res = await login(values);

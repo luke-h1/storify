@@ -44,6 +44,15 @@ async function uploadImage(
   return response.json();
 }
 
+interface FormValues {
+  name: string;
+  image: string;
+  brand: string;
+  categories: string[];
+  description: string;
+  price: number;
+}
+
 const CreateProductPage = () => {
   const [previewImage, setPreviewImage] = useState<string>('');
   const router = useRouter();
@@ -56,7 +65,7 @@ const CreateProductPage = () => {
         <Stack align="center">
           <Heading fontSize="4xl">Create a new product</Heading>
         </Stack>
-        <Formik
+        <Formik<FormValues>
           validationSchema={productCreateSchema}
           initialValues={{
             name: '',

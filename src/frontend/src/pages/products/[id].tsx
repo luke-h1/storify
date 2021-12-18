@@ -33,7 +33,7 @@ import { createurqlClient } from '../../utils/createUrqlClient';
 const SingleProductPage = () => {
   const router = useRouter();
   const intId = useGetIntId();
-  const [{ data: user }] = useMeQuery();
+  const [{ data: user, fetching: userFetching }] = useMeQuery();
   const [, deleteProduct] = useDeleteProductMutation();
   const [, createOrder] = useCreateOrderMutation();
   const [{ data, fetching }] = useProductQuery({
@@ -50,6 +50,10 @@ const SingleProductPage = () => {
     return <p>no product</p>;
   }
 
+  if (!user && !userFetching) {
+    router.push('/auth/login');
+  }
+
   const handleDelete = async () => {
     await deleteProduct({ id: data?.product?.id as number });
     toast.success('Deleted product!');
@@ -58,14 +62,16 @@ const SingleProductPage = () => {
     }, 700);
   };
 
+  interface CreateOrderFormValues {
+    qty: number;
+    address: string;
+    country: string;
+    city: string;
+    postCode: string;
+  }
+
   return (
-    <Flex
-      direction={{ base: 'column', md: 'row' }}
-      // bg={useColorModeValue("brand.500")}
-      px={8}
-      py={24}
-      mx="auto"
-    >
+    <Flex direction={{ base: 'column', md: 'row' }} px={8} py={24} mx="auto">
       <Box
         w={{ base: 'full', md: 11 / 12, xl: 9 / 12 }}
         mx="auto"
@@ -112,7 +118,7 @@ const SingleProductPage = () => {
             </>
           )}
         </Box>
-        <Formik
+        <Formik<CreateOrderFormValues>
           initialValues={{
             qty: 0.0,
             address: '',
@@ -195,7 +201,6 @@ const SingleProductPage = () => {
     </Flex>
   );
 };
-// export default SingleProductPage;
 export default withUrqlClient(createurqlClient, { ssr: true })(
   SingleProductPage,
 );
