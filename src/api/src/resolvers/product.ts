@@ -59,6 +59,7 @@ export class ProductResolver {
       })
       .returning('*')
       .execute();
+
     return result.raw[0];
   }
 

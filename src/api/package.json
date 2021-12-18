@@ -18,11 +18,10 @@
     "seed:db": "sh scripts/seed-db.sh"
   },
   "dependencies": {
-    "stripe": "8.191.0",
-    "slugify": "1.6.3",
     "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^27.0.1",
     "@types/multer-s3": "2.7.11",
+    "apollo-server-cache-redis": "^3.3.0",
     "apollo-server-express": "^3.3.0",
     "aws-sdk": "^2.991.0",
     "bcryptjs": "^2.4.3",
@@ -48,6 +47,8 @@
     "nodemailer": "^6.5.0",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
+    "slugify": "1.6.3",
+    "stripe": "8.191.0",
     "ts-jest": "^27.0.3",
     "type-graphql": "^1.1.1",
     "typeorm": "0.2.41",
