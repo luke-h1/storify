@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql';

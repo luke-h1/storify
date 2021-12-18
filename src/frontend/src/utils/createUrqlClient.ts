@@ -1,5 +1,5 @@
 import { SSRExchange } from '@urql/core/dist/types/exchanges/ssr';
-import { cacheExchange, Resolver, Cache } from '@urql/exchange-graphcache';
+import { cacheExchange, Cache } from '@urql/exchange-graphcache';
 import { multipartFetchExchange } from '@urql/exchange-multipart-fetch';
 import Router from 'next/router';
 import { toast } from 'react-hot-toast';
@@ -51,6 +51,7 @@ function invalidateAllOrders(cache: Cache) {
 
 export const createurqlClient = (
   ssrExchange: SSRExchange,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ctx: any,
 ): ClientOptions => {
   let cookie = '';
