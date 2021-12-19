@@ -115,7 +115,16 @@ const SingleProductPage = () => {
           )}
         </Box>
         <Box mt={5} mb={10}>
-          <Heading as="h2">Buy / Checkout</Heading>
+          <Button
+            bg="blue.400"
+            color="white"
+            _hover={{
+              bg: 'blue.500',
+            }}
+            type="submit"
+          >
+            Add to cart
+          </Button>{' '}
         </Box>
       </Box>
       <Box w={{ base: 'full', md: 10 / 12 }} mx="auto" textAlign="center">
