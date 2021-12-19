@@ -43,8 +43,8 @@ const main = async () => {
       cookie: {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         httpOnly: true,
-        sameSite: !isProd ? 'none' : 'lax', // csrf
-        secure: !!isProd,
+        sameSite: 'lax', // csrf
+        secure: isProd,
         domain: isProd ? 'deployed api URL' : undefined,
       },
       saveUninitialized: false,
@@ -76,10 +76,7 @@ const main = async () => {
   await apolloServer.start();
   apolloServer.applyMiddleware({
     app,
-    cors: {
-      origin: ['http://localhost:3000', 'https://studio.apollographql.com'],
-      credentials: true,
-    },
+    cors: false,
   });
 
   app.listen(process.env.PORT, () =>
