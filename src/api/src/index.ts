@@ -36,14 +36,15 @@ const main = async () => {
     session({
       name: 'fid',
       store: new RedisStore({
+        logErrors: true,
         client: redis,
         disableTouch: true,
       }),
       cookie: {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         httpOnly: true,
-        sameSite: 'lax', // csrf
-        secure: isProd,
+        sameSite: !isProd ? 'none' : 'lax', // csrf
+        secure: !!isProd,
         domain: isProd ? 'deployed api URL' : undefined,
       },
       saveUninitialized: false,
@@ -73,7 +74,13 @@ const main = async () => {
     }),
   });
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app, cors: false });
+  apolloServer.applyMiddleware({
+    app,
+    cors: {
+      origin: ['http://localhost:3000', 'https://studio.apollographql.com'],
+      credentials: true,
+    },
+  });
 
   app.listen(process.env.PORT, () =>
     console.log(

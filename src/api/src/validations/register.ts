@@ -33,29 +33,5 @@ export const validateRegister = (options: UserRegisterInput) => {
       },
     ];
   }
-  if (!options.address) {
-    return [
-      {
-        field: 'address',
-        message: 'address is a required field',
-      },
-    ];
-  }
-  if (!options.city) {
-    return [
-      {
-        field: 'city',
-        message: 'city is a required field',
-      },
-    ];
-  }
-  if (!options.postCode) {
-    return [
-      {
-        field: 'postCode',
-        message: 'postCode is a required field',
-      },
-    ];
-  }
   return null;
 };

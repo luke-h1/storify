@@ -48,10 +48,6 @@ export class Order extends BaseEntity {
   @Column()
   postCode: string;
 
-  @Field(() => String)
-  @Column({ nullable: true })
-  transactionId: string;
-
   @Field()
   @Column()
   creatorId: number;

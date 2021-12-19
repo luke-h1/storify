@@ -13,18 +13,22 @@ import { MyContext } from '../types/MyContext';
 export class OrderResolver {
   @Query(() => [Order])
   async orders(@Ctx() { req }: MyContext) {
-    return Order.find({
-      // where: { creatorId: req.session.userId },
-      relations: ['orderItems'],
-    });
+    const orders = await getConnection().query(
+      `
+      SELECT o.* FROM "orders" o 
+      ORDER BY o."createdAt" DESC
+      `,
+    );
+    return orders;
   }
 
+  // This is broken
   @Mutation(() => Order)
-  @Authorized()
+  // @Authorized()
   async createOrder(
     @Arg('input') input: OrderCreateInput,
     @Ctx() { req }: MyContext,
-  ): Promise<boolean> {
+  ) {
     try {
       const orderResult = await getConnection()
         .createQueryBuilder()
@@ -32,7 +36,7 @@ export class OrderResolver {
         .into(Order)
         .values({
           ...input,
-          creatorId: req.session.userId,
+          creatorId: 1,
         })
         .returning('*')
         .execute();
@@ -43,7 +47,7 @@ export class OrderResolver {
         throw new Error('No product!');
       }
 
-      await getConnection()
+      const orderItems = await getConnection()
         .createQueryBuilder()
         .insert()
         .into(OrderItem)
@@ -56,7 +60,10 @@ export class OrderResolver {
         .returning('*')
         .execute();
 
-      return true;
+      return {
+        orders: orderResult.raw[0],
+        orderItems: orderItems.raw[0],
+      };
     } catch (e) {
       console.error(e);
     }
