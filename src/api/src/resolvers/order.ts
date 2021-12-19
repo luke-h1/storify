@@ -14,7 +14,7 @@ export class OrderResolver {
   @Query(() => [Order])
   async orders(@Ctx() { req }: MyContext) {
     return Order.find({
-      where: { creatorId: req.session.userId },
+      // where: { creatorId: req.session.userId },
       relations: ['orderItems'],
     });
   }

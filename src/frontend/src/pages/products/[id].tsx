@@ -10,23 +10,19 @@ import {
   Tbody,
   Td,
   Tr,
-  Select,
   Heading,
 } from '@chakra-ui/react';
 
-import { Formik, Form, Field } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { toast } from 'react-hot-toast';
-import InputField from '../../components/InputField';
 import { BlogTags } from '../../components/ProductCard';
 import {
   useProductQuery,
   useMeQuery,
   useDeleteProductMutation,
-  useCreateOrderMutation,
 } from '../../generated/graphql';
 import useGetIntId from '../../hooks/useGetIntId';
 import { createurqlClient } from '../../utils/createUrqlClient';
@@ -36,7 +32,6 @@ const SingleProductPage = () => {
   const intId = useGetIntId();
   const [{ data: user, fetching: userFetching }] = useMeQuery();
   const [, deleteProduct] = useDeleteProductMutation();
-  const [, createOrder] = useCreateOrderMutation();
   const [{ data, fetching }] = useProductQuery({
     pause: intId === -1,
     variables: {
@@ -122,76 +117,6 @@ const SingleProductPage = () => {
         <Box mt={5} mb={10}>
           <Heading as="h2">Buy / Checkout</Heading>
         </Box>
-        <Formik<CreateOrderFormValues>
-          initialValues={{
-            qty: 0.0,
-            address: '',
-            country: '',
-            city: '',
-            postCode: '',
-          }}
-          onSubmit={async values => {
-            await createOrder({
-              input: {
-                address: values.address,
-                city: values.city,
-                country: values.country,
-                email: user?.me?.email as string,
-                firstName: user?.me?.firstName as string,
-                lastName: user?.me?.lastName as string,
-                postCode: values.postCode,
-                productId: data?.product?.id as number,
-                qty: parseInt(values.qty as unknown as string, 10) as number,
-              },
-            });
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              {' '}
-              <InputField
-                name="address"
-                label="address"
-                placeholder="address"
-              />
-              <InputField
-                name="country"
-                label="country"
-                placeholder="country"
-              />
-              <InputField name="city" label="city" placeholder="city" />
-              <InputField
-                name="postCode"
-                label="postcode"
-                placeholder="postcode"
-              />
-              <Field
-                as={Select}
-                placeholder="Select option"
-                id="qty"
-                name="qty"
-                label="qty"
-                type="number"
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </Field>
-              <Button
-                disabled={isSubmitting}
-                bg="blue.400"
-                color="white"
-                _hover={{
-                  bg: 'blue.500',
-                }}
-                type="submit"
-                mt={5}
-              >
-                Buy
-              </Button>
-            </Form>
-          )}
-        </Formik>
       </Box>
       <Box w={{ base: 'full', md: 10 / 12 }} mx="auto" textAlign="center">
         <Image

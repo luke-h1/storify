@@ -34,7 +34,6 @@ export class OrderItem extends BaseEntity {
   @Column()
   orderId: number;
 
-  @Field(() => Order)
   @ManyToOne(() => Order, order => order.orderItems)
   @JoinColumn({ name: 'orderId' })
   order: Order;
