@@ -12,18 +12,18 @@ import { MyContext } from '../types/MyContext';
 @Resolver(Order)
 export class OrderResolver {
   @Query(() => [Order])
+  @Authorized()
   async orders(@Ctx() { req }: MyContext) {
-    // TODO: add authorized middleware here
-
     // basic left join on orderItems when querying for orders
     return Order.find({
       relations: ['orderItems'],
+      where: { creatorId: req.session.userId },
     });
   }
 
   // This is broken
   @Mutation(() => Boolean)
-  // @Authorized()
+  @Authorized()
   async createOrder(
     @Arg('input') input: OrderCreateInput,
     @Ctx() { req }: MyContext,
@@ -35,7 +35,7 @@ export class OrderResolver {
         .into(Order)
         .values({
           ...input,
-          creatorId: 1,
+          creatorId: req.session.userId,
         })
         .returning('*')
         .execute();
