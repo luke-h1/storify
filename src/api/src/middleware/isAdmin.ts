@@ -6,7 +6,7 @@ export const isAdmin: MiddlewareFn<MyContext> = async ({ context }, next) => {
   const user = await User.findOne({ id: context.req.session.userId });
 
   if (!user?.isAdmin || !context.req.session.userId) {
-    throw new Error('Not Authenticated');
+    throw new Error('You are not Authorized to access this resource');
   }
   return next();
 };
