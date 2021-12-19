@@ -20,6 +20,7 @@ import { User } from '../entities/User';
       const user = await userRepository.findOne({
         where: { id: randomInt(2, 31) },
       });
+
       const order = await orderRepository.save({
         creatorId: randomInt(2, 31),
         creator: user,

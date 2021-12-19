@@ -13,22 +13,21 @@ import { MyContext } from '../types/MyContext';
 export class OrderResolver {
   @Query(() => [Order])
   async orders(@Ctx() { req }: MyContext) {
-    const orders = await getConnection().query(
-      `
-      SELECT o.* FROM "orders" o 
-      ORDER BY o."createdAt" DESC
-      `,
-    );
-    return orders;
+    // TODO: add authorized middleware here
+
+    // basic left join on orderItems when querying for orders
+    return Order.find({
+      relations: ['orderItems'],
+    });
   }
 
   // This is broken
-  @Mutation(() => Order)
+  @Mutation(() => Boolean)
   // @Authorized()
   async createOrder(
     @Arg('input') input: OrderCreateInput,
     @Ctx() { req }: MyContext,
-  ) {
+  ): Promise<boolean> {
     try {
       const orderResult = await getConnection()
         .createQueryBuilder()
@@ -47,7 +46,7 @@ export class OrderResolver {
         throw new Error('No product!');
       }
 
-      const orderItems = await getConnection()
+      await getConnection()
         .createQueryBuilder()
         .insert()
         .into(OrderItem)
@@ -60,13 +59,10 @@ export class OrderResolver {
         .returning('*')
         .execute();
 
-      return {
-        orders: orderResult.raw[0],
-        orderItems: orderItems.raw[0],
-      };
+      return true;
     } catch (e) {
       console.error(e);
+      return false;
     }
-    return false;
   }
 }
