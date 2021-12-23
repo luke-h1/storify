@@ -9,7 +9,9 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Order } from './Order';
 import { User } from './User';
 
 @ObjectType()
@@ -26,6 +28,9 @@ export class Product extends BaseEntity {
   @ManyToOne(() => User, u => u.products)
   @JoinColumn({ name: 'creatorId' })
   creator: User;
+
+  @OneToMany(() => Order, o => o.product, { onDelete: 'CASCADE' })
+  orders: Order[];
 
   @Field(() => String)
   @Column()

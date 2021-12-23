@@ -11,6 +11,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { OrderItem } from './OrderItem';
+import { Product } from './Product';
 import { User } from './User';
 
 @ObjectType()
@@ -19,6 +20,11 @@ export class Order extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
   readonly id!: number;
+
+  @Field(() => Product)
+  @ManyToOne(() => Product, p => p.orders)
+  @JoinColumn({ name: 'productId' })
+  product: Product;
 
   @Field(() => String)
   @Column()

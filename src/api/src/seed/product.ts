@@ -5,6 +5,7 @@ import { randomInt } from 'crypto';
 import faker from 'faker';
 import { getManager } from 'typeorm';
 import createConn from '../db/createConn';
+import { Order } from '../entities/Order';
 import { Product } from '../entities/Product';
 import { User } from '../entities/User';
 
@@ -13,6 +14,7 @@ import { User } from '../entities/User';
     await createConn();
     const userRepository = getManager().getRepository(User);
     const productRepository = getManager().getRepository(Product);
+    const orderRepository = getManager().getRepository(Order);
 
     for (let i = 0; i < 60; i += 1) {
       const user = await userRepository.findOne({
@@ -20,6 +22,13 @@ import { User } from '../entities/User';
       });
       if (!user) {
         throw new Error('user not found');
+      }
+
+      const orders = await orderRepository.find({
+        where: { id: randomInt(2, 31) },
+      });
+      if (!orders) {
+        throw new Error('order not found');
       }
 
       const product = await productRepository.save({
@@ -32,6 +41,7 @@ import { User } from '../entities/User';
           faker.commerce.department(),
           faker.commerce.productAdjective(),
         ],
+        orders,
         price: randomInt(10, 3000),
         publicId: '',
         image: faker.image.animals(),

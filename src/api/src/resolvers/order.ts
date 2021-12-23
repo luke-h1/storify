@@ -14,9 +14,9 @@ export class OrderResolver {
   @Query(() => [Order])
   @Authorized()
   async orders(@Ctx() { req }: MyContext) {
-    // basic left join on orderItems when querying for orders
+    // basic left join on orderItems and product when querying for orders
     return Order.find({
-      relations: ['orderItems'],
+      relations: ['orderItems', 'product'],
       where: { creatorId: req.session.userId },
     });
   }
@@ -41,6 +41,8 @@ export class OrderResolver {
         .execute();
 
       const product = await Product.findOne({ id: input.productId });
+
+      // todo: better error handling here
 
       if (!product) {
         throw new Error('No product!');

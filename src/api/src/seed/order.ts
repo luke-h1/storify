@@ -7,6 +7,7 @@ import { getManager } from 'typeorm';
 import createConn from '../db/createConn';
 import { Order } from '../entities/Order';
 import { OrderItem } from '../entities/OrderItem';
+import { Product } from '../entities/Product';
 import { User } from '../entities/User';
 
 (async () => {
@@ -15,9 +16,14 @@ import { User } from '../entities/User';
     const userRepository = getManager().getRepository(User);
     const orderRepository = getManager().getRepository(Order);
     const orderItemRepository = getManager().getRepository(OrderItem);
+    const productRepository = getManager().getRepository(Product);
 
     for (let i = 0; i < 60; i += 1) {
       const user = await userRepository.findOne({
+        where: { id: randomInt(2, 31) },
+      });
+
+      const product = await productRepository.findOne({
         where: { id: randomInt(2, 31) },
       });
 
@@ -28,6 +34,7 @@ import { User } from '../entities/User';
         lastName: faker.name.lastName(),
         address: faker.address.city(),
         country: faker.address.country(),
+        product,
         city: faker.address.city(),
         postCode: faker.address.zipCode(),
         email: faker.internet.email(),
