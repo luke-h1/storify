@@ -64,7 +64,8 @@ export class UserResolver {
         errors: [
           {
             field: 'newPassword',
-            message: 'New password length must be greater than 7 characters',
+            message:
+              'New password length must be greater than or equal to 7 characters',
           },
         ],
       };
