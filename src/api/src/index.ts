@@ -79,11 +79,12 @@ const main = async () => {
   apolloServer.applyMiddleware({
     app,
     cors: false,
+    path: '/api',
   });
 
   app.listen(process.env.PORT, () =>
     console.log(
-      `Server running on http://localhost:${process.env.PORT}/graphql`,
+      `Server running on http://localhost:${process.env.PORT}/api/graphql`,
     ),
   );
 };
