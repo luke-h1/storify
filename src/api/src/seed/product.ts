@@ -37,10 +37,6 @@ import { User } from '../entities/User';
         brand: faker.commerce.product(),
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
-        categories: [
-          faker.commerce.department(),
-          faker.commerce.productAdjective(),
-        ],
         orders,
         price: randomInt(10, 3000),
         publicId: '',

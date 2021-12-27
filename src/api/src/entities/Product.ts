@@ -45,10 +45,6 @@ export class Product extends BaseEntity {
   @Column()
   brand: string;
 
-  @Field(() => [String])
-  @Column({ array: true, type: 'varchar' })
-  categories: string[];
-
   @Field(() => String)
   @Column()
   description: string;

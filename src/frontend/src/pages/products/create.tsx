@@ -49,7 +49,6 @@ interface FormValues {
   name: string;
   image: string;
   brand: string;
-  categories: string[];
   description: string;
   price: number;
 }
@@ -72,7 +71,6 @@ const CreateProductPage = () => {
             name: '',
             image: '',
             brand: '',
-            categories: [''],
             description: '',
             price: 0,
           }}
@@ -90,7 +88,6 @@ const CreateProductPage = () => {
                 input: {
                   image: imageData.secure_url,
                   brand: values.brand,
-                  categories: values.categories,
                   description: values.description,
                   name: values.name,
                   price: values.price,
@@ -115,21 +112,6 @@ const CreateProductPage = () => {
                     placeholder="informative description of the product"
                   />
 
-                  <InputField
-                    name="categories[0]"
-                    placeholder="category"
-                    label="category"
-                  />
-                  <InputField
-                    name="categories[1]"
-                    placeholder="category 2"
-                    label="category 2"
-                  />
-                  <InputField
-                    name="categories[2]"
-                    placeholder="category 3"
-                    label="category 3"
-                  />
                   <InputField
                     label="Price"
                     name="price"
