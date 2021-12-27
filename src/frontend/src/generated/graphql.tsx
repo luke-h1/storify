@@ -38,14 +38,15 @@ export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
   createImageSignature: ImageSignature;
-  createOrder: Order;
-  createOrder2: Order;
+  createOrder: Scalars['Boolean'];
   createProduct: Product;
+  deleteOrder: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
   register: UserResponse;
+  updateOrder: Scalars['Boolean'];
   updateProduct?: Maybe<Product>;
 };
 
@@ -58,12 +59,12 @@ export type MutationCreateOrderArgs = {
   input: OrderCreateInput;
 };
 
-export type MutationCreateOrder2Args = {
-  input: OrderCreateInput;
-};
-
 export type MutationCreateProductArgs = {
   input: ProductCreateInput;
+};
+
+export type MutationDeleteOrderArgs = {
+  id: Scalars['Int'];
 };
 
 export type MutationDeleteProductArgs = {
@@ -81,6 +82,11 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   options: UserRegisterInput;
+};
+
+export type MutationUpdateOrderArgs = {
+  id: Scalars['Float'];
+  input: OrderCreateInput;
 };
 
 export type MutationUpdateProductArgs = {
@@ -101,8 +107,8 @@ export type Order = {
   lastName: Scalars['String'];
   orderItems: Array<OrderItem>;
   postCode: Scalars['String'];
+  productId: Scalars['Int'];
   total: Scalars['Int'];
-  transactionId: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
@@ -122,7 +128,6 @@ export type OrderItem = {
   __typename?: 'OrderItem';
   createdAt: Scalars['String'];
   id: Scalars['Int'];
-  order: Order;
   orderId: Scalars['Int'];
   price: Scalars['Int'];
   productTitle: Scalars['String'];
@@ -159,9 +164,14 @@ export type ProductCreateInput = {
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
+  order: Order;
   orders: Array<Order>;
   product?: Maybe<Product>;
   products: Array<Product>;
+};
+
+export type QueryOrderArgs = {
+  id: Scalars['Int'];
 };
 
 export type QueryProductArgs = {
@@ -233,24 +243,7 @@ export type CreateOrderMutationVariables = Exact<{
 
 export type CreateOrderMutation = {
   __typename?: 'Mutation';
-  createOrder: {
-    __typename?: 'Order';
-    address: string;
-    city: string;
-    country: string;
-    total: number;
-    transactionId: string;
-    orderItems: Array<{
-      __typename?: 'OrderItem';
-      createdAt: string;
-      id: number;
-      orderId: number;
-      price: number;
-      productTitle: string;
-      qty: number;
-      updatedAt: string;
-    }>;
-  };
+  createOrder: boolean;
 };
 
 export type CreateProductMutationVariables = Exact<{
@@ -388,6 +381,40 @@ export type MeQuery = {
     | undefined;
 };
 
+export type OrderQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type OrderQuery = {
+  __typename?: 'Query';
+  order: {
+    __typename?: 'Order';
+    id: number;
+    productId: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    address: string;
+    country: string;
+    city: string;
+    postCode: string;
+    creatorId: number;
+    total: number;
+    createdAt: string;
+    updatedAt: string;
+    orderItems: Array<{
+      __typename?: 'OrderItem';
+      id: number;
+      productTitle: string;
+      price: number;
+      qty: number;
+      orderId: number;
+      createdAt: string;
+      updatedAt: string;
+    }>;
+  };
+};
+
 export type OrdersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type OrdersQuery = {
@@ -395,15 +422,27 @@ export type OrdersQuery = {
   orders: Array<{
     __typename?: 'Order';
     id: number;
+    productId: number;
     firstName: string;
+    lastName: string;
+    email: string;
+    address: string;
+    country: string;
+    city: string;
+    postCode: string;
+    creatorId: number;
     total: number;
+    createdAt: string;
+    updatedAt: string;
     orderItems: Array<{
       __typename?: 'OrderItem';
       id: number;
-      price: number;
       productTitle: string;
+      price: number;
       qty: number;
       orderId: number;
+      createdAt: string;
+      updatedAt: string;
     }>;
   }>;
 };
@@ -476,22 +515,7 @@ export const UserResponseFragmentFragmentDoc = gql`
 `;
 export const CreateOrderDocument = gql`
   mutation CreateOrder($input: OrderCreateInput!) {
-    createOrder(input: $input) {
-      address
-      city
-      country
-      orderItems {
-        createdAt
-        id
-        orderId
-        price
-        productTitle
-        qty
-        updatedAt
-      }
-      total
-      transactionId
-    }
+    createOrder(input: $input)
   }
 `;
 
@@ -621,18 +645,64 @@ export function useMeQuery(
 ) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 }
+export const OrderDocument = gql`
+  query Order($id: Int!) {
+    order(id: $id) {
+      id
+      productId
+      firstName
+      lastName
+      email
+      address
+      country
+      city
+      postCode
+      creatorId
+      total
+      createdAt
+      updatedAt
+      orderItems {
+        id
+        productTitle
+        price
+        qty
+        orderId
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export function useOrderQuery(
+  options: Omit<Urql.UseQueryArgs<OrderQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<OrderQuery>({ query: OrderDocument, ...options });
+}
 export const OrdersDocument = gql`
   query Orders {
     orders {
       id
+      productId
       firstName
+      lastName
+      email
+      address
+      country
+      city
+      postCode
+      creatorId
       total
+      createdAt
+      updatedAt
       orderItems {
         id
-        price
         productTitle
+        price
         qty
         orderId
+        createdAt
+        updatedAt
       }
     }
   }

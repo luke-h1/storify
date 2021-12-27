@@ -1,18 +1,3 @@
 mutation CreateOrder($input: OrderCreateInput!) {
-  createOrder(input: $input) {
-    address
-    city
-    country
-    orderItems {
-      createdAt
-      id
-      orderId
-      price
-      productTitle
-      qty
-      updatedAt
-    }
-    total
-    transactionId
-  }
+  createOrder(input: $input)
 }

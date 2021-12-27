@@ -1,5 +1,5 @@
-query Orders {
-  orders {
+query Order($id: Int!) {
+  order(id: $id) {
     id
     productId
     firstName

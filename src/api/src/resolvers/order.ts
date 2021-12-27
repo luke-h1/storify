@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
+import { query } from 'express';
 import {
   Arg,
   Authorized,
@@ -19,14 +20,36 @@ import { MyContext } from '../types/MyContext';
 
 @Resolver(Order)
 export class OrderResolver {
-  @Query(() => [Order])
-  // @Authorized()
-  async orders(@Ctx() { req }: MyContext) {
-    // basic left join on orderItems and product when querying for orders
-    return Order.find({
+  @Query(() => Order)
+  @Authorized()
+  async order(
+    @Arg('id', () => Int) id: number,
+    @Ctx() { req }: MyContext,
+  ): Promise<Order | undefined> {
+    return Order.findOne({
       relations: ['orderItems'],
-      // where: { creatorId: req.session.userId },
+      where: { creatorId: req.session.userId, id },
+      loadEagerRelations: true,
+      transaction: true,
+      order: {
+        createdAt: 'DESC',
+      },
     });
+  }
+
+  @Query(() => [Order])
+  @Authorized()
+  async orders(@Ctx() { req }: MyContext) {
+    const orders = Order.find({
+      relations: ['orderItems'],
+      where: { creatorId: req.session.userId },
+      loadEagerRelations: true,
+      transaction: true,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    return orders;
   }
 
   @Mutation(() => Boolean)
