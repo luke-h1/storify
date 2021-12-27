@@ -12,12 +12,12 @@ import { MyContext } from '../types/MyContext';
 @Resolver(Order)
 export class OrderResolver {
   @Query(() => [Order])
-  @Authorized()
+  // @Authorized()
   async orders(@Ctx() { req }: MyContext) {
     // basic left join on orderItems and product when querying for orders
     return Order.find({
-      relations: ['orderItems', 'product'],
-      where: { creatorId: req.session.userId },
+      relations: ['orderItems'],
+      // where: { creatorId: req.session.userId },
     });
   }
 

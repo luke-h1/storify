@@ -34,8 +34,8 @@ import { User } from '../entities/User';
         lastName: faker.name.lastName(),
         address: faker.address.city(),
         country: faker.address.country(),
-        product,
         city: faker.address.city(),
+        productId: product?.id as number,
         postCode: faker.address.zipCode(),
         email: faker.internet.email(),
       });
