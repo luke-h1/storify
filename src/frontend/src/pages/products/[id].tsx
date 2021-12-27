@@ -73,7 +73,10 @@ const SingleProductPage = () => {
       },
     });
     if (res.data?.createOrder) {
-      router.push('/');
+      setTimeout(() => {
+        router.push('/');
+      }, 700);
+      toast.success('Added to cart');
     }
   };
   return (
