@@ -1,12 +1,11 @@
-import { ChakraProvider } from '@chakra-ui/react';
+import '../styles/global.css';
 import type { AppProps } from 'next/app';
 import { toast, Toaster, ToastBar } from 'react-hot-toast';
 import Nav from '../components/Nav';
-import Wrapper from '../components/Wrapper';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <ChakraProvider>
+    <>
       <Toaster
         position="bottom-center"
         toastOptions={{
@@ -32,10 +31,8 @@ const App = ({ Component, pageProps }: AppProps) => {
         )}
       </Toaster>
       <Nav {...pageProps} />
-      <Wrapper variant="regular">
-        <Component {...pageProps} />
-      </Wrapper>
-    </ChakraProvider>
+      <Component {...pageProps} />
+    </>
   );
 };
 export default App;
