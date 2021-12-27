@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
-import { query } from 'express';
 import {
   Arg,
   Authorized,
