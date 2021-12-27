@@ -14,10 +14,6 @@ interface FormValues {
   password: string;
   firstName: string;
   lastName: string;
-  address: string;
-  country: string;
-  city: string;
-  postCode: string;
 }
 
 const Register = () => {
@@ -35,10 +31,6 @@ const Register = () => {
             password: '',
             firstName: '',
             lastName: '',
-            address: '',
-            country: '',
-            city: '',
-            postCode: '',
           }}
           onSubmit={async (values, { setErrors }) => {
             const res = await register({
