@@ -26,7 +26,6 @@ import uploadImage from '../../../utils/uploadImage';
 
 interface FormValues {
   brand: string;
-  categories: string[];
   description: string;
   image: string;
   name: string;
@@ -64,7 +63,6 @@ const UpdateProductPage = () => {
             name: data?.product?.name as string,
             image: data?.product?.image as string,
             brand: data?.product?.brand as string,
-            categories: data?.product?.categories as string[],
             description: data?.product?.description as string,
             price: data?.product?.price as number,
           }}
@@ -89,7 +87,6 @@ const UpdateProductPage = () => {
               id: intId,
               input: {
                 brand: values.brand as string,
-                categories: values.categories as string[],
                 description: values.description as string,
                 image,
                 name: values.name as string,
@@ -113,22 +110,6 @@ const UpdateProductPage = () => {
                     name="description"
                     placeholder="informative description of the product"
                     textarea
-                  />
-
-                  <InputField
-                    name="categories[0]"
-                    placeholder="category"
-                    label="category"
-                  />
-                  <InputField
-                    name="categories[1]"
-                    placeholder="category 2"
-                    label="category 2"
-                  />
-                  <InputField
-                    name="categories[2]"
-                    placeholder="category 3"
-                    label="category 3"
                   />
 
                   <InputField

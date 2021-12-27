@@ -4,7 +4,6 @@ const productCreateSchema = yup.object({
   name: yup.string().required(),
   image: yup.string().required(),
   brand: yup.string().required(),
-  categories: yup.array().required(),
   description: yup.string().required(),
   price: yup.number().required(),
 });

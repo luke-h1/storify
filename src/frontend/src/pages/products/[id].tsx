@@ -10,7 +10,6 @@ import {
   Tbody,
   Td,
   Tr,
-  Heading,
 } from '@chakra-ui/react';
 
 import { withUrqlClient } from 'next-urql';
@@ -18,7 +17,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { toast } from 'react-hot-toast';
-import { BlogTags } from '../../components/ProductCard';
 import {
   useProductQuery,
   useMeQuery,
@@ -58,14 +56,6 @@ const SingleProductPage = () => {
     }, 700);
   };
 
-  interface CreateOrderFormValues {
-    qty: number;
-    address: string;
-    country: string;
-    city: string;
-    postCode: string;
-  }
-
   return (
     <Flex direction={{ base: 'column', md: 'row' }} px={8} py={24} mx="auto">
       <Box
@@ -93,7 +83,6 @@ const SingleProductPage = () => {
         <chakra.p mb={6} fontSize={{ base: 'lg', md: 'xl' }} color="#000">
           {data?.product.description}
         </chakra.p>
-        <BlogTags tags={data?.product?.categories} marginTop="3" />
         <Box mb={10} />
         <Box mb={10} mt={5}>
           {data?.product.creator.id === user?.me?.id && (

@@ -1,41 +1,12 @@
-import {
-  Box,
-  Heading,
-  Image,
-  Text,
-  HStack,
-  Tag,
-  WrapItem,
-  SpaceProps,
-} from '@chakra-ui/react';
+import { Box, Heading, Image, Text, WrapItem } from '@chakra-ui/react';
 import Link from 'next/link';
 import React from 'react';
-
-interface IBlogTags {
-  tags: string[];
-  marginTop?: SpaceProps['marginTop'];
-}
-
-export const BlogTags: React.FC<IBlogTags> = ({ tags, marginTop }) => {
-  return (
-    <HStack spacing={3} marginTop={marginTop}>
-      {tags.map(tag => {
-        return (
-          <Tag size="md" variant="solid" colorScheme="blue" key={tag}>
-            {tag}
-          </Tag>
-        );
-      })}
-    </HStack>
-  );
-};
 
 interface Props {
   product: {
     __typename?: 'Product' | undefined;
     id: number;
     brand: string;
-    categories: string[];
     descriptionSnippet: string;
     image: string;
     name: string;
@@ -65,7 +36,6 @@ const ProductCard = ({ product }: Props) => {
                 />
               </Text>
             </Box>
-            <BlogTags tags={product.categories} marginTop="3" />
             <Heading fontSize="xl" marginTop="2">
               <Text textDecoration="none" _hover={{ textDecoration: 'none' }}>
                 {product.name}
