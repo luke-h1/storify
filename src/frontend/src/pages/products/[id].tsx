@@ -21,6 +21,7 @@ import {
   useProductQuery,
   useMeQuery,
   useDeleteProductMutation,
+  useCreateOrderMutation,
 } from '../../generated/graphql';
 import useGetIntId from '../../hooks/useGetIntId';
 import { createurqlClient } from '../../utils/createUrqlClient';
@@ -30,6 +31,7 @@ const SingleProductPage = () => {
   const intId = useGetIntId();
   const [{ data: user, fetching: userFetching }] = useMeQuery();
   const [, deleteProduct] = useDeleteProductMutation();
+  const [, createOrder] = useCreateOrderMutation();
   const [{ data, fetching }] = useProductQuery({
     pause: intId === -1,
     variables: {
@@ -56,6 +58,24 @@ const SingleProductPage = () => {
     }, 700);
   };
 
+  const handleSubmit = async () => {
+    const res = await createOrder({
+      input: {
+        address: 'test',
+        city: 'test',
+        country: 'test',
+        email: 'test',
+        firstName: 'test',
+        lastName: 'test',
+        postCode: 'test',
+        productId: data.product?.id as number,
+        qty: 1,
+      },
+    });
+    if (res.data?.createOrder) {
+      router.push('/');
+    }
+  };
   return (
     <Flex direction={{ base: 'column', md: 'row' }} px={8} py={24} mx="auto">
       <Box
@@ -111,6 +131,7 @@ const SingleProductPage = () => {
               bg: 'blue.500',
             }}
             type="submit"
+            onClick={handleSubmit}
           >
             Add to cart
           </Button>{' '}
