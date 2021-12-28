@@ -5,10 +5,6 @@ query Orders {
     firstName
     lastName
     email
-    address
-    country
-    city
-    postCode
     creatorId
     total
     createdAt

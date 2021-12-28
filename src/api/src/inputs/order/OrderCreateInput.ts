@@ -11,18 +11,6 @@ export class OrderCreateInput {
   @Field()
   email: string;
 
-  @Field()
-  address: string;
-
-  @Field()
-  country: string;
-
-  @Field()
-  city: string;
-
-  @Field()
-  postCode: string;
-
   @Field(() => Int)
   productId: number;
 

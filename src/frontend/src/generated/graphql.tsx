@@ -96,9 +96,6 @@ export type MutationUpdateProductArgs = {
 
 export type Order = {
   __typename?: 'Order';
-  address: Scalars['String'];
-  city: Scalars['String'];
-  country: Scalars['String'];
   createdAt: Scalars['String'];
   creatorId: Scalars['Float'];
   email: Scalars['String'];
@@ -106,20 +103,15 @@ export type Order = {
   id: Scalars['Int'];
   lastName: Scalars['String'];
   orderItems: Array<OrderItem>;
-  postCode: Scalars['String'];
   productId: Scalars['Int'];
   total: Scalars['Int'];
   updatedAt: Scalars['String'];
 };
 
 export type OrderCreateInput = {
-  address: Scalars['String'];
-  city: Scalars['String'];
-  country: Scalars['String'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
-  postCode: Scalars['String'];
   productId: Scalars['Int'];
   qty: Scalars['Int'];
 };
@@ -390,10 +382,6 @@ export type OrderQuery = {
     firstName: string;
     lastName: string;
     email: string;
-    address: string;
-    country: string;
-    city: string;
-    postCode: string;
     creatorId: number;
     total: number;
     createdAt: string;
@@ -422,10 +410,6 @@ export type OrdersQuery = {
     firstName: string;
     lastName: string;
     email: string;
-    address: string;
-    country: string;
-    city: string;
-    postCode: string;
     creatorId: number;
     total: number;
     createdAt: string;
@@ -645,10 +629,6 @@ export const OrderDocument = gql`
       firstName
       lastName
       email
-      address
-      country
-      city
-      postCode
       creatorId
       total
       createdAt
@@ -679,10 +659,6 @@ export const OrdersDocument = gql`
       firstName
       lastName
       email
-      address
-      country
-      city
-      postCode
       creatorId
       total
       createdAt

@@ -63,13 +63,9 @@ const SingleProductPage = () => {
   const handleSubmit = async () => {
     const res = await createOrder({
       input: {
-        address: 'test',
-        city: 'test',
-        country: 'test',
-        email: 'test',
-        firstName: 'test',
-        lastName: 'test',
-        postCode: 'test',
+        email: user?.me?.email as string,
+        firstName: user?.me?.firstName as string,
+        lastName: user?.me?.lastName as string,
         productId: data.product?.id as number,
         qty: 1,
       },

@@ -36,22 +36,6 @@ export class Order extends BaseEntity {
   @Column()
   email: string;
 
-  @Field(() => String)
-  @Column()
-  address: string;
-
-  @Field(() => String)
-  @Column()
-  country: string;
-
-  @Field(() => String)
-  @Column()
-  city: string;
-
-  @Field(() => String)
-  @Column()
-  postCode: string;
-
   @Field()
   @Column()
   creatorId: number;
