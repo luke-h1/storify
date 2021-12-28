@@ -29,13 +29,11 @@ export class ProductResolver {
 
   @Query(() => [Product])
   async products(): Promise<Product[]> {
-    const products = await getConnection().query(
-      `
-      SELECT p.* FROM "products" p
-      ORDER BY p."createdAt" DESC
-      `,
-    );
-    return products;
+    return Product.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   @Query(() => Product, { nullable: true })

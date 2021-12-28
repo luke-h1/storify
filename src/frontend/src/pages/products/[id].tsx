@@ -35,7 +35,7 @@ const SingleProductPage = () => {
   useIsAuth();
   const router = useRouter();
   const intId = useGetIntId();
-  const [{ data: user, fetching: userFetching }] = useMeQuery();
+  const [{ data: user }] = useMeQuery();
   const [, deleteProduct] = useDeleteProductMutation();
   const [, createOrder] = useCreateOrderMutation();
   const [{ data, fetching }] = useProductQuery({

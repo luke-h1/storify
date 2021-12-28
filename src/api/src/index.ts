@@ -14,6 +14,7 @@ import 'dotenv-safe/config';
 import createConn from './db/createConn';
 import redis from './db/redis';
 import { createOrderLoader } from './loaders/createOrderLoader';
+import { createProductLoader } from './loaders/createProductLoader';
 import { createUserLoader } from './loaders/createUserLoader';
 import { isProd } from './shared/constants';
 import createSchema from './utils/createSchema';
@@ -74,6 +75,7 @@ const main = async () => {
       redis,
       userLoader: createUserLoader(),
       orderLoader: createOrderLoader(),
+      productLoader: createProductLoader(),
     }),
   });
   await apolloServer.start();
