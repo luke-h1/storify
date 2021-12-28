@@ -1,32 +1,38 @@
-/* eslint-disable no-shadow */
 import {
-  Flex,
-  chakra,
-  Table,
   Box,
+  chakra,
+  Container,
+  Stack,
+  Text,
   Image,
+  Flex,
+  VStack,
   Button,
-  ButtonGroup,
-  Tbody,
-  Td,
-  Tr,
+  Heading,
+  SimpleGrid,
+  StackDivider,
+  useColorModeValue,
+  VisuallyHidden,
+  List,
+  ListItem,
 } from '@chakra-ui/react';
-
 import { withUrqlClient } from 'next-urql';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
 import { toast } from 'react-hot-toast';
+import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { MdLocalShipping } from 'react-icons/md';
 import {
-  useProductQuery,
   useMeQuery,
   useDeleteProductMutation,
   useCreateOrderMutation,
+  useProductQuery,
 } from '../../generated/graphql';
 import useGetIntId from '../../hooks/useGetIntId';
+import { useIsAuth } from '../../hooks/useIsAuth';
 import { createurqlClient } from '../../utils/createUrqlClient';
 
 const SingleProductPage = () => {
+  useIsAuth();
   const router = useRouter();
   const intId = useGetIntId();
   const [{ data: user, fetching: userFetching }] = useMeQuery();
@@ -44,10 +50,6 @@ const SingleProductPage = () => {
   }
   if (!data?.product) {
     return <p>no product</p>;
-  }
-
-  if (!user && !userFetching) {
-    router.push('/auth/login');
   }
 
   const handleDelete = async () => {
@@ -79,77 +81,76 @@ const SingleProductPage = () => {
       toast.success('Added to cart');
     }
   };
+
   return (
-    <Flex direction={{ base: 'column', md: 'row' }} px={8} py={24} mx="auto">
-      <Box
-        w={{ base: 'full', md: 11 / 12, xl: 9 / 12 }}
-        mx="auto"
-        pr={{ md: 20 }}
+    <Container maxW="7xl">
+      <SimpleGrid
+        columns={{ base: 1, lg: 2 }}
+        spacing={{ base: 8, md: 10 }}
+        py={{ base: 18, md: 24 }}
       >
-        <chakra.h2
-          fontSize={{ base: '3xl', sm: '4xl' }}
-          fontWeight="extrabold"
-          lineHeight="shorter"
-          color="#000"
-          mb={6}
-        >
-          <chakra.span display="block">{data?.product.name}</chakra.span>
-        </chakra.h2>
-        <Table variant="simple" mb={4}>
-          <Tbody>
-            <Tr>
-              <Td>Price</Td>
-              <Td>£{data?.product.price}</Td>
-            </Tr>
-          </Tbody>
-        </Table>
-        <chakra.p mb={6} fontSize={{ base: 'lg', md: 'xl' }} color="#000">
-          {data?.product.description}
-        </chakra.p>
-        <Box mb={10} />
-        <Box mb={10} mt={5}>
-          {data?.product.creator.id === user?.me?.id && (
-            <>
-              <hr />
-              <ButtonGroup>
-                <Link href={`/products/update/${data?.product.id}`}>
-                  <a>
-                    <Button colorScheme="blue" mt={4}>
-                      Update product
-                    </Button>
-                  </a>
-                </Link>
-                <Button as="a" colorScheme="red" mt={4} onClick={handleDelete}>
-                  Delete product
-                </Button>
-              </ButtonGroup>
-            </>
-          )}
-        </Box>
-        <Box mt={5} mb={10}>
+        <Flex>
+          <Image
+            rounded="md"
+            alt="product image"
+            src={data?.product.image}
+            fit="cover"
+            align="center"
+            w="100%"
+            h={{ base: '100%', sm: '400px', lg: '500px' }}
+          />
+        </Flex>
+        <Stack spacing={{ base: 6, md: 10 }}>
+          <Box as="header">
+            <Heading
+              lineHeight={1.1}
+              fontWeight={600}
+              fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}
+            >
+              {data?.product.name}
+            </Heading>
+            <Text fontWeight={300} fontSize="2xl">
+              £{data?.product.price.toFixed(2)} GBP
+            </Text>
+          </Box>
+
+          <Stack
+            spacing={{ base: 4, sm: 6 }}
+            direction="column"
+            divider={<StackDivider />}
+          >
+            <VStack spacing={{ base: 4, sm: 6 }}>
+              <Text fontSize="2xl" fontWeight="300">
+                Brand: {data?.product.brand}
+              </Text>
+              <Text fontSize="lg">{data?.product.description}</Text>
+            </VStack>
+          </Stack>
+
           <Button
-            bg="blue.400"
-            color="white"
-            _hover={{
-              bg: 'blue.500',
-            }}
-            type="submit"
+            rounded="none"
+            w="full"
+            mt={8}
+            size="lg"
+            py="7"
             onClick={handleSubmit}
+            type="submit"
+            textTransform="uppercase"
+            _hover={{
+              transform: 'translateY(2px)',
+              boxShadow: 'lg',
+            }}
           >
             Add to cart
-          </Button>{' '}
-        </Box>
-      </Box>
-      <Box w={{ base: 'full', md: 10 / 12 }} mx="auto" textAlign="center">
-        <Image
-          w="full"
-          rounded="lg"
-          shadow="2xl"
-          src={data?.product.image}
-          alt={data?.product.name}
-        />
-      </Box>
-    </Flex>
+          </Button>
+
+          <Stack direction="row" alignItems="center" justifyContent="center">
+            <MdLocalShipping />
+            <Text>2-3 business days delivery</Text>
+          </Stack>
+        </Stack>
+      </SimpleGrid>
+    </Container>
   );
 };
 export default withUrqlClient(createurqlClient, { ssr: true })(

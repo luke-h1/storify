@@ -17,7 +17,11 @@ interface Props {
 
 const ProductCard = ({ product }: Props) => {
   return (
-    <WrapItem width={{ base: '100%', sm: '45%', md: '45%', lg: '30%' }}>
+    <WrapItem
+      width={{ base: '100%', sm: '45%', md: '45%', lg: '30%' }}
+      border="1px solid #000"
+      padding="1rem"
+    >
       <Link href={`/products/${product.id}`}>
         <a>
           <Box w="100%">
@@ -43,6 +47,9 @@ const ProductCard = ({ product }: Props) => {
             </Heading>
             <Text as="p" fontSize="md" marginTop="2">
               {product.descriptionSnippet}
+            </Text>
+            <Text as="h3" fontSize="25px">
+              £{product?.price.toFixed(2)}
             </Text>
           </Box>
         </a>

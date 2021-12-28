@@ -47,6 +47,7 @@ const main = async () => {
         sameSite: 'lax', // csrf
         secure: isProd,
         domain: isProd ? 'deployed api URL' : undefined,
+        signed: !!isProd,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,
