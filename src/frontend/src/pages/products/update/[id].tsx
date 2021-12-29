@@ -91,6 +91,7 @@ const UpdateProductPage = () => {
                 image,
                 name: values.name as string,
                 price: values.price as number,
+                stripeProductId: data?.product?.stripeProductId as string,
               },
             });
             if (res.data?.updateProduct) {
@@ -135,6 +136,21 @@ const UpdateProductPage = () => {
                       }
                     }}
                   />
+                  {data?.product?.image && !previewImage && (
+                    <Box>
+                      <Image
+                        transform="scale(1.0)"
+                        src={data?.product.image}
+                        alt="some text"
+                        objectFit="contain"
+                        width="100%"
+                        transition="0.3s ease-in-out"
+                        _hover={{
+                          transform: 'scale(1.05)',
+                        }}
+                      />
+                    </Box>
+                  )}
                   {previewImage && (
                     <Box>
                       <Image

@@ -198,7 +198,6 @@ const SingleProductPage = () => {
                 </Button>
               </Box>
             )}
-
             <Button
               rounded="none"
               w="full"
