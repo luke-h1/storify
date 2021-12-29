@@ -19,7 +19,6 @@ const ProductCard = ({ product }: Props) => {
   return (
     <WrapItem
       width={{ base: '100%', sm: '45%', md: '45%', lg: '30%' }}
-      border="1px solid #000"
       padding="1rem"
     >
       <Link href={`/products/${product.id}`}>

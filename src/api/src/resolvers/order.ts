@@ -20,14 +20,14 @@ import { MyContext } from '../types/MyContext';
 @Resolver(Order)
 export class OrderResolver {
   @Query(() => Order)
-  // @Authorized()
+  @Authorized()
   async order(
     @Arg('id', () => Int) id: number,
     @Ctx() { req }: MyContext,
   ): Promise<Order | undefined> {
     return Order.findOne({
       relations: ['orderItems'],
-      where: { id },
+      where: { id, creatorId: req.session.userId },
       loadEagerRelations: true,
       transaction: true,
       order: {
@@ -37,11 +37,11 @@ export class OrderResolver {
   }
 
   @Query(() => [Order])
-  // @Authorized()
+  @Authorized()
   async orders(@Ctx() { req }: MyContext) {
     const orders = Order.find({
       relations: ['orderItems'],
-      // where: { creatorId: req.session.userId },
+      where: { creatorId: req.session.userId },
       loadEagerRelations: true,
       transaction: true,
       order: {
