@@ -27,7 +27,6 @@ export type ChargeInput = {
   description: Scalars['String'];
   email: Scalars['String'];
   firstName: Scalars['String'];
-  id: Scalars['String'];
   lastName: Scalars['String'];
   productId: Scalars['Int'];
   productTitle: Scalars['String'];
@@ -48,7 +47,7 @@ export type ImageSignature = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
-  charge: Scalars['Boolean'];
+  charge: Order;
   createImageSignature: ImageSignature;
   createProduct: Product;
   deleteProduct: Scalars['Boolean'];
@@ -107,6 +106,7 @@ export type Order = {
   price: Scalars['Int'];
   productTitle: Scalars['String'];
   qty: Scalars['Int'];
+  transactionId: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
@@ -226,7 +226,22 @@ export type ChargeMutationVariables = Exact<{
   options: ChargeInput;
 }>;
 
-export type ChargeMutation = { __typename?: 'Mutation'; charge: boolean };
+export type ChargeMutation = {
+  __typename?: 'Mutation';
+  charge: {
+    __typename?: 'Order';
+    id: number;
+    productTitle: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    transactionId: string;
+    creatorId: number;
+    completed: boolean;
+    price: number;
+    qty: number;
+  };
+};
 
 export type CreateProductMutationVariables = Exact<{
   input: ProductCreateInput;
@@ -466,7 +481,18 @@ export const UserResponseFragmentFragmentDoc = gql`
 `;
 export const ChargeDocument = gql`
   mutation Charge($options: ChargeInput!) {
-    charge(options: $options)
+    charge(options: $options) {
+      id
+      productTitle
+      firstName
+      lastName
+      email
+      transactionId
+      creatorId
+      completed
+      price
+      qty
+    }
   }
 `;
 

@@ -67,18 +67,35 @@ const CheckoutForm = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { error } = await stripe!.redirectToCheckout({
-      cancelUrl: 'http://localhost:3000/checkout/error',
-      successUrl: 'http://localhost:3000/checkout/success',
-      lineItems: [
-        {
-          price: stripePriceId,
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      submitType: 'pay',
+    // const { error } = await stripe!.redirectToCheckout({
+    //   cancelUrl: 'http://localhost:3000/checkout/error',
+    //   successUrl: 'http://localhost:3000/checkout/success',
+    //   lineItems: [
+    //     {
+    //       price: stripePriceId,
+    //       quantity: 1,
+    //     },
+    //   ],
+    //   mode: 'payment',
+    //   submitType: 'pay',
+
+    // });
+    const res = await charge({
+      options: {
+        amount: price,
+        description,
+        productId,
+        productTitle,
+        firstName,
+        lastName,
+        email,
+      },
     });
+    if (res.data?.charge.transactionId) {
+      stripe?.redirectToCheckout({
+        sessionId: res.data?.charge.transactionId,
+      });
+    }
   };
 
   return (

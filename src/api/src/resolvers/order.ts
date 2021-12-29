@@ -12,29 +12,25 @@ import {
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Order } from '../entities/Order';
+import { Product } from '../entities/Product';
 import { ChargeInput } from '../inputs/order/ChargeInput';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
 
 @Resolver(Order)
 export class OrderResolver {
-  @Mutation(() => Boolean)
+  @Mutation(() => Order)
   @Authorized()
   async charge(
     @Arg('options') options: ChargeInput,
     @Ctx() { req }: MyContext,
-  ): Promise<boolean> {
+  ): Promise<Order | null> {
     try {
-      const payment = await stripe.paymentIntents.create({
-        amount: options.amount * 100, // send to stripe in pence
-        currency: 'GBP',
-        description: options.description,
-        payment_method: options.id,
-        confirm: true, // charge the card right away
+      const product = await Product.findOne({
+        where: { id: options.productId },
       });
-      console.log(payment);
 
-      await getConnection()
+      const result = await getConnection()
         .createQueryBuilder()
         .insert()
         .into(Order)
@@ -46,15 +42,47 @@ export class OrderResolver {
           price: options.amount,
           qty: 1,
           productTitle: options.productTitle,
-          completed: true,
+          completed: false,
         })
         .returning('*')
         .execute();
 
-      return true;
+      const source = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        cancel_url:
+          'http://localhost:3000/checkout/success?source={CHECKOUT_SESSION_ID}',
+        success_url: 'http://localhost:3000/checkout/success',
+        mode: 'payment',
+        line_items: [
+          {
+            price: product?.stripePriceId as string,
+            quantity: 1,
+          },
+        ],
+      });
+
+      const { id } = result.raw[0];
+
+      console.log('ID IS ', id);
+
+      await Order.findOne({ where: { id } });
+
+      const updatedOrder = await getConnection()
+        .createQueryBuilder()
+        .update(Order)
+        .set({
+          transactionId: source.id,
+        })
+        .where('id = :id', {
+          id,
+        })
+        .returning('*')
+        .execute();
+      console.log(updatedOrder.raw[0]);
+      return updatedOrder.raw[0];
     } catch (e) {
       console.error(e);
-      return false;
+      return null;
     }
   }
 

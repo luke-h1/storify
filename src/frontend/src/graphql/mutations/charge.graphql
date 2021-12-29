@@ -1,3 +1,14 @@
 mutation Charge($options: ChargeInput!) {
-  charge(options: $options)
+  charge(options: $options) {
+    id
+    productTitle
+    firstName
+    lastName
+    email
+    transactionId
+    creatorId
+    completed
+    price
+    qty
+  }
 }
