@@ -37,6 +37,7 @@ export type ImageSignature = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
+  charge: Scalars['Boolean'];
   createImageSignature: ImageSignature;
   createOrder: Scalars['Boolean'];
   createProduct: Product;
@@ -53,6 +54,12 @@ export type Mutation = {
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
+};
+
+export type MutationChargeArgs = {
+  amount: Scalars['Int'];
+  description: Scalars['String'];
+  id: Scalars['String'];
 };
 
 export type MutationCreateOrderArgs = {
@@ -225,6 +232,14 @@ export type UserResponseFragmentFragment = {
     | null
     | undefined;
 };
+
+export type ChargeMutationVariables = Exact<{
+  description: Scalars['String'];
+  amount: Scalars['Int'];
+  chargeId: Scalars['String'];
+}>;
+
+export type ChargeMutation = { __typename?: 'Mutation'; charge: boolean };
 
 export type CreateOrderMutationVariables = Exact<{
   input: OrderCreateInput;
@@ -488,6 +503,17 @@ export const UserResponseFragmentFragmentDoc = gql`
   ${ErrorFragmentDoc}
   ${UserFragmentFragmentDoc}
 `;
+export const ChargeDocument = gql`
+  mutation Charge($description: String!, $amount: Int!, $chargeId: String!) {
+    charge(description: $description, amount: $amount, id: $chargeId)
+  }
+`;
+
+export function useChargeMutation() {
+  return Urql.useMutation<ChargeMutation, ChargeMutationVariables>(
+    ChargeDocument,
+  );
+}
 export const CreateOrderDocument = gql`
   mutation CreateOrder($input: OrderCreateInput!) {
     createOrder(input: $input)

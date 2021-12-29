@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
+import Stripe from 'stripe';
 import {
   Arg,
   Authorized,
@@ -17,8 +18,36 @@ import { Product } from '../entities/Product';
 import { OrderCreateInput } from '../inputs/order/OrderCreateInput';
 import { MyContext } from '../types/MyContext';
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  typescript: true,
+  apiVersion: '2020-08-27',
+});
+
 @Resolver(Order)
 export class OrderResolver {
+  @Mutation(() => Boolean)
+  @Authorized()
+  async charge(
+    @Arg('id', () => String) id: string,
+    @Arg('amount', () => Int) amount: number,
+    @Arg('description') description: string,
+  ): Promise<boolean> {
+    try {
+      const payment = await stripe.paymentIntents.create({
+        amount,
+        currency: 'GBP',
+        description,
+        payment_method: id,
+        confirm: true, // charge the cart right away
+      });
+      console.log(payment);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  }
+
   @Query(() => Order)
   @Authorized()
   async order(

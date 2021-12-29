@@ -96,9 +96,11 @@ const OrdersPage = () => {
               </Tbody>
             ))}
         </Table>
-        <Button mb={10} colorScheme="blue" onClick={() => setComplete(true)}>
-          Complete order
-        </Button>
+        {!complete && (
+          <Button mb={10} colorScheme="blue" onClick={() => setComplete(true)}>
+            Complete order
+          </Button>
+        )}
         {complete && (
           <Box>
             <CheckoutForm />
