@@ -12,13 +12,20 @@ import {
   Th,
   Thead,
   Tr,
+  Button,
+  Stack,
 } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
 import { withUrqlClient } from 'next-urql';
+import { useState } from 'react';
+import InputField from '../../components/InputField';
 import { useOrdersQuery } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import { isServer } from '../../utils/isServer';
 
 const OrdersPage = () => {
+  const [complete, setComplete] = useState<boolean>(false);
+
   const [{ data, fetching }] = useOrdersQuery({
     pause: isServer(),
   });
@@ -53,9 +60,6 @@ const OrdersPage = () => {
             </Tbody>
           ))}
       </Table>
-      <Box mb={10}>
-        <Text>Finish Order</Text>
-      </Box>
     </Box>
   );
 };
