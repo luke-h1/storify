@@ -30,7 +30,7 @@ export class OrderResolver {
         currency: 'GBP',
         description: options.description,
         payment_method: options.id,
-        confirm: true, // charge the cart right away
+        confirm: true, // charge the card right away
       });
       console.log(payment);
 

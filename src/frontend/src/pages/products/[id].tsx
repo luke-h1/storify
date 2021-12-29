@@ -126,13 +126,16 @@ const SingleProductPage = () => {
     return <p>no product</p>;
   }
 
-  // const handleDelete = async () => {
-  //   await deleteProduct({ id: data?.product?.id as number });
-  //   toast.success('Deleted product!');
-  //   setTimeout(() => {
-  //     router.push('/');
-  //   }, 700);
-  // };
+  const handleDelete = async () => {
+    await deleteProduct({
+      id: data?.product?.id as number,
+      stripeProductId: data?.product?.stripeProductId as string,
+    });
+    toast.success('Deleted product!');
+    setTimeout(() => {
+      router.push('/');
+    }, 700);
+  };
 
   return (
     <Elements stripe={stripePromise}>
@@ -179,6 +182,22 @@ const SingleProductPage = () => {
                 <Text fontSize="lg">{data?.product.description}</Text>
               </VStack>
             </Stack>
+            {user?.me?.id === data?.product.creator.id && (
+              <Box display="flex" flexDirection="column" maxW="50%">
+                <Button
+                  mb={2}
+                  colorScheme="green"
+                  onClick={() => {
+                    router.push(`/products/update/${data?.product?.id}`);
+                  }}
+                >
+                  Update product
+                </Button>
+                <Button colorScheme="red" onClick={handleDelete}>
+                  Delete Product
+                </Button>
+              </Box>
+            )}
 
             <Button
               rounded="none"
