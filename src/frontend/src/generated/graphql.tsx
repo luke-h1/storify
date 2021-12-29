@@ -123,6 +123,7 @@ export type Product = {
   name: Scalars['String'];
   price: Scalars['Int'];
   publicId: Scalars['String'];
+  stripePriceId: Scalars['String'];
   stripeProductId: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -141,6 +142,7 @@ export type ProductUpdateInput = {
   image: Scalars['String'];
   name: Scalars['String'];
   price: Scalars['Float'];
+  stripePriceId: Scalars['String'];
   stripeProductId: Scalars['String'];
 };
 
@@ -411,6 +413,7 @@ export type ProductQuery = {
         image: string;
         price: number;
         name: string;
+        stripePriceId: string;
         stripeProductId: string;
         creator: { __typename?: 'User'; id: number };
       }
@@ -641,6 +644,7 @@ export const ProductDocument = gql`
       image
       price
       name
+      stripePriceId
       stripeProductId
       creator {
         id

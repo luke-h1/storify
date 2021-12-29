@@ -5,4 +5,7 @@ import { ProductCreateInput } from './ProductCreateInput';
 export class ProductUpdateInput extends ProductCreateInput {
   @Field()
   stripeProductId: string;
+
+  @Field()
+  stripePriceId: string;
 }

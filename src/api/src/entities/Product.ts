@@ -51,6 +51,10 @@ export class Product extends BaseEntity {
 
   @Field(() => String)
   @Column()
+  stripePriceId: string;
+
+  @Field(() => String)
+  @Column()
   description: string;
 
   @Field(() => Int)

@@ -59,6 +59,15 @@ export class ProductResolver {
       caption: input.brand,
     });
 
+    // create the price in stripe
+    const stripePrice = await stripe.prices.create({
+      product: stripeProduct.id,
+      currency: 'GBP',
+      active: true,
+      billing_scheme: 'per_unit',
+      unit_amount: input.price * 100,
+    });
+
     const result = await getConnection()
       .createQueryBuilder()
       .insert()
@@ -66,6 +75,7 @@ export class ProductResolver {
       .values({
         ...input,
         stripeProductId: stripeProduct.id,
+        stripePriceId: stripePrice.id,
         creatorId: req.session.userId,
       })
       .returning('*')
@@ -89,13 +99,24 @@ export class ProductResolver {
       throw new Error('no product');
     }
 
-    await stripe.products.update(input.stripeProductId, {
+    const stripeProduct = await stripe.products.update(input.stripeProductId, {
       name: input.name,
       active: true,
       description: input.description,
       images: [input.image],
       caption: input.brand,
     });
+
+    // create the price in stripe
+    await stripe.prices.create({
+      product: stripeProduct.id,
+      currency: 'GBP',
+      active: true,
+      billing_scheme: 'per_unit',
+      unit_amount: input.price * 100,
+    });
+
+    await stripe.prices.update(input.stripePriceId);
 
     const result = await getConnection()
       .createQueryBuilder()

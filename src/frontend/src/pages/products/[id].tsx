@@ -45,6 +45,7 @@ interface Props {
   lastName: string;
   email: string;
   productTitle: string;
+  stripePriceId: string;
 }
 
 const CheckoutForm = ({
@@ -55,6 +56,7 @@ const CheckoutForm = ({
   lastName,
   email,
   productTitle,
+  stripePriceId,
 }: Props) => {
   const [, charge] = useChargeMutation();
 
@@ -65,32 +67,18 @@ const CheckoutForm = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { error, paymentMethod } = await stripe!.createPaymentMethod({
-      type: 'card',
-      card: elements!.getElement(CardElement) as StripeCardElement,
+    const { error } = await stripe!.redirectToCheckout({
+      cancelUrl: 'http://localhost:3000/checkout/error',
+      successUrl: 'http://localhost:3000/checkout/success',
+      lineItems: [
+        {
+          price: stripePriceId,
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      submitType: 'pay',
     });
-
-    const res = await charge({
-      options: {
-        amount: price,
-        id: paymentMethod?.id as string,
-        email,
-        firstName,
-        lastName,
-        productId,
-        productTitle,
-        description,
-      },
-    });
-
-    if (error) {
-      toast.error(`Payment failed: ${error.message}`);
-    } else {
-      toast.success('You bought this item');
-    }
-    if (res.data?.charge) {
-      router.push('/me/orders');
-    }
   };
 
   return (
@@ -229,6 +217,7 @@ const SingleProductPage = () => {
           firstName={user?.me?.firstName as string}
           lastName={user?.me?.lastName as string}
           productTitle={data?.product.name}
+          stripePriceId={data?.product.stripePriceId as string}
         />
       )}
     </Elements>
