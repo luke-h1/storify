@@ -63,8 +63,6 @@ export class OrderResolver {
 
       const { id } = result.raw[0];
 
-      console.log('ID IS ', id);
-
       await Order.findOne({ where: { id } });
 
       const updatedOrder = await getConnection()
@@ -78,7 +76,6 @@ export class OrderResolver {
         })
         .returning('*')
         .execute();
-      console.log(updatedOrder.raw[0]);
       return updatedOrder.raw[0];
     } catch (e) {
       console.error(e);
