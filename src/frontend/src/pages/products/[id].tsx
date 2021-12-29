@@ -132,9 +132,7 @@ const SingleProductPage = () => {
       stripeProductId: data?.product?.stripeProductId as string,
     });
     toast.success('Deleted product!');
-    setTimeout(() => {
-      router.push('/');
-    }, 700);
+    router.push('/');
   };
 
   return (
