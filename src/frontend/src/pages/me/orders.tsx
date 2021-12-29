@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Text,
   Spinner,
   Table,
   Tbody,
@@ -27,30 +28,35 @@ const OrdersPage = () => {
   }
 
   return (
-    <Table>
-      <Thead>
-        <Tr>
-          <Td>#</Td>
-          <Td>Product Title</Td>
-          <Td>Price</Td>
-          <Td>Qty</Td>
-        </Tr>
-      </Thead>
-      {data?.orders &&
-        data?.orders.map(o => (
-          <Tbody key={o.id}>
-            {o.orderItems &&
-              o.orderItems.map(item => (
-                <Tr key={item.id}>
-                  <Td>{item.id}</Td>
-                  <Td>{item.productTitle}</Td>
-                  <Td>{item.price}</Td>
-                  <Td>{item.qty}</Td>
-                </Tr>
-              ))}
-          </Tbody>
-        ))}
-    </Table>
+    <Box>
+      <Table mb={10}>
+        <Thead>
+          <Tr>
+            <Td>#</Td>
+            <Td>Product Title</Td>
+            <Td>Price</Td>
+            <Td>Qty</Td>
+          </Tr>
+        </Thead>
+        {data?.orders &&
+          data?.orders.map(o => (
+            <Tbody key={o.id}>
+              {o.orderItems &&
+                o.orderItems.map(item => (
+                  <Tr key={item.id}>
+                    <Td>{item.id}</Td>
+                    <Td>{item.productTitle}</Td>
+                    <Td>{item.price}</Td>
+                    <Td>{item.qty}</Td>
+                  </Tr>
+                ))}
+            </Tbody>
+          ))}
+      </Table>
+      <Box mb={10}>
+        <Text>Finish Order</Text>
+      </Box>
+    </Box>
   );
 };
 export default withUrqlClient(createurqlClient, { ssr: true })(OrdersPage);
