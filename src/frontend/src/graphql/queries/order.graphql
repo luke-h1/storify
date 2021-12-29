@@ -1,21 +1,12 @@
-query Order($id: Int!) {
-  order(id: $id) {
+query Order($orderId: Int!) {
+  order(id: $orderId) {
     id
-    productId
-    firstName
-    lastName
+    completed
     email
     creatorId
-    createdAt
-    updatedAt
-    orderItems {
-      id
-      productTitle
-      price
-      qty
-      orderId
-      createdAt
-      updatedAt
-    }
+    firstName
+    lastName
+    productTitle
+    
   }
 }

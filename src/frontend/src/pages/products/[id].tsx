@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable no-console */
 import {
   Box,
-  chakra,
   Container,
   Stack,
   Text,
@@ -11,10 +12,6 @@ import {
   Heading,
   SimpleGrid,
   StackDivider,
-  useColorModeValue,
-  VisuallyHidden,
-  List,
-  ListItem,
 } from '@chakra-ui/react';
 import {
   useStripe,
@@ -24,15 +21,13 @@ import {
 } from '@stripe/react-stripe-js';
 import { loadStripe, StripeCardElement } from '@stripe/stripe-js';
 import { withUrqlClient } from 'next-urql';
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
 import {
   useMeQuery,
   useDeleteProductMutation,
-  useCreateOrderMutation,
   useProductQuery,
   useChargeMutation,
 } from '../../generated/graphql';
@@ -45,9 +40,22 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PK);
 interface Props {
   price: number;
   description: string;
+  productId: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  productTitle: string;
 }
 
-const CheckoutForm = ({ price, description }: Props) => {
+const CheckoutForm = ({
+  price,
+  description,
+  productId,
+  firstName,
+  lastName,
+  email,
+  productTitle,
+}: Props) => {
   const [, charge] = useChargeMutation();
 
   const stripe = useStripe();
@@ -62,11 +70,27 @@ const CheckoutForm = ({ price, description }: Props) => {
       card: elements!.getElement(CardElement) as StripeCardElement,
     });
 
-    await charge({
-      amount: price,
-      chargeId: paymentMethod?.id as string,
-      description,
+    const res = await charge({
+      options: {
+        amount: price,
+        id: paymentMethod?.id as string,
+        email,
+        firstName,
+        lastName,
+        productId,
+        productTitle,
+        description,
+      },
     });
+
+    if (error) {
+      toast.error(`Payment failed: ${error.message}`);
+    } else {
+      toast.success('You bought this item');
+    }
+    if (res.data?.charge) {
+      router.push('/me/orders');
+    }
   };
 
   return (
@@ -83,12 +107,11 @@ const CheckoutForm = ({ price, description }: Props) => {
 
 const SingleProductPage = () => {
   useIsAuth();
-  const router = useRouter();
+  // const router = useRouter();
   const [showForm, setShowForm] = useState<boolean>(false);
   const intId = useGetIntId();
   const [{ data: user }] = useMeQuery();
   const [, deleteProduct] = useDeleteProductMutation();
-  const [, createOrder] = useCreateOrderMutation();
   const [{ data, fetching }] = useProductQuery({
     pause: intId === -1,
     variables: {
@@ -103,31 +126,13 @@ const SingleProductPage = () => {
     return <p>no product</p>;
   }
 
-  const handleDelete = async () => {
-    await deleteProduct({ id: data?.product?.id as number });
-    toast.success('Deleted product!');
-    setTimeout(() => {
-      router.push('/');
-    }, 700);
-  };
-
-  const handleSubmit = async () => {
-    const res = await createOrder({
-      input: {
-        email: user?.me?.email as string,
-        firstName: user?.me?.firstName as string,
-        lastName: user?.me?.lastName as string,
-        productId: data.product?.id as number,
-        qty: 1,
-      },
-    });
-    // if (res.data?.createOrder) {
-    //   setTimeout(() => {
-    //     router.push('/');
-    //   }, 700);
-    //   toast.success('Added to cart');
-    // }
-  };
+  // const handleDelete = async () => {
+  //   await deleteProduct({ id: data?.product?.id as number });
+  //   toast.success('Deleted product!');
+  //   setTimeout(() => {
+  //     router.push('/');
+  //   }, 700);
+  // };
 
   return (
     <Elements stripe={stripePromise}>
@@ -203,6 +208,11 @@ const SingleProductPage = () => {
         <CheckoutForm
           price={data?.product.price}
           description={data?.product.description}
+          productId={data?.product.id}
+          email={user?.me?.email as string}
+          firstName={user?.me?.firstName as string}
+          lastName={user?.me?.lastName as string}
+          productTitle={data?.product.name}
         />
       )}
     </Elements>

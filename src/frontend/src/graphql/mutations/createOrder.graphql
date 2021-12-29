@@ -1,3 +1,0 @@
-mutation CreateOrder($input: OrderCreateInput!) {
-  createOrder(input: $input)
-}

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Redis } from 'ioredis';
-import { createOrderLoader } from 'src/loaders/createOrderLoader';
+import { createOrderLoader } from '../loaders/createOrderLoader';
 import { createProductLoader } from '../loaders/createProductLoader';
 import { createUserLoader } from '../loaders/createUserLoader';
 

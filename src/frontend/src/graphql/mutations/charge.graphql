@@ -1,3 +1,3 @@
-mutation Charge($description: String!, $amount: Int!, $chargeId: String!) {
-  charge(description: $description, amount: $amount, id: $chargeId)
+mutation Charge($options: ChargeInput!) {
+  charge(options: $options)
 }

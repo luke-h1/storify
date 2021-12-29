@@ -6,11 +6,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
-import { OrderItem } from './OrderItem';
 import { User } from './User';
 
 @ObjectType()
@@ -20,9 +18,9 @@ export class Order extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id!: number;
 
-  @Field(() => Int)
+  @Field(() => String)
   @Column()
-  productId: number;
+  productTitle: string;
 
   @Field(() => String)
   @Column()
@@ -44,9 +42,17 @@ export class Order extends BaseEntity {
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 
-  @Field(() => [OrderItem])
-  @OneToMany(() => OrderItem, orderItem => orderItem.order)
-  orderItems: OrderItem[];
+  @Field(() => Boolean)
+  @Column({ default: false })
+  completed: boolean;
+
+  @Field(() => Int)
+  @Column()
+  qty: number;
+
+  @Field(() => Int)
+  @Column()
+  price: number;
 
   @Field(() => String)
   @CreateDateColumn({ type: 'timestamp with time zone' })
