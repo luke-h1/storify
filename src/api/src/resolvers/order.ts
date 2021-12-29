@@ -70,6 +70,7 @@ export class OrderResolver {
         .update(Order)
         .set({
           transactionId: source.id,
+          completed: true,
         })
         .where('id = :id', {
           id,
