@@ -10087,9 +10087,9 @@ next-transpile-modules@9.0.0:
     escalade "^3.1.1"
 
 next-urql@^3.0.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/next-urql/-/next-urql-3.3.1.tgz#4ca109235c30bf6266e757a5fc3dcbe746294300"
-  integrity sha512-3JvOF+cuWtoIdIKxaksecaOrYDZTtgHJxlPGNYmPn7WTkJa9+xY7vjQbM15PaEwZNp087RXn+Lv95LjgNGtNww==
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/next-urql/-/next-urql-3.3.2.tgz#8be8e37f48726c55cb1c3eecb8c2003bdc319f2e"
+  integrity sha512-oXQHCFU0R3pIwXWtDqZDYOjKcD7SlNP7aove9YuukgKuItdtIR9CRUgo3qMOD5dSQ3wBBGfQ8zR6XtzqV5WiGg==
   dependencies:
     react-ssr-prepass "^1.4.0"
 
