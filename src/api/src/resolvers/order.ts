@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
-import Stripe from 'stripe';
 import {
   Arg,
   Authorized,
@@ -15,11 +14,7 @@ import { getConnection } from 'typeorm';
 import { Order } from '../entities/Order';
 import { ChargeInput } from '../inputs/order/ChargeInput';
 import { MyContext } from '../types/MyContext';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  typescript: true,
-  apiVersion: '2020-08-27',
-});
+import { stripe } from '../utils/stripe';
 
 @Resolver(Order)
 export class OrderResolver {
@@ -31,7 +26,7 @@ export class OrderResolver {
   ): Promise<boolean> {
     try {
       const payment = await stripe.paymentIntents.create({
-        amount: options.amount,
+        amount: options.amount * 100, // send to stripe in pence
         currency: 'GBP',
         description: options.description,
         payment_method: options.id,

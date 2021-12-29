@@ -6,7 +6,6 @@ query Orders {
     lastName
     qty
     email
-    image
     creatorId
     completed
     price

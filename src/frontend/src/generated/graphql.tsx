@@ -74,6 +74,7 @@ export type MutationCreateProductArgs = {
 
 export type MutationDeleteProductArgs = {
   id: Scalars['Int'];
+  stripeProductId: Scalars['String'];
 };
 
 export type MutationForgotPasswordArgs = {
@@ -91,7 +92,7 @@ export type MutationRegisterArgs = {
 
 export type MutationUpdateProductArgs = {
   id: Scalars['Int'];
-  input: ProductCreateInput;
+  input: ProductUpdateInput;
 };
 
 export type Order = {
@@ -122,6 +123,7 @@ export type Product = {
   name: Scalars['String'];
   price: Scalars['Int'];
   publicId: Scalars['String'];
+  stripeProductId: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
@@ -131,6 +133,15 @@ export type ProductCreateInput = {
   image: Scalars['String'];
   name: Scalars['String'];
   price: Scalars['Float'];
+};
+
+export type ProductUpdateInput = {
+  brand: Scalars['String'];
+  description: Scalars['String'];
+  image: Scalars['String'];
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  stripeProductId: Scalars['String'];
 };
 
 export type Query = {
@@ -245,6 +256,7 @@ export type CreateSignatureMutation = {
 
 export type DeleteProductMutationVariables = Exact<{
   id: Scalars['Int'];
+  stripeProductId: Scalars['String'];
 }>;
 
 export type DeleteProductMutation = {
@@ -310,7 +322,7 @@ export type RegisterMutation = {
 };
 
 export type UpdateProductMutationVariables = Exact<{
-  input: ProductCreateInput;
+  input: ProductUpdateInput;
   id: Scalars['Int'];
 }>;
 
@@ -399,6 +411,7 @@ export type ProductQuery = {
         image: string;
         price: number;
         name: string;
+        stripeProductId: string;
         creator: { __typename?: 'User'; id: number };
       }
     | null
@@ -494,8 +507,8 @@ export function useCreateSignatureMutation() {
   >(CreateSignatureDocument);
 }
 export const DeleteProductDocument = gql`
-  mutation DeleteProduct($id: Int!) {
-    deleteProduct(id: $id)
+  mutation DeleteProduct($id: Int!, $stripeProductId: String!) {
+    deleteProduct(id: $id, stripeProductId: $stripeProductId)
   }
 `;
 
@@ -543,7 +556,7 @@ export function useRegisterMutation() {
   );
 }
 export const UpdateProductDocument = gql`
-  mutation UpdateProduct($input: ProductCreateInput!, $id: Int!) {
+  mutation UpdateProduct($input: ProductUpdateInput!, $id: Int!) {
     updateProduct(input: $input, id: $id) {
       id
       image
@@ -628,6 +641,7 @@ export const ProductDocument = gql`
       image
       price
       name
+      stripeProductId
       creator {
         id
       }
