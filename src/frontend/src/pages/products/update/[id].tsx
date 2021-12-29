@@ -88,6 +88,7 @@ const UpdateProductPage = () => {
               input: {
                 brand: values.brand as string,
                 description: values.description as string,
+                stripePriceId: data?.product?.stripePriceId as string,
                 image,
                 name: values.name as string,
                 price: values.price as number,
