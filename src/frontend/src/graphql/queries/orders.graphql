@@ -6,7 +6,6 @@ query Orders {
     lastName
     email
     creatorId
-    total
     createdAt
     updatedAt
     orderItems {

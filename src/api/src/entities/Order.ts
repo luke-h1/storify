@@ -48,11 +48,6 @@ export class Order extends BaseEntity {
   @OneToMany(() => OrderItem, orderItem => orderItem.order)
   orderItems: OrderItem[];
 
-  @Field(() => Int)
-  get total(): number {
-    return this.orderItems.reduce((s, i) => s + i.price, 0);
-  }
-
   @Field(() => String)
   @CreateDateColumn({ type: 'timestamp with time zone' })
   readonly createdAt: Date;

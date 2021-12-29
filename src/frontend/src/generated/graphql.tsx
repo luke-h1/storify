@@ -104,7 +104,6 @@ export type Order = {
   lastName: Scalars['String'];
   orderItems: Array<OrderItem>;
   productId: Scalars['Int'];
-  total: Scalars['Int'];
   updatedAt: Scalars['String'];
 };
 
@@ -383,7 +382,6 @@ export type OrderQuery = {
     lastName: string;
     email: string;
     creatorId: number;
-    total: number;
     createdAt: string;
     updatedAt: string;
     orderItems: Array<{
@@ -411,7 +409,6 @@ export type OrdersQuery = {
     lastName: string;
     email: string;
     creatorId: number;
-    total: number;
     createdAt: string;
     updatedAt: string;
     orderItems: Array<{
@@ -630,7 +627,6 @@ export const OrderDocument = gql`
       lastName
       email
       creatorId
-      total
       createdAt
       updatedAt
       orderItems {
@@ -660,7 +656,6 @@ export const OrdersDocument = gql`
       lastName
       email
       creatorId
-      total
       createdAt
       updatedAt
       orderItems {

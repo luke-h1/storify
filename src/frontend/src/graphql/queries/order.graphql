@@ -6,7 +6,6 @@ query Order($id: Int!) {
     lastName
     email
     creatorId
-    total
     createdAt
     updatedAt
     orderItems {
