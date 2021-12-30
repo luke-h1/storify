@@ -1,12 +1,8 @@
-import { MiddlewareFn } from 'type-graphql';
+import { AuthChecker } from 'type-graphql';
 import { User } from '../entities/User';
 import { MyContext } from '../types/MyContext';
 
-export const isAdmin: MiddlewareFn<MyContext> = async ({ context }, next) => {
+export const isAdmin: AuthChecker<MyContext> = async ({ context }) => {
   const user = await User.findOne({ id: context.req.session.userId });
-
-  if (!user?.isAdmin || !context.req.session.userId) {
-    throw new Error('Not Authenticated');
-  }
-  return next();
+  return !!user?.isAdmin;
 };

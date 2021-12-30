@@ -1,0 +1,12 @@
+query Order($orderId: Int!) {
+  order(id: $orderId) {
+    id
+    completed
+    email
+    creatorId
+    firstName
+    lastName
+    productTitle
+    
+  }
+}

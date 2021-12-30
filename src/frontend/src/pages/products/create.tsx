@@ -12,7 +12,9 @@ import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import InputField from '../../components/form/InputField';
+import { toast } from 'react-hot-toast';
+import AuthRoute from '../../components/AuthRoute';
+import InputField from '../../components/InputField';
 import {
   useCreateProductMutation,
   useCreateSignatureMutation,
@@ -44,6 +46,14 @@ async function uploadImage(
   return response.json();
 }
 
+interface FormValues {
+  name: string;
+  image: string;
+  brand: string;
+  description: string;
+  price: number;
+}
+
 const CreateProductPage = () => {
   const [previewImage, setPreviewImage] = useState<string>('');
   const router = useRouter();
@@ -51,137 +61,128 @@ const CreateProductPage = () => {
   const [, createProduct] = useCreateProductMutation();
   const [, createSignature] = useCreateSignatureMutation();
   return (
-    <Flex align="center" justify="center" bg="#fff">
-      <Stack spacing={3} mx="auto" maxW="lg" py={12} px={6}>
-        <Stack align="center">
-          <Heading fontSize="4xl">Create a new product</Heading>
-        </Stack>
-        <Formik
-          validationSchema={productCreateSchema}
-          initialValues={{
-            name: '',
-            image: '',
-            brand: '',
-            categories: [''],
-            description: '',
-            price: 0,
-          }}
-          onSubmit={async values => {
-            const { data: signatureData } = await createSignature();
-            if (signatureData) {
-              const { signature, timestamp } =
-                signatureData.createImageSignature;
-              const imageData = await uploadImage(
-                values.image as unknown as File,
-                signature,
-                timestamp,
-              );
-              const res = await createProduct({
-                input: {
-                  image: imageData.secure_url,
-                  brand: values.brand,
-                  categories: values.categories,
-                  description: values.description,
-                  name: values.name,
-                  price: values.price,
-                },
-              });
-              router.push(`/products/${res.data?.createProduct.id}`);
-            }
-          }}
-        >
-          {({ isSubmitting, setFieldValue }) => (
-            <Form>
-              <Box rounded="lg" bg="#fff" boxShadow="lg" py={8} px={8}>
-                <Stack spacing={5}>
-                  <InputField label="Name" name="name" placeholder="iphone" />
-                  <InputField label="Brand" name="brand" placeholder="apple" />
-                  <InputField
-                    label="description"
-                    name="description"
-                    placeholder="informative description of the product"
-                    textarea
-                  />
-
-                  <InputField
-                    name="categories[0]"
-                    placeholder="category"
-                    label="category"
-                  />
-                  <InputField
-                    name="categories[1]"
-                    placeholder="category 2"
-                    label="category 2"
-                  />
-                  <InputField
-                    name="categories[2]"
-                    placeholder="category 3"
-                    label="category 3"
-                  />
-                  <InputField
-                    label="Price"
-                    name="price"
-                    placeholder="1000"
-                    type="number"
-                  />
-
-                  <Input
-                    placeholder="Image"
-                    type="file"
-                    accept="image/*"
-                    onChange={({ target: { validity, files } }) => {
-                      if (validity.valid && files) {
-                        setFieldValue('image', files[0]);
-                        const file = files[0];
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setPreviewImage(reader.result as string);
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                  {previewImage && (
-                    <Box>
-                      <Image
-                        transform="scale(1.0)"
-                        src={previewImage}
-                        alt="some text"
-                        objectFit="contain"
-                        width="100%"
-                        transition="0.3s ease-in-out"
-                        _hover={{
-                          transform: 'scale(1.05)',
-                        }}
-                      />
-                    </Box>
-                  )}
-
-                  <Stack spacing={10}>
-                    <Stack
-                      direction={{ base: 'column', sm: 'row' }}
-                      align="start"
-                      justify="space-between"
+    <AuthRoute>
+      <Flex align="center" justify="center" bg="#fff">
+        <Stack spacing={3} mx="auto" maxW="lg" py={12} px={6}>
+          <Stack align="center">
+            <Heading fontSize="4xl">Create a new product</Heading>
+          </Stack>
+          <Formik<FormValues>
+            validationSchema={productCreateSchema}
+            initialValues={{
+              name: '',
+              image: '',
+              brand: '',
+              description: '',
+              price: 0,
+            }}
+            onSubmit={async values => {
+              const { data: signatureData } = await createSignature();
+              if (signatureData) {
+                const { signature, timestamp } =
+                  signatureData.createImageSignature;
+                const imageData = await uploadImage(
+                  values.image as unknown as File,
+                  signature,
+                  timestamp,
+                );
+                const res = await createProduct({
+                  input: {
+                    image: imageData.secure_url,
+                    brand: values.brand,
+                    description: values.description,
+                    name: values.name,
+                    price: values.price,
+                  },
+                });
+                if (res?.data?.createProduct) {
+                  toast.success('Created product');
+                  router.push(`/products/${res.data?.createProduct.id}`);
+                }
+              }
+            }}
+          >
+            {({ isSubmitting, setFieldValue }) => (
+              <Form>
+                <Box rounded="lg" bg="#fff" boxShadow="lg" py={8} px={8}>
+                  <Stack spacing={5}>
+                    <InputField label="Name" name="name" placeholder="iphone" />
+                    <InputField
+                      label="Brand"
+                      name="brand"
+                      placeholder="apple"
                     />
-                    <Button
-                      bg="blue.400"
-                      color="white"
-                      _hover={{
-                        bg: 'blue.500',
+                    <InputField
+                      label="description"
+                      name="description"
+                      placeholder="informative description of the product"
+                    />
+
+                    <InputField
+                      label="Price"
+                      name="price"
+                      placeholder="1000"
+                      type="number"
+                    />
+
+                    <Input
+                      placeholder="Image"
+                      type="file"
+                      accept="image/*"
+                      onChange={({ target: { validity, files } }) => {
+                        if (validity.valid && files) {
+                          setFieldValue('image', files[0]);
+                          const file = files[0];
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setPreviewImage(reader.result as string);
+                          };
+                          reader.readAsDataURL(file);
+                        }
                       }}
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
-                      Create Product
-                    </Button>
+                    />
+                    {previewImage && (
+                      <Box>
+                        <Image
+                          transform="scale(1.0)"
+                          src={previewImage}
+                          alt="some text"
+                          objectFit="contain"
+                          width="100%"
+                          transition="0.3s ease-in-out"
+                          _hover={{
+                            transform: 'scale(1.05)',
+                          }}
+                        />
+                      </Box>
+                    )}
+
+                    <Stack spacing={10}>
+                      <Stack
+                        direction={{ base: 'column', sm: 'row' }}
+                        align="start"
+                        justify="space-between"
+                      />
+                      <Button
+                        bg="blue.400"
+                        color="white"
+                        _hover={{
+                          bg: 'blue.500',
+                        }}
+                        type="submit"
+                        disabled={isSubmitting}
+                      >
+                        Create Product
+                      </Button>
+                    </Stack>
                   </Stack>
-                </Stack>
-              </Box>
-            </Form>
-          )}
-        </Formik>
-      </Stack>
-    </Flex>
+                </Box>
+              </Form>
+            )}
+          </Formik>
+        </Stack>
+      </Flex>
+    </AuthRoute>
   );
 };
 export default withUrqlClient(createurqlClient, { ssr: false })(

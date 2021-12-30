@@ -16,9 +16,15 @@ const Home: NextPage = () => {
   }
   return (
     <Container maxW="7xl" p="12">
-      <Heading as="h2" marginTop="5">
-        Latest products
-      </Heading>
+      {data?.products ? (
+        <Heading as="h2" marginTop="5">
+          Latest products
+        </Heading>
+      ) : (
+        <Heading as="h2" marginTop="5">
+          No products
+        </Heading>
+      )}
       <Divider marginTop="5" />
       <Wrap spacing="30px" marginTop="5">
         {data?.products.map(product => (

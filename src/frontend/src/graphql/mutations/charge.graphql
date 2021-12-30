@@ -1,13 +1,14 @@
-query Orders {
-  orders {
+mutation Charge($options: ChargeInput!) {
+  charge(options: $options) {
     id
     productTitle
     firstName
     lastName
-    qty
     email
+    transactionId
     creatorId
     completed
     price
+    qty
   }
 }

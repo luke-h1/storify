@@ -11,9 +11,10 @@ import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import 'dotenv-safe/config';
-import { graphqlUploadExpress } from 'graphql-upload';
 import createConn from './db/createConn';
 import redis from './db/redis';
+import { createOrderLoader } from './loaders/createOrderLoader';
+import { createProductLoader } from './loaders/createProductLoader';
 import { createUserLoader } from './loaders/createUserLoader';
 import { isProd } from './shared/constants';
 import createSchema from './utils/createSchema';
@@ -31,13 +32,13 @@ const main = async () => {
       credentials: true,
     }),
   );
-  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
   const RedisStore = connectRedis(session);
   app.use(
     session({
       name: 'fid',
       store: new RedisStore({
+        logErrors: true,
         client: redis,
         disableTouch: true,
       }),
@@ -46,7 +47,8 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: isProd,
-        domain: isProd ? '.url' : undefined,
+        domain: isProd ? 'deployed api URL' : undefined,
+        signed: !!isProd,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,
@@ -65,19 +67,28 @@ const main = async () => {
   const apolloServer = new ApolloServer({
     plugins,
     debug: !!isProd,
+    allowBatchedHttpRequests: true,
     schema: await createSchema(),
     context: ({ req, res }) => ({
       req,
       res,
       redis,
       userLoader: createUserLoader(),
+      orderLoader: createOrderLoader(),
+      productLoader: createProductLoader(),
     }),
   });
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app, cors: false });
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+    path: '/api',
+  });
 
   app.listen(process.env.PORT, () =>
-    console.log(`Server running on http://localhost:${process.env.PORT}`),
+    console.log(
+      `Server running on http://localhost:${process.env.PORT}/api/graphql`,
+    ),
   );
 };
 main().catch(e => console.error(e));

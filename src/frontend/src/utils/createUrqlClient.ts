@@ -1,15 +1,8 @@
 import { SSRExchange } from '@urql/core/dist/types/exchanges/ssr';
-import { cacheExchange, Resolver, Cache } from '@urql/exchange-graphcache';
+import { cacheExchange, Cache } from '@urql/exchange-graphcache';
 import { multipartFetchExchange } from '@urql/exchange-multipart-fetch';
 import Router from 'next/router';
-import { toast } from 'react-hot-toast';
-import {
-  dedupExchange,
-  Exchange,
-  fetchExchange,
-  ClientOptions,
-  stringifyVariables,
-} from 'urql';
+import { dedupExchange, Exchange, fetchExchange, ClientOptions } from 'urql';
 import { pipe, tap } from 'wonka';
 import {
   MeDocument,
@@ -31,10 +24,6 @@ const errorExchange: Exchange =
         if (error?.message.includes('Not authenticated')) {
           Router.push('/auth/login');
         }
-        toast.error(error?.message as string);
-        if (error?.networkError) {
-          toast.error(error?.networkError as unknown as string);
-        }
       }),
     );
   };
@@ -47,8 +36,17 @@ function invalidateAllProducts(cache: Cache) {
   });
 }
 
+function invalidateAllOrders(cache: Cache) {
+  const allFields = cache.inspectFields('Query');
+  const fieldInfos = allFields.filter(info => info.fieldName === 'orders');
+  fieldInfos.forEach(fi => {
+    cache.invalidate('Query', 'orders', fi.arguments || {});
+  });
+}
+
 export const createurqlClient = (
   ssrExchange: SSRExchange,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ctx: any,
 ): ClientOptions => {
   let cookie = '';
@@ -113,6 +111,9 @@ export const createurqlClient = (
                 __typename: 'Product',
                 id: (args as DeleteProductMutationVariables).id,
               });
+            },
+            createOrder: (_result, args, cache) => {
+              invalidateAllOrders(cache);
             },
           },
         },

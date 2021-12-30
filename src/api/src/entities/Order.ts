@@ -6,11 +6,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
-import { OrderItem } from './OrderItem';
 import { User } from './User';
 
 @ObjectType()
@@ -19,6 +17,10 @@ export class Order extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
   readonly id!: number;
+
+  @Field(() => String)
+  @Column()
+  productTitle: string;
 
   @Field(() => String)
   @Column()
@@ -33,22 +35,6 @@ export class Order extends BaseEntity {
   email: string;
 
   @Field(() => String)
-  @Column()
-  address: string;
-
-  @Field(() => String)
-  @Column()
-  country: string;
-
-  @Field(() => String)
-  @Column()
-  city: string;
-
-  @Field(() => String)
-  @Column()
-  postCode: string;
-
-  @Field(() => String)
   @Column({ nullable: true })
   transactionId: string;
 
@@ -60,14 +46,17 @@ export class Order extends BaseEntity {
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 
-  @Field(() => [OrderItem])
-  @OneToMany(() => OrderItem, orderItem => orderItem.order)
-  orderItems: OrderItem[];
+  @Field(() => Boolean)
+  @Column({ default: false })
+  completed: boolean;
 
   @Field(() => Int)
-  get total(): number {
-    return this.orderItems.reduce((s, i) => s + i.price, 0);
-  }
+  @Column()
+  qty: number;
+
+  @Field(() => Int)
+  @Column()
+  price: number;
 
   @Field(() => String)
   @CreateDateColumn({ type: 'timestamp with time zone' })

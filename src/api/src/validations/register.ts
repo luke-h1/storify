@@ -33,6 +33,5 @@ export const validateRegister = (options: UserRegisterInput) => {
       },
     ];
   }
-
   return null;
 };

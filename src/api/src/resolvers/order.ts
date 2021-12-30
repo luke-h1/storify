@@ -1,93 +1,116 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-await-in-loop */
-import Stripe from 'stripe';
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql';
+/* eslint-disable no-console */
+
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+} from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Order } from '../entities/Order';
-import { OrderItem } from '../entities/OrderItem';
 import { Product } from '../entities/Product';
-import { OrderCreateInput } from '../inputs/order/OrderCreateInput';
+import { ChargeInput } from '../inputs/order/ChargeInput';
+import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
+import { stripe } from '../utils/stripe';
 
 @Resolver(Order)
 export class OrderResolver {
-  @Query(() => [Order])
-  async orders() {
-    return Order.find({ relations: ['orderItems'] });
-  }
-
   @Mutation(() => Order)
-  @Authorized()
-  async createOrder(
-    @Arg('input') input: OrderCreateInput,
+  @Authorized(isAuth)
+  async charge(
+    @Arg('options') options: ChargeInput,
     @Ctx() { req }: MyContext,
-  ): Promise<boolean> {
-    const queryRunner = getConnection().createQueryRunner();
-
+  ): Promise<Order | null> {
     try {
-      const o = new Order();
-
-      o.creatorId = req.session.userId;
-      o.firstName = input.firstName;
-      o.lastName = input.lastName;
-      o.email = input.email;
-      o.address = input.address;
-      o.country = input.country;
-      o.city = input.city;
-      o.postCode = input.postCode;
-
-      const order = await queryRunner.manager.save(o);
-
-      const lineItems = [];
-
-      for (const i of input.products) {
-        const product = await Product.findOne({ id: i.productId });
-
-        if (!product) {
-          // eslint-disable-next-line no-console
-          console.log('no product');
-        }
-
-        const orderItem = new OrderItem();
-
-        orderItem.order = order;
-        orderItem.productTitle = product?.name as string;
-        orderItem.price = product?.price as number;
-        orderItem.qty = i.qty;
-
-        await queryRunner.manager.save(orderItem);
-
-        lineItems.push({
-          name: product?.name,
-          description: product?.description,
-          image: product?.image,
-          amount: 100 * (product?.price as number),
-          currency: 'gbp',
-          quantity: i.qty,
-        });
-      }
-
-      // stripe
-      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-        apiVersion: '2020-08-27',
-        maxNetworkRetries: 5,
+      const product = await Product.findOne({
+        where: { id: options.productId },
       });
+
+      const result = await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(Order)
+        .values({
+          creatorId: req.session.userId,
+          email: options.email,
+          firstName: options.firstName,
+          lastName: options.lastName,
+          price: options.amount,
+          qty: 1,
+          productTitle: options.productTitle,
+          completed: false,
+        })
+        .returning('*')
+        .execute();
+
       const source = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
-        line_items: lineItems,
-        success_url: `http://localhost:3000/checkout/success?source={CHECKOUT_SESSION_ID}`,
-        cancel_url: `http://localhost:3000/checkout/error`,
+        cancel_url:
+          'http://localhost:3000/checkout/success?source={CHECKOUT_SESSION_ID}',
+        success_url: 'http://localhost:3000/checkout/success',
+        mode: 'payment',
+        line_items: [
+          {
+            price: product?.stripePriceId as string,
+            quantity: 1,
+          },
+        ],
       });
-      order.transactionId = source.id;
 
-      await queryRunner.manager.save(order);
+      const { id } = result.raw[0];
 
-      await queryRunner.commitTransaction();
+      await Order.findOne({ where: { id } });
+
+      const updatedOrder = await getConnection()
+        .createQueryBuilder()
+        .update(Order)
+        .set({
+          transactionId: source.id,
+          completed: true,
+        })
+        .where('id = :id', {
+          id,
+        })
+        .returning('*')
+        .execute();
+      return updatedOrder.raw[0];
     } catch (e) {
-      await queryRunner.rollbackTransaction();
-    } finally {
-      await queryRunner.release();
+      console.error(e);
+      return null;
     }
-    return true;
+  }
+
+  @Query(() => Order)
+  @Authorized(isAuth)
+  async order(
+    @Arg('id', () => Int) id: number,
+    @Ctx() { req }: MyContext,
+  ): Promise<Order | undefined> {
+    return Order.findOne({
+      where: { id, creatorId: req.session.userId },
+      loadEagerRelations: true,
+      transaction: true,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
+  @Query(() => [Order])
+  @Authorized(isAuth)
+  async orders(@Ctx() { req }: MyContext) {
+    const orders = Order.find({
+      where: { creatorId: req.session.userId },
+      loadEagerRelations: true,
+      transaction: true,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    return orders;
   }
 }

@@ -13,10 +13,15 @@ import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React from 'react';
 import toast from 'react-hot-toast';
-import InputField from '../../components/form/InputField';
+import InputField from '../../components/InputField';
 import { useLoginMutation } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import toErrorMap from '../../utils/toErrorMap';
+
+interface FormValues {
+  email: string;
+  password: string;
+}
 
 const Login = () => {
   const router = useRouter();
@@ -31,7 +36,7 @@ const Login = () => {
           </Text>
         </Stack>
 
-        <Formik
+        <Formik<FormValues>
           initialValues={{ email: '', password: '' }}
           onSubmit={async (values, { setErrors }) => {
             const res = await login(values);

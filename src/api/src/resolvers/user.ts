@@ -3,9 +3,11 @@
 import bcrypt from 'bcryptjs';
 import {
   Arg,
+  Authorized,
   Ctx,
   Field,
   FieldResolver,
+  Int,
   Mutation,
   ObjectType,
   Query,
@@ -16,6 +18,7 @@ import { getConnection } from 'typeorm';
 import { v4 } from 'uuid';
 import { User } from '../entities/User';
 import { UserRegisterInput } from '../inputs/user/UserRegisterInput';
+import { isAdmin } from '../middleware/isAdmin';
 import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from '../shared/constants';
 import { MyContext } from '../types/MyContext';
 import { validateRegister } from '../validations/register';
@@ -64,7 +67,8 @@ export class UserResolver {
         errors: [
           {
             field: 'newPassword',
-            message: 'New password length must be greater than 7 characters',
+            message:
+              'New password length must be greater than or equal to 7 characters',
           },
         ],
       };
@@ -119,6 +123,24 @@ export class UserResolver {
     return {
       user,
     };
+  }
+
+  @Query(() => [User], { nullable: true })
+  @Authorized(isAdmin)
+  users() {
+    return User.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
+  @Query(() => User, { nullable: true })
+  @Authorized(isAdmin)
+  user(@Arg('id', () => Int) id: number) {
+    return User.findOne({
+      where: { id },
+    });
   }
 
   @Query(() => User, { nullable: true })
@@ -225,8 +247,8 @@ export class UserResolver {
       return {
         errors: [
           {
-            field: 'password',
-            message: 'Incorrect credentials',
+            field: 'email',
+            message: 'Invalid email / password combination',
           },
         ],
       };
@@ -249,7 +271,6 @@ export class UserResolver {
           return {
             errors: [
               {
-                field: '',
                 message: `Problem logging out ${e}`,
               },
             ],

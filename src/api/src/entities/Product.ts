@@ -45,9 +45,13 @@ export class Product extends BaseEntity {
   @Column()
   brand: string;
 
-  @Field(() => [String])
-  @Column({ array: true, type: 'varchar' })
-  categories: string[];
+  @Field(() => String)
+  @Column()
+  stripeProductId: string;
+
+  @Field(() => String)
+  @Column()
+  stripePriceId: string;
 
   @Field(() => String)
   @Column()
@@ -58,10 +62,10 @@ export class Product extends BaseEntity {
   price: number;
 
   @Field(() => String)
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   readonly createdAt: Date;
 
   @Field(() => String)
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
   updatedAt: Date;
 }

@@ -5,7 +5,6 @@ mutation CreateProduct($input: ProductCreateInput!) {
     name
     price
     brand
-    categories
     descriptionSnippet
   }
 }

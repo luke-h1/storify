@@ -8,7 +8,8 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "build": "tsc",
-    "lint": "eslint --ext .ts,.tsx,.js,.jsx src --fix"  
+    "build": "tsc --noEmit",
+    "tsc": "tsc --noEmit",
+    "lint": "eslint --ext .ts,.tsx,.js,.jsx src --fix"
   }
 }

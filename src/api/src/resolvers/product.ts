@@ -13,7 +13,11 @@ import { getConnection } from 'typeorm';
 import { Product } from '../entities/Product';
 import { User } from '../entities/User';
 import { ProductCreateInput } from '../inputs/product/ProductCreateInput';
+import { ProductUpdateInput } from '../inputs/product/productUpdateInput';
+import { isAdmin } from '../middleware/isAdmin';
+import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
+import { stripe } from '../utils/stripe';
 
 @Resolver(Product)
 export class ProductResolver {
@@ -29,13 +33,11 @@ export class ProductResolver {
 
   @Query(() => [Product])
   async products(): Promise<Product[]> {
-    const products = await getConnection().query(
-      `
-      SELECT p.* FROM "products" p
-      ORDER BY p."createdAt" DESC
-      `,
-    );
-    return products;
+    return Product.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   @Query(() => Product, { nullable: true })
@@ -44,37 +46,89 @@ export class ProductResolver {
   }
 
   @Mutation(() => Product)
-  @Authorized()
+  @Authorized(isAuth)
   async createProduct(
     @Arg('input') input: ProductCreateInput,
     @Ctx() { req }: MyContext,
   ): Promise<Product> {
+    // create the product in stripe
+    const stripeProduct = await stripe.products.create({
+      name: input.name,
+      active: true,
+      description: input.description,
+      images: [input.image],
+      type: 'good',
+      caption: input.brand,
+    });
+
+    // create the price in stripe
+    const stripePrice = await stripe.prices.create({
+      product: stripeProduct.id,
+      currency: 'GBP',
+      active: true,
+      billing_scheme: 'per_unit',
+      unit_amount: input.price * 100,
+    });
+
     const result = await getConnection()
       .createQueryBuilder()
       .insert()
       .into(Product)
       .values({
         ...input,
+        stripeProductId: stripeProduct.id,
+        stripePriceId: stripePrice.id,
         creatorId: req.session.userId,
       })
       .returning('*')
       .execute();
+
     return result.raw[0];
   }
 
   @Mutation(() => Product, { nullable: true })
-  @Authorized()
+  @Authorized(isAuth)
   async updateProduct(
     @Arg('id', () => Int) id: number,
-    @Arg('input') input: ProductCreateInput,
+    @Arg('input') input: ProductUpdateInput,
     @Ctx() { req }: MyContext,
   ): Promise<Product | null> {
+    const product = await Product.findOne({
+      where: { id, creatorId: req.session.userId },
+    });
+
+    if (!product) {
+      throw new Error('no product');
+    }
+
+    const stripeProduct = await stripe.products.update(input.stripeProductId, {
+      name: input.name,
+      active: true,
+      description: input.description,
+      images: [input.image],
+      caption: input.brand,
+    });
+
+    await stripe.prices.update(input.stripePriceId, {
+      active: false,
+    });
+
+    const newPrice = await stripe.prices.create({
+      product: stripeProduct.id,
+      currency: 'GBP',
+      active: true,
+      billing_scheme: 'per_unit',
+      unit_amount: input.price * 100,
+    });
+    // todo: update price in stripe
+
     const result = await getConnection()
       .createQueryBuilder()
       .update(Product)
       .set({
         ...input,
         creatorId: req.session.userId,
+        stripePriceId: newPrice.id,
       })
       .where('id = :id and "creatorId" = :creatorId', {
         id,
@@ -86,15 +140,25 @@ export class ProductResolver {
   }
 
   @Mutation(() => Boolean)
-  @Authorized()
+  @Authorized(isAuth)
   async deleteProduct(
     @Arg('id', () => Int) id: number,
+    @Arg('stripeProductId') stripeProductId: string,
     @Ctx() { req }: MyContext,
   ): Promise<boolean> {
+    await stripe.products.del(stripeProductId);
+
     const product = await Product.findOne(id);
     if (product) {
       await Product.delete({ id, creatorId: req.session.userId });
     }
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized(isAdmin)
+  async deleteAllProducts(): Promise<boolean> {
+    await Product.delete({});
     return true;
   }
 }
