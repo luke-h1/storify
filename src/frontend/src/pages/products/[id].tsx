@@ -13,15 +13,10 @@ import {
   SimpleGrid,
   StackDivider,
 } from '@chakra-ui/react';
-import {
-  useStripe,
-  useElements,
-  CardElement,
-  Elements,
-} from '@stripe/react-stripe-js';
-import { loadStripe, StripeCardElement } from '@stripe/stripe-js';
+import { useStripe, Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { withUrqlClient } from 'next-urql';
-import router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { MdLocalShipping } from 'react-icons/md';
@@ -45,7 +40,6 @@ interface Props {
   lastName: string;
   email: string;
   productTitle: string;
-  stripePriceId: string;
 }
 
 const CheckoutForm = ({
@@ -56,30 +50,14 @@ const CheckoutForm = ({
   lastName,
   email,
   productTitle,
-  stripePriceId,
 }: Props) => {
   const [, charge] = useChargeMutation();
 
   const stripe = useStripe();
 
-  const elements = useElements();
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // const { error } = await stripe!.redirectToCheckout({
-    //   cancelUrl: 'http://localhost:3000/checkout/error',
-    //   successUrl: 'http://localhost:3000/checkout/success',
-    //   lineItems: [
-    //     {
-    //       price: stripePriceId,
-    //       quantity: 1,
-    //     },
-    //   ],
-    //   mode: 'payment',
-    //   submitType: 'pay',
-
-    // });
     const res = await charge({
       options: {
         amount: price,
@@ -101,7 +79,6 @@ const CheckoutForm = ({
   return (
     <form onSubmit={handleSubmit}>
       <h2>price: £{price} GBP</h2>
-      <CardElement />
       <br />
       <Button colorScheme="blue" disabled={!stripe} mb={10} type="submit">
         Pay
@@ -111,10 +88,11 @@ const CheckoutForm = ({
 };
 
 const SingleProductPage = () => {
+  const router = useRouter();
   useIsAuth();
-  // const router = useRouter();
   const [showForm, setShowForm] = useState<boolean>(false);
   const intId = useGetIntId();
+  const [, charge] = useChargeMutation();
   const [{ data: user }] = useMeQuery();
   const [, deleteProduct] = useDeleteProductMutation();
   const [{ data, fetching }] = useProductQuery({
@@ -234,7 +212,6 @@ const SingleProductPage = () => {
           firstName={user?.me?.firstName as string}
           lastName={user?.me?.lastName as string}
           productTitle={data?.product.name}
-          stripePriceId={data?.product.stripePriceId as string}
         />
       )}
     </Elements>

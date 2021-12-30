@@ -107,16 +107,18 @@ export class ProductResolver {
       caption: input.brand,
     });
 
-    // create the price in stripe
-    await stripe.prices.create({
+    await stripe.prices.update(input.stripePriceId, {
+      active: false,
+    });
+
+    const newPrice = await stripe.prices.create({
       product: stripeProduct.id,
       currency: 'GBP',
       active: true,
       billing_scheme: 'per_unit',
       unit_amount: input.price * 100,
     });
-
-    await stripe.prices.update(input.stripePriceId);
+    // todo: update price in stripe
 
     const result = await getConnection()
       .createQueryBuilder()
@@ -124,6 +126,7 @@ export class ProductResolver {
       .set({
         ...input,
         creatorId: req.session.userId,
+        stripePriceId: newPrice.id,
       })
       .where('id = :id and "creatorId" = :creatorId', {
         id,
