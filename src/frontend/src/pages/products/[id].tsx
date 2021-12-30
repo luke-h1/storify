@@ -93,7 +93,6 @@ const SingleProductPage = () => {
   useIsAuth();
   const [showForm, setShowForm] = useState<boolean>(false);
   const intId = useGetIntId();
-  const [, charge] = useChargeMutation();
   const [{ data: user }] = useMeQuery();
   const [, deleteProduct] = useDeleteProductMutation();
   const [{ data, fetching }] = useProductQuery({

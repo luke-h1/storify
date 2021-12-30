@@ -13,7 +13,7 @@ import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import AuthRoute from 'src/frontend/src/components/AuthRoute';
+import AuthRoute from '../../../components/AuthRoute';
 import InputField from '../../../components/InputField';
 import {
   useCreateSignatureMutation,

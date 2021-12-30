@@ -1,4 +1,4 @@
-import { Box, Spinner } from '@chakra-ui/react';
+import { Spinner } from '@chakra-ui/react';
 import { withUrqlClient } from 'next-urql';
 import AdminRoute from '../../components/AdminRoute';
 import { useUsersQuery } from '../../generated/graphql';
@@ -6,15 +6,11 @@ import { useIsAdmin } from '../../hooks/useIsAdmin';
 import { createurqlClient } from '../../utils/createUrqlClient';
 
 const Users = () => {
-  const { data: adminData, fetching: adminFetching } = useIsAdmin();
+  useIsAdmin();
   const [{ fetching, data }] = useUsersQuery();
 
   if (fetching) {
     return <Spinner />;
-  }
-
-  if (adminFetching && fetching && !adminData) {
-    return null;
   }
 
   return (
@@ -27,9 +23,6 @@ const Users = () => {
           <li>Created At: {u.createdAt}</li>
           <li>Updated At: {u.updatedAt}</li>
           <li>IsAdmin: {u.isAdmin}</li>
-          <br />
-          <hr />
-          <br />
         </ul>
       ))}
     </AdminRoute>
