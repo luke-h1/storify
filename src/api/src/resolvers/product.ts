@@ -14,6 +14,8 @@ import { Product } from '../entities/Product';
 import { User } from '../entities/User';
 import { ProductCreateInput } from '../inputs/product/ProductCreateInput';
 import { ProductUpdateInput } from '../inputs/product/productUpdateInput';
+import { isAdmin } from '../middleware/isAdmin';
+import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
 
@@ -44,7 +46,7 @@ export class ProductResolver {
   }
 
   @Mutation(() => Product)
-  @Authorized()
+  @Authorized(isAuth)
   async createProduct(
     @Arg('input') input: ProductCreateInput,
     @Ctx() { req }: MyContext,
@@ -85,7 +87,7 @@ export class ProductResolver {
   }
 
   @Mutation(() => Product, { nullable: true })
-  @Authorized()
+  @Authorized(isAuth)
   async updateProduct(
     @Arg('id', () => Int) id: number,
     @Arg('input') input: ProductUpdateInput,
@@ -138,7 +140,7 @@ export class ProductResolver {
   }
 
   @Mutation(() => Boolean)
-  @Authorized()
+  @Authorized(isAuth)
   async deleteProduct(
     @Arg('id', () => Int) id: number,
     @Arg('stripeProductId') stripeProductId: string,
@@ -150,6 +152,13 @@ export class ProductResolver {
     if (product) {
       await Product.delete({ id, creatorId: req.session.userId });
     }
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized(isAdmin)
+  async deleteAllProducts(): Promise<boolean> {
+    await Product.delete({});
     return true;
   }
 }

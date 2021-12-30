@@ -2,7 +2,6 @@ import { SSRExchange } from '@urql/core/dist/types/exchanges/ssr';
 import { cacheExchange, Cache } from '@urql/exchange-graphcache';
 import { multipartFetchExchange } from '@urql/exchange-multipart-fetch';
 import Router from 'next/router';
-import { toast } from 'react-hot-toast';
 import { dedupExchange, Exchange, fetchExchange, ClientOptions } from 'urql';
 import { pipe, tap } from 'wonka';
 import {
@@ -24,10 +23,6 @@ const errorExchange: Exchange =
       tap(({ error }) => {
         if (error?.message.includes('Not authenticated')) {
           Router.push('/auth/login');
-        }
-        toast.error(error?.message as string);
-        if (error?.networkError) {
-          toast.error(error?.networkError as unknown as string);
         }
       }),
     );

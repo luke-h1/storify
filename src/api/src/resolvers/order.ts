@@ -13,13 +13,14 @@ import { getConnection } from 'typeorm';
 import { Order } from '../entities/Order';
 import { Product } from '../entities/Product';
 import { ChargeInput } from '../inputs/order/ChargeInput';
+import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
 
 @Resolver(Order)
 export class OrderResolver {
   @Mutation(() => Order)
-  @Authorized()
+  @Authorized(isAuth)
   async charge(
     @Arg('options') options: ChargeInput,
     @Ctx() { req }: MyContext,
@@ -84,7 +85,7 @@ export class OrderResolver {
   }
 
   @Query(() => Order)
-  @Authorized()
+  @Authorized(isAuth)
   async order(
     @Arg('id', () => Int) id: number,
     @Ctx() { req }: MyContext,
@@ -100,7 +101,7 @@ export class OrderResolver {
   }
 
   @Query(() => [Order])
-  @Authorized()
+  @Authorized(isAuth)
   async orders(@Ctx() { req }: MyContext) {
     const orders = Order.find({
       where: { creatorId: req.session.userId },
