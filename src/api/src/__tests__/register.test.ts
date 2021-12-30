@@ -1,7 +1,7 @@
 import faker from 'faker';
-import { User } from 'src/entities/User';
 import { Connection } from 'typeorm';
 import redis from '../db/redis';
+import { User } from '../entities/User';
 import { createTestConn } from '../test/createTestConn';
 import { gCall } from '../test/gCall';
 
