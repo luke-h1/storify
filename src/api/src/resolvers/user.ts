@@ -3,9 +3,11 @@
 import bcrypt from 'bcryptjs';
 import {
   Arg,
+  Authorized,
   Ctx,
   Field,
   FieldResolver,
+  Int,
   Mutation,
   ObjectType,
   Query,
@@ -16,6 +18,7 @@ import { getConnection } from 'typeorm';
 import { v4 } from 'uuid';
 import { User } from '../entities/User';
 import { UserRegisterInput } from '../inputs/user/UserRegisterInput';
+import { isAdmin } from '../middleware/isAdmin';
 import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from '../shared/constants';
 import { MyContext } from '../types/MyContext';
 import { validateRegister } from '../validations/register';
@@ -120,6 +123,24 @@ export class UserResolver {
     return {
       user,
     };
+  }
+
+  @Query(() => [User], { nullable: true })
+  @Authorized(isAdmin)
+  users() {
+    return User.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
+  @Query(() => User, { nullable: true })
+  @Authorized(isAdmin)
+  user(@Arg('id', () => Int) id: number) {
+    return User.findOne({
+      where: { id },
+    });
   }
 
   @Query(() => User, { nullable: true })

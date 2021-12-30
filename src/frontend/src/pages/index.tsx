@@ -4,12 +4,10 @@ import { withUrqlClient } from 'next-urql';
 import React from 'react';
 import ProductCard from '../components/ProductCard';
 import { useProductsQuery } from '../generated/graphql';
-import { useIsAuth } from '../hooks/useIsAuth';
 import { createurqlClient } from '../utils/createUrqlClient';
 import { isServer } from '../utils/isServer';
 
 const Home: NextPage = () => {
-  useIsAuth();
   const [{ data, fetching }] = useProductsQuery({
     pause: isServer(),
   });

@@ -153,6 +153,8 @@ export type Query = {
   orders: Array<Order>;
   product?: Maybe<Product>;
   products: Array<Product>;
+  user?: Maybe<User>;
+  users?: Maybe<Array<User>>;
 };
 
 export type QueryOrderArgs = {
@@ -160,6 +162,10 @@ export type QueryOrderArgs = {
 };
 
 export type QueryProductArgs = {
+  id: Scalars['Int'];
+};
+
+export type QueryUserArgs = {
   id: Scalars['Int'];
 };
 
@@ -356,6 +362,46 @@ export type UpdateProductMutation = {
         publicId: string;
         creator: { __typename?: 'User'; fullName: string };
       }
+    | null
+    | undefined;
+};
+
+export type QueryQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+export type QueryQuery = {
+  __typename?: 'Query';
+  user?:
+    | {
+        __typename?: 'User';
+        id: number;
+        firstName: string;
+        lastName: string;
+        email: string;
+        isAdmin: boolean;
+        createdAt: string;
+        updatedAt: string;
+      }
+    | null
+    | undefined;
+};
+
+export type UsersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type UsersQuery = {
+  __typename?: 'Query';
+  users?:
+    | Array<{
+        __typename?: 'User';
+        id: number;
+        email: string;
+        firstName: string;
+        lastName: string;
+        isAdmin: boolean;
+        createdAt: string;
+        updatedAt: string;
+      }>
     | null
     | undefined;
 };
@@ -605,6 +651,44 @@ export function useUpdateProductMutation() {
     UpdateProductMutation,
     UpdateProductMutationVariables
   >(UpdateProductDocument);
+}
+export const QueryDocument = gql`
+  query Query($userId: Int!) {
+    user(id: $userId) {
+      id
+      firstName
+      lastName
+      email
+      isAdmin
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export function useQueryQuery(
+  options: Omit<Urql.UseQueryArgs<QueryQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<QueryQuery>({ query: QueryDocument, ...options });
+}
+export const UsersDocument = gql`
+  query Users {
+    users {
+      id
+      email
+      firstName
+      lastName
+      isAdmin
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export function useUsersQuery(
+  options: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options });
 }
 export const MeDocument = gql`
   query Me {
