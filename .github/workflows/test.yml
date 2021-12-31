@@ -26,7 +26,6 @@ jobs:
         env:
           POSTGRES_DB: storify
           POSTGRES_PASSWORD: storify
-          POSTGRES_PORT: 5432
           POSTGRES_USER: storify
         ports:
           - 5432:5432
@@ -57,12 +56,12 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Build API
+      - name: Build and start backend
         run: |
           yarn workspace @storify/api build
           yarn workspace @storify/api start
 
-      - name: Check API is healthy
+      - name: Check backend is running
         run: | 
             http_response=$(curl -s -o response.txt -w "%{http_code}" https://localhost:8000/api/health)
             if [ $http_response != "200" ]; then
