@@ -35,10 +35,12 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-      - name: Redis
-        uses: luke-h1/redis-github-action@1.4.0
 
     steps:
+
+      - name: Start redis
+        uses: luke-h1/redis-github-action@1.4.0
+
       - name: Build API
         run: |
           yarn workspace @storify/api build
@@ -56,5 +58,5 @@ jobs:
             cat response.txt    
             fi
 
-      - name: run unit tests
+      - name: run backend unit tests
         run: yarn workspace @storify/api test
