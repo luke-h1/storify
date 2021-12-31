@@ -36,8 +36,9 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-    - name: exit 
-      run: echo hello
+    steps:
+      - name: exit 
+        run: echo hello
 
   build:
     name: Build & test
