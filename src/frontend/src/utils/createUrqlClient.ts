@@ -13,6 +13,8 @@ import {
   DeleteProductMutationVariables,
   DeleteUserMutationVariables,
   DeleteProductAsAdminMutationVariables,
+  MakeUserAdminMutationVariables,
+  MakeUserRegularUserMutationVariables,
 } from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
@@ -115,6 +117,18 @@ export const createurqlClient = (
               cache.invalidate({
                 __typename: 'Product',
                 id: (args as DeleteProductAsAdminMutationVariables).id,
+              });
+            },
+            makeUserAdmin: (_result, args, cache) => {
+              cache.invalidate({
+                __typename: 'User',
+                id: (args as MakeUserAdminMutationVariables).id,
+              });
+            },
+            makeUserRegularUser: (_result, args, cache) => {
+              cache.invalidate({
+                __typename: 'User',
+                id: (args as MakeUserRegularUserMutationVariables).id,
               });
             },
             createProduct: (_result, args, cache) => {

@@ -296,6 +296,43 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   @Authorized(isAdmin)
+  async makeUserAdmin(@Arg('id', () => Int) id: number): Promise<Boolean> {
+    const user = await User.find({ id });
+
+    if (!user) {
+      return false;
+    }
+    await User.update(
+      { id },
+      {
+        isAdmin: true,
+      },
+    );
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized(isAdmin)
+  async makeUserRegularUser(
+    @Arg('id', () => Int) id: number,
+  ): Promise<Boolean> {
+    const user = await User.find({ id });
+
+    if (!user) {
+      return false;
+    }
+
+    await User.update(
+      { id },
+      {
+        isAdmin: false,
+      },
+    );
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized(isAdmin)
   async deleteUser(@Arg('id', () => Int) id: number): Promise<boolean> {
     const user = await User.find({ id });
 

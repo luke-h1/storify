@@ -58,6 +58,8 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
+  makeUserAdmin: Scalars['Boolean'];
+  makeUserRegularUser: Scalars['Boolean'];
   register: UserResponse;
   updateProduct?: Maybe<Product>;
 };
@@ -100,6 +102,14 @@ export type MutationForgotPasswordArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationMakeUserAdminArgs = {
+  id: Scalars['Int'];
+};
+
+export type MutationMakeUserRegularUserArgs = {
+  id: Scalars['Int'];
 };
 
 export type MutationRegisterArgs = {
@@ -362,6 +372,24 @@ export type LoginMutation = {
 export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
 export type LogoutMutation = { __typename?: 'Mutation'; logout: boolean };
+
+export type MakeUserAdminMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type MakeUserAdminMutation = {
+  __typename?: 'Mutation';
+  makeUserAdmin: boolean;
+};
+
+export type MakeUserRegularUserMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type MakeUserRegularUserMutation = {
+  __typename?: 'Mutation';
+  makeUserRegularUser: boolean;
+};
 
 export type RegisterMutationVariables = Exact<{
   options: UserRegisterInput;
@@ -697,6 +725,30 @@ export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(
     LogoutDocument,
   );
+}
+export const MakeUserAdminDocument = gql`
+  mutation MakeUserAdmin($id: Int!) {
+    makeUserAdmin(id: $id)
+  }
+`;
+
+export function useMakeUserAdminMutation() {
+  return Urql.useMutation<
+    MakeUserAdminMutation,
+    MakeUserAdminMutationVariables
+  >(MakeUserAdminDocument);
+}
+export const MakeUserRegularUserDocument = gql`
+  mutation MakeUserRegularUser($id: Int!) {
+    makeUserRegularUser(id: $id)
+  }
+`;
+
+export function useMakeUserRegularUserMutation() {
+  return Urql.useMutation<
+    MakeUserRegularUserMutation,
+    MakeUserRegularUserMutationVariables
+  >(MakeUserRegularUserDocument);
 }
 export const RegisterDocument = gql`
   mutation Register($options: UserRegisterInput!) {
