@@ -17,9 +17,9 @@ env:
   EMAIL_DOMAIN_NAME: ${{ secrets.EMAIL_DOMAIN_NAME }}
   
 jobs:
-  postgres-test-database:
+  postgres-test-job:
     runs-on: ubuntu-latest
-    container: node:latest
+    container: postgres-2
     services:
       postgres:
         image: postgres:latest
@@ -36,9 +36,9 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-  postgres-database:
+  postgres-job:
     runs-on: ubuntu-latest
-    container: node:latest
+    container: postgres
     services:
       postgres:
         image: postgres:latest
