@@ -53,7 +53,7 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
       </Head>
 
       <Toaster
-        position="top-right"
+        position="bottom-center"
         toastOptions={{
           style: toastStyles,
           error: {

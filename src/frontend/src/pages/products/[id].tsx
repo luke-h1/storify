@@ -121,6 +121,24 @@ const SingleProductPage = () => {
           >
             Checkout
           </button>
+
+          {user?.me?.id === data?.product.creator.id && (
+            <div>
+              <button onClick={handleDelete} type="button" className="btn">
+                Delete Product
+              </button>
+              <button
+                onClick={() => {
+                  router.push(`/products/${data?.product?.id}`);
+                }}
+                type="button"
+                className="btn"
+              >
+                Update Product
+              </button>
+            </div>
+          )}
+
           {showForm && (
             <CheckoutForm
               price={data?.product.price}
