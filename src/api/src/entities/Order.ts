@@ -42,7 +42,7 @@ export class Order extends BaseEntity {
   @Column()
   creatorId: number;
 
-  @ManyToOne(() => User, u => u.orders)
+  @ManyToOne(() => User, u => u.orders, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 

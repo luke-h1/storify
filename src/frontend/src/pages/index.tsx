@@ -3,7 +3,7 @@ import { withUrqlClient } from 'next-urql';
 import Loader from '../components/Loader';
 import Page from '../components/Page';
 import Snap from '../components/Snap';
-import { useProductsQuery } from '../generated/graphql';
+import { useProductsQuery, useMeQuery } from '../generated/graphql';
 import { createurqlClient } from '../utils/createUrqlClient';
 import { isServer } from '../utils/isServer';
 import styles from './index.module.scss';

@@ -1,6 +1,7 @@
 import { withUrqlClient } from 'next-urql';
 import Link from 'next/link';
-import { useMeQuery } from '../generated/graphql';
+import { useRouter } from 'next/router';
+import { useMeQuery, useLogoutMutation } from '../generated/graphql';
 import { createurqlClient } from '../utils/createUrqlClient';
 import { isServer } from '../utils/isServer';
 import styles from './nav.module.scss';
@@ -14,12 +15,12 @@ const adminLinks = [
   {
     id: 2,
     slug: '/admin/products',
-    text: 'users',
+    text: 'Manage products',
   },
   {
     id: 3,
     slug: '/admin/orders',
-    text: 'users',
+    text: 'Manage orders',
   },
 ];
 
@@ -55,7 +56,9 @@ const noAuthLinks = [
 ];
 
 const Nav = () => {
+  const router = useRouter();
   const [{ data, fetching }] = useMeQuery({ pause: isServer() });
+  const [, logout] = useLogoutMutation();
   return (
     <div className={styles.nav}>
       <ul>
@@ -64,6 +67,11 @@ const Nav = () => {
             <a>Home</a>
           </Link>
         </li>
+        {data?.me && !fetching && (
+          <li>
+            <p style={{ color: 'blue' }}>Logged in as {data?.me?.email}</p>
+          </li>
+        )}
 
         {data?.me?.isAdmin &&
           adminLinks.map(link => (
@@ -92,6 +100,18 @@ const Nav = () => {
               </Link>
             </li>
           ))}
+        {data?.me && (
+          <button
+            className="btn"
+            onClick={async () => {
+              await logout();
+              await router.reload();
+            }}
+            type="button"
+          >
+            Logout
+          </button>
+        )}
       </ul>
     </div>
   );

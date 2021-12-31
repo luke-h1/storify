@@ -11,6 +11,7 @@ import {
   RegisterMutation,
   LogoutMutation,
   DeleteProductMutationVariables,
+  DeleteUserMutationVariables,
 } from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
@@ -102,6 +103,12 @@ export const createurqlClient = (
                 _result,
                 () => ({ me: null }),
               );
+            },
+            deleteUser: (_result, args, cache) => {
+              cache.invalidate({
+                __typename: 'User',
+                id: (args as DeleteUserMutationVariables).id,
+              });
             },
             createProduct: (_result, args, cache) => {
               invalidateAllProducts(cache);

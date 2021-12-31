@@ -23,7 +23,7 @@ export class Product extends BaseEntity {
   @Column()
   creatorId: number;
 
-  @ManyToOne(() => User, u => u.products)
+  @ManyToOne(() => User, u => u.products, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 

@@ -50,7 +50,10 @@ export type Mutation = {
   charge: Order;
   createImageSignature: ImageSignature;
   createProduct: Product;
+  deleteAllProducts: Scalars['Boolean'];
+  deleteMyAccount: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
+  deleteUser: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
@@ -71,9 +74,17 @@ export type MutationCreateProductArgs = {
   input: ProductCreateInput;
 };
 
+export type MutationDeleteMyAccountArgs = {
+  id: Scalars['Int'];
+};
+
 export type MutationDeleteProductArgs = {
   id: Scalars['Int'];
   stripeProductId: Scalars['String'];
+};
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['Int'];
 };
 
 export type MutationForgotPasswordArgs = {
@@ -115,7 +126,7 @@ export type Product = {
   brand: Scalars['String'];
   createdAt: Scalars['String'];
   creator: User;
-  creatorId: Scalars['Float'];
+  creatorId: Scalars['Int'];
   description: Scalars['String'];
   descriptionSnippet: Scalars['String'];
   id: Scalars['Int'];
@@ -277,6 +288,15 @@ export type CreateSignatureMutation = {
   };
 };
 
+export type DeleteMyAccountMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteMyAccountMutation = {
+  __typename?: 'Mutation';
+  deleteMyAccount: boolean;
+};
+
 export type DeleteProductMutationVariables = Exact<{
   id: Scalars['Int'];
   stripeProductId: Scalars['String'];
@@ -285,6 +305,15 @@ export type DeleteProductMutationVariables = Exact<{
 export type DeleteProductMutation = {
   __typename?: 'Mutation';
   deleteProduct: boolean;
+};
+
+export type DeleteUserMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteUserMutation = {
+  __typename?: 'Mutation';
+  deleteUser: boolean;
 };
 
 export type LoginMutationVariables = Exact<{
@@ -362,46 +391,6 @@ export type UpdateProductMutation = {
         publicId: string;
         creator: { __typename?: 'User'; fullName: string };
       }
-    | null
-    | undefined;
-};
-
-export type QueryQueryVariables = Exact<{
-  userId: Scalars['Int'];
-}>;
-
-export type QueryQuery = {
-  __typename?: 'Query';
-  user?:
-    | {
-        __typename?: 'User';
-        id: number;
-        firstName: string;
-        lastName: string;
-        email: string;
-        isAdmin: boolean;
-        createdAt: string;
-        updatedAt: string;
-      }
-    | null
-    | undefined;
-};
-
-export type UsersQueryVariables = Exact<{ [key: string]: never }>;
-
-export type UsersQuery = {
-  __typename?: 'Query';
-  users?:
-    | Array<{
-        __typename?: 'User';
-        id: number;
-        email: string;
-        firstName: string;
-        lastName: string;
-        isAdmin: boolean;
-        createdAt: string;
-        updatedAt: string;
-      }>
     | null
     | undefined;
 };
@@ -498,6 +487,46 @@ export type ProductsQuery = {
   }>;
 };
 
+export type UserQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+export type UserQuery = {
+  __typename?: 'Query';
+  user?:
+    | {
+        __typename?: 'User';
+        id: number;
+        firstName: string;
+        lastName: string;
+        email: string;
+        isAdmin: boolean;
+        createdAt: string;
+        updatedAt: string;
+      }
+    | null
+    | undefined;
+};
+
+export type UsersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type UsersQuery = {
+  __typename?: 'Query';
+  users?:
+    | Array<{
+        __typename: 'User';
+        id: number;
+        email: string;
+        firstName: string;
+        lastName: string;
+        isAdmin: boolean;
+        createdAt: string;
+        updatedAt: string;
+      }>
+    | null
+    | undefined;
+};
+
 export const ErrorFragmentDoc = gql`
   fragment Error on FieldError {
     field
@@ -581,6 +610,18 @@ export function useCreateSignatureMutation() {
     CreateSignatureMutationVariables
   >(CreateSignatureDocument);
 }
+export const DeleteMyAccountDocument = gql`
+  mutation DeleteMyAccount($id: Int!) {
+    deleteMyAccount(id: $id)
+  }
+`;
+
+export function useDeleteMyAccountMutation() {
+  return Urql.useMutation<
+    DeleteMyAccountMutation,
+    DeleteMyAccountMutationVariables
+  >(DeleteMyAccountDocument);
+}
 export const DeleteProductDocument = gql`
   mutation DeleteProduct($id: Int!, $stripeProductId: String!) {
     deleteProduct(id: $id, stripeProductId: $stripeProductId)
@@ -592,6 +633,17 @@ export function useDeleteProductMutation() {
     DeleteProductMutation,
     DeleteProductMutationVariables
   >(DeleteProductDocument);
+}
+export const DeleteUserDocument = gql`
+  mutation DeleteUser($id: Int!) {
+    deleteUser(id: $id)
+  }
+`;
+
+export function useDeleteUserMutation() {
+  return Urql.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(
+    DeleteUserDocument,
+  );
 }
 export const LoginDocument = gql`
   mutation Login($email: String!, $password: String!) {
@@ -651,44 +703,6 @@ export function useUpdateProductMutation() {
     UpdateProductMutation,
     UpdateProductMutationVariables
   >(UpdateProductDocument);
-}
-export const QueryDocument = gql`
-  query Query($userId: Int!) {
-    user(id: $userId) {
-      id
-      firstName
-      lastName
-      email
-      isAdmin
-      createdAt
-      updatedAt
-    }
-  }
-`;
-
-export function useQueryQuery(
-  options: Omit<Urql.UseQueryArgs<QueryQueryVariables>, 'query'> = {},
-) {
-  return Urql.useQuery<QueryQuery>({ query: QueryDocument, ...options });
-}
-export const UsersDocument = gql`
-  query Users {
-    users {
-      id
-      email
-      firstName
-      lastName
-      isAdmin
-      createdAt
-      updatedAt
-    }
-  }
-`;
-
-export function useUsersQuery(
-  options: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'> = {},
-) {
-  return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options });
 }
 export const MeDocument = gql`
   query Me {
@@ -788,4 +802,43 @@ export function useProductsQuery(
   options: Omit<Urql.UseQueryArgs<ProductsQueryVariables>, 'query'> = {},
 ) {
   return Urql.useQuery<ProductsQuery>({ query: ProductsDocument, ...options });
+}
+export const UserDocument = gql`
+  query User($userId: Int!) {
+    user(id: $userId) {
+      id
+      firstName
+      lastName
+      email
+      isAdmin
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export function useUserQuery(
+  options: Omit<Urql.UseQueryArgs<UserQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<UserQuery>({ query: UserDocument, ...options });
+}
+export const UsersDocument = gql`
+  query Users {
+    users {
+      __typename
+      id
+      email
+      firstName
+      lastName
+      isAdmin
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export function useUsersQuery(
+  options: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options });
 }
