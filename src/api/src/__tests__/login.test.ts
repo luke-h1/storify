@@ -15,6 +15,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await conn.dropDatabase();
   await conn.close();
   redis.disconnect();
 });
@@ -87,7 +88,7 @@ describe('login', () => {
         login: {
           errors: null,
           user: {
-            id: 2,
+            id: 1,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
