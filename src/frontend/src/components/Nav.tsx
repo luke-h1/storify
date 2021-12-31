@@ -102,7 +102,7 @@ const Nav = () => {
           ))}
         {data?.me && (
           <button
-            className="btn"
+            className="btn danger"
             onClick={async () => {
               await logout();
               await router.reload();

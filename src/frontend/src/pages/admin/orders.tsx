@@ -38,6 +38,7 @@ const Orders = () => {
               <tbody key={o.id}>
                 <tr key={o.id}>
                   <td>{o.id}</td>
+                  <td>{o.creatorId}</td>
                   <td>{o.productTitle}</td>
                   <td>{o.qty}</td>
                   <td>{o.completed ? 'true' : 'false'}</td>

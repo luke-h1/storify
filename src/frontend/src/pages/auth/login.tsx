@@ -46,7 +46,7 @@ const Login = () => {
             <button
               style={{ marginLeft: '1rem' }}
               disabled={isSubmitting}
-              className="btn submit"
+              className="btn success"
               type="submit"
             >
               {isSubmitting ? 'submitting..' : 'Login'}

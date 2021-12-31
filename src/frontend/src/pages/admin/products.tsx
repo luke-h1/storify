@@ -60,7 +60,7 @@ const Products = () => {
                   <td>{p.description}</td>
                   <td>
                     <button
-                      className="btn"
+                      className="btn danger"
                       type="button"
                       onClick={async () => {
                         // eslint-disable-next-line no-alert

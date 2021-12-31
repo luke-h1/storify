@@ -123,8 +123,12 @@ const SingleProductPage = () => {
           </button>
 
           {user?.me?.id === data?.product?.creator.id && (
-            <div>
-              <button onClick={handleDelete} type="button" className="btn">
+            <div className="flex">
+              <button
+                onClick={handleDelete}
+                type="button"
+                className="btn danger"
+              >
                 Delete Product
               </button>
               <button
@@ -132,7 +136,7 @@ const SingleProductPage = () => {
                   router.push(`/products/update/${data?.product?.id}`);
                 }}
                 type="button"
-                className="btn"
+                className="btn success"
               >
                 Update Product
               </button>

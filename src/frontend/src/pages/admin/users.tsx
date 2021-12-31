@@ -1,7 +1,5 @@
 /* eslint-disable no-alert */
 import { withUrqlClient } from 'next-urql';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import AdminRoute from '../../components/AdminRoute';
 import Loader from '../../components/Loader';
 import Page from '../../components/Page';
@@ -16,7 +14,6 @@ import { createurqlClient } from '../../utils/createUrqlClient';
 import { isServer } from '../../utils/isServer';
 
 const Users = () => {
-  const router = useRouter();
   const [, deleteUser] = useDeleteUserMutation();
   const [, makeUserAdmin] = useMakeUserAdminMutation();
   const [, makeUserRegularUser] = useMakeUserRegularUserMutation();
@@ -59,7 +56,7 @@ const Users = () => {
                   <td>{u.createdAt}</td>
                   <td>
                     <button
-                      className="btn"
+                      className="btn danger"
                       type="button"
                       onClick={async () => {
                         if (window.confirm('Are you sure?')) {
@@ -72,7 +69,7 @@ const Users = () => {
                   </td>
                   <td>
                     <button
-                      className="btn"
+                      className="btn warning"
                       type="button"
                       onClick={async () => {
                         if (window.confirm('Are you sure?')) {
@@ -85,7 +82,7 @@ const Users = () => {
                   </td>
                   <td>
                     <button
-                      className="btn"
+                      className="btn danger"
                       type="button"
                       onClick={async () => {
                         if (window.confirm('Are you sure?')) {
