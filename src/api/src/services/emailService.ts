@@ -18,7 +18,7 @@ const messageData = {
 };
 
 client.messages
-  .create(process.env.DOMAIN_NAME, messageData)
+  .create(process.env.EMAIL_DOMAIN_NAME, messageData)
   .then(res => {
     console.log(res);
   })
