@@ -7,7 +7,7 @@
     "build": "tsc --noEmit",
     "clean": "rm -rf dist && docker-compose down && rm -rf .dbdata",
     "watch": "tsc -w",
-    "dev": "esr src/index.ts",
+    "dev": "cross-env NODE_ENV=development nodemon dist/index.js",
     "start": "NODE_ENV=production node dist/index.js",
     "lint": "eslint --ext .ts,.tsx,.js,.jsx src --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
