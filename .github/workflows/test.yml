@@ -36,6 +36,10 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+  test:
+    name: Build & test
+    runs-on: ubuntu-20.04
+
     steps:
       - name: Setup node
         uses: luke-h1/setup-node@v2
