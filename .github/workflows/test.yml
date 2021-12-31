@@ -42,6 +42,9 @@ jobs:
         with:
           node-version: 14 
 
+      - name: Install Yarn
+        run: npm install -g yarn
+
       - name: Start redis
         uses: luke-h1/redis-github-action@1.4.0
 
