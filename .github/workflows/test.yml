@@ -6,7 +6,7 @@ on:
     branches: [dev, main]
 env: 
   CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
-  SESSION_SECRET: ${{ sercrets.SESSION_SECRET }}
+  SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
   DATABASE_URL: ${{ secrets.SESSION_SECRET }}
   REDIS_URL: ${{ secrets.REDIS_URL }}
   PORT: ${{ secrets.PORT }}
