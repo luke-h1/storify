@@ -1,4 +1,4 @@
-name: CI / test
+name: CI / unit tests
 on:
   push:
     branches: [dev]
@@ -35,9 +35,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-
     steps:
-
       - name: Start redis
         uses: luke-h1/redis-github-action@1.4.0
 
