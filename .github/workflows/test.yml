@@ -41,6 +41,15 @@ jobs:
       - name: Start redis
         uses: luke-h1/redis-github-action@1.4.0
 
+      - name: Checkout
+        uses: luke-h1/checkout@v2
+
+      - name: Use latest npm version
+        run: npm i -g npm@latest
+
+      - name: Install dependencies
+        run: yarn
+
       - name: Build API
         run: |
           yarn workspace @storify/api build
@@ -58,5 +67,5 @@ jobs:
             cat response.txt    
             fi
 
-      - name: run backend unit tests
+      - name: run backend tests
         run: yarn workspace @storify/api test
