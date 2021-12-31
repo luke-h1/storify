@@ -129,7 +129,7 @@ const SingleProductPage = () => {
               </button>
               <button
                 onClick={() => {
-                  router.push(`/products/${data?.product?.id}`);
+                  router.push(`/products/update/${data?.product?.id}`);
                 }}
                 type="button"
                 className="btn"
