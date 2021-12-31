@@ -37,6 +37,11 @@ jobs:
           --health-retries 5
 
     steps:
+      - name: Setup node
+        uses: luke-h1/setup-node@v2
+        with:
+          node-version: 14 
+
       - name: Start redis
         uses: luke-h1/redis-github-action@1.4.0
 
