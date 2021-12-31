@@ -8,6 +8,8 @@ import { Toaster } from 'react-hot-toast';
 import Nav from '../components/Nav';
 import '../styles/index.scss';
 import '../styles/table.scss';
+import '../styles/nprogress.scss';
+
 import { setThemeClass, getTheme } from '../utils/theme';
 
 const toastStyles: React.CSSProperties = {
