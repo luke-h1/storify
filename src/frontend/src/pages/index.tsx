@@ -1,38 +1,38 @@
-import { Container, Heading, Divider, Wrap, Spinner } from '@chakra-ui/react';
-import type { NextPage } from 'next';
+import classnames from 'classnames';
 import { withUrqlClient } from 'next-urql';
-import React from 'react';
-import ProductCard from '../components/ProductCard';
+import Loader from '../components/Loader';
+import Page from '../components/Page';
+import Snap from '../components/Snap';
 import { useProductsQuery } from '../generated/graphql';
 import { createurqlClient } from '../utils/createUrqlClient';
 import { isServer } from '../utils/isServer';
+import styles from './index.module.scss';
 
-const Home: NextPage = () => {
+const Home = () => {
   const [{ data, fetching }] = useProductsQuery({
     pause: isServer(),
   });
+
   if (!data && fetching) {
-    return <Spinner />;
+    return <Loader />;
   }
+
   return (
-    <Container maxW="7xl" p="12">
-      {data?.products ? (
-        <Heading as="h2" marginTop="5">
-          Latest products
-        </Heading>
-      ) : (
-        <Heading as="h2" marginTop="5">
-          No products
-        </Heading>
-      )}
-      <Divider marginTop="5" />
-      <Wrap spacing="30px" marginTop="5">
-        {data?.products.map(product => (
-          <ProductCard product={product} key={product.id} />
-        ))}
-      </Wrap>
-    </Container>
+    <Page className="container" title="Home | storify" description="Home page">
+      <div className={classnames('container', styles.hero)}>
+        <h1 className={styles.greeting}>
+          <span>Welcome to storify</span>
+          <br />
+          <p>Fictional ecommerce store</p>
+        </h1>
+      </div>
+      <div className={classnames('container', styles.projectContainer)}>
+        <div className={styles.cardContainer}>
+          {data?.products &&
+            data?.products.map(p => <Snap product={p} key={p.id} />)}
+        </div>
+      </div>
+    </Page>
   );
 };
-
 export default withUrqlClient(createurqlClient, { ssr: true })(Home);

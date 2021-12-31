@@ -1,0 +1,19 @@
+.table {
+  border-collapse: collapse;
+  width: 100%;
+
+  thead {
+    tr:nth-child(1) {
+      background-color: var(--gray);
+    }
+  }
+  td,
+  th {
+    border: 1.5px solid vvar(--gray);
+    text-align: left;
+    padding: 8px;
+  }
+  #table-actions button {
+    float: right;
+  }
+}

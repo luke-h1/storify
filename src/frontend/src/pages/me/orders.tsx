@@ -1,5 +1,5 @@
-import { Box, Spinner, Table, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
 import { withUrqlClient } from 'next-urql';
+import Loader from '../../components/Loader';
 import { useOrdersQuery } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import { isServer } from '../../utils/isServer';
@@ -10,33 +10,31 @@ const OrdersPage = () => {
   });
 
   if (fetching) {
-    return <Spinner />;
+    return <Loader />;
   }
 
   return (
-    <Box>
-      <Table mb={10}>
-        <Thead>
-          <Tr>
-            <Td>#</Td>
-            <Td>Product Title</Td>
-            <Td>Price</Td>
-            <Td>Qty</Td>
-          </Tr>
-        </Thead>
-        {data?.orders &&
-          data?.orders.map(o => (
-            <Tbody key={o.id}>
-              <Tr key={o.id}>
-                <Td>{o.id}</Td>
-                <Td>{o.productTitle}</Td>
-                <Td>{o.price}</Td>
-                <Td>{o.qty}</Td>
-              </Tr>
-            </Tbody>
-          ))}
-      </Table>
-    </Box>
+    <table style={{ marginTop: '0.5rem' }} className="table">
+      <thead>
+        <tr>
+          <td>#</td>
+          <td>Product Title</td>
+          <td>Price</td>
+          <td>Qty</td>
+        </tr>
+      </thead>
+      {data?.orders &&
+        data?.orders.map(o => (
+          <tbody key={o.id}>
+            <tr key={o.id}>
+              <td>{o.id}</td>
+              <td>{o.productTitle}</td>
+              <td>{o.price}</td>
+              <td>{o.qty}</td>
+            </tr>
+          </tbody>
+        ))}
+    </table>
   );
 };
 export default withUrqlClient(createurqlClient, { ssr: true })(OrdersPage);
