@@ -26,24 +26,15 @@ jobs:
         env:
           POSTGRES_DB: storify
           POSTGRES_PASSWORD: storify
-          POSTGRES_PORT: 5555
+          POSTGRES_PORT: 5432
           POSTGRES_USER: storify
         ports:
-          - 5555:5555
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
-    steps:
-      - name: exit 
-        run: echo hello
-
-  build:
-    name: Build & test
-    needs: db
-    runs-on: ubuntu-20.04
 
     steps:
       - name: Setup node
