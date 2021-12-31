@@ -24,6 +24,10 @@ const main = async () => {
 
   const app = express();
 
+  app.get('/api/health', (_req, res) => {
+    res.status(200).json({ status: 'OK' });
+  });
+
   app.use(compression());
   app.set('trust-proxy', 1);
   app.use(

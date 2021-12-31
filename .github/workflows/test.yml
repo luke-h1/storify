@@ -1,0 +1,60 @@
+name: CI / test
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev, main]
+env: 
+  CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
+  SESSION_SECRET: ${{ sercrets.SESSION_SECRET }}
+  DATABASE_URL: ${{ secrets.SESSION_SECRET }}
+  REDIS_URL: ${{ secrets.REDIS_URL }}
+  PORT: ${{ secrets.PORT }}
+  FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+  CLOUDINARY_SECRET: ${{ secrets.CLOUDINARY_SECRET }}
+  STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+  MAILGUN_API_KEY: ${{ secrets.MAILGUN_API_KEY }}
+  EMAIL_DOMAIN_NAME: ${{ secrets.EMAIL_DOMAIN_NAME }}
+jobs:
+  postgres-job:
+    runs-on: ubuntu-latest
+    container: node:latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: storify
+          POSTGRES_PASSWORD: storify
+          POSTGRES_PORT: 5555
+          POSTGRES_USER: storify
+        ports:
+          - 5555:5555
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      - name: Redis
+        uses: luke-h1/redis-github-action@1.4.0
+
+    steps:
+      - name: Build API
+        run: |
+          yarn workspace @storify/api build
+          yarn workspace @storify/api start
+
+      - name: Check API is healthy
+        run: | 
+            http_response=$(curl -s -o response.txt -w "%{http_code}" https://localhost:8000/api/health)
+            if [ $http_response != "200" ]; then
+              echo "server not running, exiting CI"
+              exit 1
+            else
+              echo "Server running"
+              exit 0
+            cat response.txt    
+            fi
+
+      - name: run unit tests
+        run: yarn workspace @storify/api test
