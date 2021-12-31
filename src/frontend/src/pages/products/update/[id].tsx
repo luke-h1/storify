@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import AuthRoute from '../../../components/AuthRoute';
 import InputField from '../../../components/InputField';
+import Loader from '../../../components/Loader';
 import {
   useCreateSignatureMutation,
   useUpdateProductMutation,
@@ -39,7 +40,11 @@ const UpdateProductPage = () => {
   const [, createSignature] = useCreateSignatureMutation();
 
   if (fetching && !data) {
-    return <p>loading</p>;
+    return <Loader />;
+  }
+
+  if (!fetching && !data?.product?.id) {
+    return <p>No product with that ID</p>;
   }
 
   return (
