@@ -19,7 +19,7 @@ env:
 jobs:
   postgres-test-job:
     runs-on: ubuntu-latest
-    container: postgres-2
+    container: postgres
     services:
       postgres:
         image: postgres:latest
@@ -35,7 +35,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-          
+
     steps:
       - name: Start redis
         uses: luke-h1/redis-github-action@1.4.0
