@@ -5,8 +5,8 @@ import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { MdLocalShipping } from 'react-icons/md';
 import AuthRoute from '../../components/AuthRoute';
+import Loader from '../../components/Loader';
 import {
   useMeQuery,
   useDeleteProductMutation,
@@ -90,9 +90,9 @@ const SingleProductPage = () => {
   });
 
   if (fetching && !data) {
-    return <p>loading</p>;
+    return <Loader />;
   }
-  if (!data?.product) {
+  if (!fetching && !data?.product) {
     return <p>no product</p>;
   }
 
@@ -110,9 +110,9 @@ const SingleProductPage = () => {
       <Elements stripe={stripePromise}>
         <div className={classnames(styles.wrap, 'container')}>
           <h2>
-            {data?.product.name} - £{data?.product.price}
+            {data?.product?.name} - £{data?.product?.price}
           </h2>
-          <img src={data?.product.image} alt={data?.product.name} />
+          <img src={data?.product?.image} alt={data?.product?.name} />
 
           <button
             onClick={() => setShowForm(true)}
@@ -122,7 +122,7 @@ const SingleProductPage = () => {
             Checkout
           </button>
 
-          {user?.me?.id === data?.product.creator.id && (
+          {user?.me?.id === data?.product?.creator.id && (
             <div>
               <button onClick={handleDelete} type="button" className="btn">
                 Delete Product
@@ -141,13 +141,13 @@ const SingleProductPage = () => {
 
           {showForm && (
             <CheckoutForm
-              price={data?.product.price}
-              description={data?.product.description}
-              productId={data?.product.id}
+              price={data?.product?.price as number}
+              description={data?.product?.description as string}
+              productId={data?.product?.id as number}
               email={user?.me?.email as string}
               firstName={user?.me?.firstName as string}
               lastName={user?.me?.lastName as string}
-              productTitle={data?.product.name}
+              productTitle={data?.product?.name as string}
             />
           )}
         </div>
