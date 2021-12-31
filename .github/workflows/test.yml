@@ -35,26 +35,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
-  postgres-job:
-    runs-on: ubuntu-latest
-    container: postgres
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: storify
-          POSTGRES_PASSWORD: storify
-          POSTGRES_PORT: 5432
-          POSTGRES_USER: storify
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
+          
     steps:
       - name: Start redis
         uses: luke-h1/redis-github-action@1.4.0
