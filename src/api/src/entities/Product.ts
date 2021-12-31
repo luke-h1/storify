@@ -19,7 +19,7 @@ export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id!: number;
 
-  @Field()
+  @Field(() => Int)
   @Column()
   creatorId: number;
 
