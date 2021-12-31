@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styles from './snap.module.scss';
 
 interface Props {
@@ -15,15 +16,18 @@ interface Props {
 
 const Snap = ({ product }: Props) => {
   return (
-    <a className={styles.card}>
-      <img alt={product.name} className={styles.img} />
-      <div className={styles.body}>
-        <h3>
-          {product.name} <span className={styles.arrow}>&rarr;</span>
-        </h3>
-        <p>{product.price}</p>
-      </div>
-    </a>
+    <Link href={`/products/${product.id}`}>
+      <a className={styles.card}>
+        <img alt={product.name} className={styles.img} src={product.image} />
+        <div className={styles.body}>
+          <h3>
+            {product.name} <span className={styles.arrow}>&rarr;</span>
+          </h3>
+          <h4>{product.descriptionSnippet}</h4>
+          <p>£{product.price}</p>
+        </div>
+      </a>
+    </Link>
   );
 };
 export default Snap;

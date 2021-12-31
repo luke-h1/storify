@@ -1,4 +1,4 @@
-.authContainer {
+.container {
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -7,7 +7,7 @@
   justify-content: center;
 }
 
-.authForm {
+.form {
   width: 30rem;
   padding: 0.5rem;
   h1 {
@@ -62,7 +62,7 @@
 .formInput {
   font-size: 1rem;
   padding: 0.5rem;
-  background: var(--hover-color);
+  background: var(--grey);
   color: var(--dark);
   border: 1px solid transparent;
   border-radius: 0.3rem;

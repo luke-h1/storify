@@ -5,7 +5,9 @@ import Router from 'next/router';
 import NProgress from 'nprogress';
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import Nav from '../components/Nav';
 import '../styles/index.scss';
+import '../styles/table.scss';
 import { setThemeClass, getTheme } from '../utils/theme';
 
 const toastStyles: React.CSSProperties = {
@@ -59,6 +61,7 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
           },
         }}
       />
+      <Nav {...pageProps} />
       <Component {...pageProps} />
     </>
   );

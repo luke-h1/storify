@@ -1,15 +1,7 @@
-import {
-  Flex,
-  Box,
-  Heading,
-  Stack,
-  Input,
-  Button,
-  Image,
-} from '@chakra-ui/react';
 import productCreateSchema from '@storify/common/src/schemas/productCreateSchema';
 import { Formik, Form } from 'formik';
 import { withUrqlClient } from 'next-urql';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -20,6 +12,7 @@ import {
   useCreateSignatureMutation,
 } from '../../generated/graphql';
 import { useIsAuth } from '../../hooks/useIsAuth';
+import styles from '../../styles/forms.module.scss';
 import { createurqlClient } from '../../utils/createUrqlClient';
 
 interface IUploadImageResponse {
@@ -62,126 +55,91 @@ const CreateProductPage = () => {
   const [, createSignature] = useCreateSignatureMutation();
   return (
     <AuthRoute>
-      <Flex align="center" justify="center" bg="#fff">
-        <Stack spacing={3} mx="auto" maxW="lg" py={12} px={6}>
-          <Stack align="center">
-            <Heading fontSize="4xl">Create a new product</Heading>
-          </Stack>
-          <Formik<FormValues>
-            validationSchema={productCreateSchema}
-            initialValues={{
-              name: '',
-              image: '',
-              brand: '',
-              description: '',
-              price: 0,
-            }}
-            onSubmit={async values => {
-              const { data: signatureData } = await createSignature();
-              if (signatureData) {
-                const { signature, timestamp } =
-                  signatureData.createImageSignature;
-                const imageData = await uploadImage(
-                  values.image as unknown as File,
-                  signature,
-                  timestamp,
-                );
-                const res = await createProduct({
-                  input: {
-                    image: imageData.secure_url,
-                    brand: values.brand,
-                    description: values.description,
-                    name: values.name,
-                    price: values.price,
-                  },
-                });
-                if (res?.data?.createProduct) {
-                  toast.success('Created product');
-                  router.push(`/products/${res.data?.createProduct.id}`);
-                }
+      <div className={styles.container}>
+        <Formik<FormValues>
+          validationSchema={productCreateSchema}
+          initialValues={{
+            name: '',
+            image: '',
+            brand: '',
+            description: '',
+            price: 0,
+          }}
+          onSubmit={async values => {
+            const { data: signatureData } = await createSignature();
+            if (signatureData) {
+              const { signature, timestamp } =
+                signatureData.createImageSignature;
+              const imageData = await uploadImage(
+                values.image as unknown as File,
+                signature,
+                timestamp,
+              );
+              const res = await createProduct({
+                input: {
+                  image: imageData.secure_url,
+                  brand: values.brand,
+                  description: values.description,
+                  name: values.name,
+                  price: values.price,
+                },
+              });
+              if (res?.data?.createProduct) {
+                toast.success('Created product');
+                router.push(`/products/${res.data?.createProduct.id}`);
               }
-            }}
-          >
-            {({ isSubmitting, setFieldValue }) => (
-              <Form>
-                <Box rounded="lg" bg="#fff" boxShadow="lg" py={8} px={8}>
-                  <Stack spacing={5}>
-                    <InputField label="Name" name="name" placeholder="iphone" />
-                    <InputField
-                      label="Brand"
-                      name="brand"
-                      placeholder="apple"
-                    />
-                    <InputField
-                      label="description"
-                      name="description"
-                      placeholder="informative description of the product"
-                    />
+            }
+          }}
+        >
+          {({ isSubmitting, setFieldValue }) => (
+            <Form className={styles.form}>
+              <InputField label="Name" name="name" placeholder="iphone" />
+              <InputField label="Brand" name="brand" placeholder="apple" />
+              <InputField
+                label="description"
+                name="description"
+                placeholder="informative description of the product"
+              />
 
-                    <InputField
-                      label="Price"
-                      name="price"
-                      placeholder="1000"
-                      type="number"
-                    />
+              <InputField
+                label="Price"
+                name="price"
+                placeholder="1000"
+                type="number"
+              />
 
-                    <Input
-                      placeholder="Image"
-                      type="file"
-                      accept="image/*"
-                      onChange={({ target: { validity, files } }) => {
-                        if (validity.valid && files) {
-                          setFieldValue('image', files[0]);
-                          const file = files[0];
-                          const reader = new FileReader();
-                          reader.onloadend = () => {
-                            setPreviewImage(reader.result as string);
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
-                    />
-                    {previewImage && (
-                      <Box>
-                        <Image
-                          transform="scale(1.0)"
-                          src={previewImage}
-                          alt="some text"
-                          objectFit="contain"
-                          width="100%"
-                          transition="0.3s ease-in-out"
-                          _hover={{
-                            transform: 'scale(1.05)',
-                          }}
-                        />
-                      </Box>
-                    )}
+              <input
+                placeholder="Image"
+                type="file"
+                accept="image/*"
+                onChange={({ target: { validity, files } }) => {
+                  if (validity.valid && files) {
+                    setFieldValue('image', files[0]);
+                    const file = files[0];
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setPreviewImage(reader.result as string);
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
 
-                    <Stack spacing={10}>
-                      <Stack
-                        direction={{ base: 'column', sm: 'row' }}
-                        align="start"
-                        justify="space-between"
-                      />
-                      <Button
-                        bg="blue.400"
-                        color="white"
-                        _hover={{
-                          bg: 'blue.500',
-                        }}
-                        type="submit"
-                        disabled={isSubmitting}
-                      >
-                        Create Product
-                      </Button>
-                    </Stack>
-                  </Stack>
-                </Box>
-              </Form>
-            )}
-          </Formik>
-        </Stack>
-      </Flex>
+              <button
+                style={{ marginLeft: '1rem' }}
+                disabled={isSubmitting}
+                className="btn submit"
+                type="submit"
+              >
+                {isSubmitting ? 'submitting..' : 'Add product'}
+              </button>
+              {previewImage && (
+                <img src={previewImage} alt="some text" width="100%" />
+              )}
+            </Form>
+          )}
+        </Formik>
+      </div>
     </AuthRoute>
   );
 };
