@@ -1,52 +1,63 @@
 import { withUrqlClient } from 'next-urql';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import AdminRoute from '../../components/AdminRoute';
 import Loader from '../../components/Loader';
 import Page from '../../components/Page';
-import { useUsersQuery, useDeleteUserMutation } from '../../generated/graphql';
+import {
+  useProductsQuery,
+  useDeleteProductAsAdminMutation,
+} from '../../generated/graphql';
 import { useIsAdmin } from '../../hooks/useIsAdmin';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import { isServer } from '../../utils/isServer';
 
-const Users = () => {
-  const router = useRouter();
-  const [, deleteUser] = useDeleteUserMutation();
+const Products = () => {
   useIsAdmin();
-  const [{ data, fetching }] = useUsersQuery({
+  const [{ data, fetching }] = useProductsQuery({
     pause: isServer(),
   });
+  const [, DeleteProductAsAdmin] = useDeleteProductAsAdminMutation();
 
   if (!data && fetching) {
     return <Loader />;
   }
 
+  if (!fetching && !data) {
+    return <p>No products</p>;
+  }
+
   return (
     <AdminRoute>
       <Page className="container" title="Users - Admin | Storify">
-        <h1 style={{ marginBottom: '2rem' }}>Manage users on the service</h1>
+        <h1 style={{ marginBottom: '2rem' }}>Manage products on the service</h1>
         <table style={{ marginTop: '0.5rem' }} className="table">
           <thead>
             <tr>
               <td>ID</td>
               <td>Name</td>
-              <td>Email</td>
-              <td>Admin</td>
-              <td>createdAt</td>
+              <td>Brand</td>
+              <td>Creator</td>
+              <td>Image</td>
+              <td>price</td>
+              <td>Description</td>
               <td>Delete user</td>
             </tr>
           </thead>
-          {data?.users &&
-            data?.users.map(u => (
-              <tbody key={u.id}>
-                <tr key={u.id}>
-                  <td>{u.id}</td>
+          {data?.products &&
+            data?.products.map(p => (
+              <tbody key={p.id}>
+                <tr key={p.id}>
+                  <td>{p.id}</td>
+                  <td>{p.name}</td>
+                  <td>{p.brand}</td>
                   <td>
-                    {u.firstName} {u.lastName}{' '}
+                    {p.creator.fullName} (ID: {p.creator.id})
                   </td>
-                  <td>{u.email}</td>
-                  <td>{u.isAdmin ? 'true' : 'false'}</td>
-                  <td>{u.createdAt}</td>
+                  <td>
+                    <img src={p.image} alt={p.name} />{' '}
+                  </td>
+                  <td>£{p.price.toFixed(2)}</td>
+                  <td>{p.description}</td>
                   <td>
                     <button
                       className="btn"
@@ -54,12 +65,14 @@ const Users = () => {
                       onClick={async () => {
                         // eslint-disable-next-line no-alert
                         if (window.confirm('Are you sure?')) {
-                          await deleteUser({ id: u.id });
-                          // await router.reload()
+                          await DeleteProductAsAdmin({
+                            id: p.id,
+                            stripeProductId: p.stripeProductId,
+                          });
                         }
                       }}
                     >
-                      Delete user
+                      Delete product
                     </button>
                   </td>
                 </tr>
@@ -70,4 +83,4 @@ const Users = () => {
     </AdminRoute>
   );
 };
-export default withUrqlClient(createurqlClient, { ssr: true })(Users);
+export default withUrqlClient(createurqlClient, { ssr: true })(Products);

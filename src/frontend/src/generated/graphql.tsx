@@ -53,6 +53,7 @@ export type Mutation = {
   deleteAllProducts: Scalars['Boolean'];
   deleteMyAccount: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
+  deleteProductAsAdmin: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
@@ -79,6 +80,11 @@ export type MutationDeleteMyAccountArgs = {
 };
 
 export type MutationDeleteProductArgs = {
+  id: Scalars['Int'];
+  stripeProductId: Scalars['String'];
+};
+
+export type MutationDeleteProductAsAdminArgs = {
   id: Scalars['Int'];
   stripeProductId: Scalars['String'];
 };
@@ -307,6 +313,16 @@ export type DeleteProductMutation = {
   deleteProduct: boolean;
 };
 
+export type DeleteProductAsAdminMutationVariables = Exact<{
+  stripeProductId: Scalars['String'];
+  id: Scalars['Int'];
+}>;
+
+export type DeleteProductAsAdminMutation = {
+  __typename?: 'Mutation';
+  deleteProductAsAdmin: boolean;
+};
+
 export type DeleteUserMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -483,7 +499,9 @@ export type ProductsQuery = {
     image: string;
     name: string;
     price: number;
-    creator: { __typename?: 'User'; fullName: string };
+    description: string;
+    stripeProductId: string;
+    creator: { __typename?: 'User'; id: number; fullName: string };
   }>;
 };
 
@@ -633,6 +651,18 @@ export function useDeleteProductMutation() {
     DeleteProductMutation,
     DeleteProductMutationVariables
   >(DeleteProductDocument);
+}
+export const DeleteProductAsAdminDocument = gql`
+  mutation DeleteProductAsAdmin($stripeProductId: String!, $id: Int!) {
+    deleteProductAsAdmin(stripeProductId: $stripeProductId, id: $id)
+  }
+`;
+
+export function useDeleteProductAsAdminMutation() {
+  return Urql.useMutation<
+    DeleteProductAsAdminMutation,
+    DeleteProductAsAdminMutationVariables
+  >(DeleteProductAsAdminDocument);
 }
 export const DeleteUserDocument = gql`
   mutation DeleteUser($id: Int!) {
@@ -791,7 +821,10 @@ export const ProductsDocument = gql`
       image
       name
       price
+      description
+      stripeProductId
       creator {
+        id
         fullName
       }
     }
