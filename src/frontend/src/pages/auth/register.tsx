@@ -1,4 +1,5 @@
 import { Formik, Form } from 'formik';
+import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -16,7 +17,7 @@ interface FormValues {
   lastName: string;
 }
 
-const Register = () => {
+const Register: NextPage = () => {
   const router = useRouter();
   const [, register] = useRegisterMutation();
   return (

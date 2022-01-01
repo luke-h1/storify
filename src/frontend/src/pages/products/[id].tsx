@@ -1,6 +1,7 @@
 import { useStripe, Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import classnames from 'classnames';
+import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -75,7 +76,7 @@ const CheckoutForm = ({
   );
 };
 
-const SingleProductPage = () => {
+const SingleProductPage: NextPage = () => {
   const router = useRouter();
   useIsAuth();
   const [showForm, setShowForm] = useState<boolean>(false);

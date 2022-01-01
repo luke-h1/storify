@@ -1,13 +1,13 @@
 import { Form, Formik } from 'formik';
+import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import { useState } from 'react';
 import InputField from '../components/InputField';
 import Page from '../components/Page';
 import { useForgotPasswordMutation } from '../generated/graphql';
-import styles from '../styles/forms.module.scss';
 import { createurqlClient } from '../utils/createUrqlClient';
 
-const ForgotPassword = () => {
+const ForgotPassword: NextPage = () => {
   const [complete, setComplete] = useState<Boolean>(false);
   const [, forgotPassword] = useForgotPasswordMutation();
 

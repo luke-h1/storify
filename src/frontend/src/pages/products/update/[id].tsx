@@ -1,4 +1,5 @@
 import { Formik, Form } from 'formik';
+import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -25,7 +26,7 @@ interface FormValues {
   price: number;
 }
 
-const UpdateProductPage = () => {
+const UpdateProductPage: NextPage = () => {
   const [previewImage, setPreviewImage] = useState<string>('');
   const intId = useGetIntId();
   const [{ data, fetching }] = useProductQuery({

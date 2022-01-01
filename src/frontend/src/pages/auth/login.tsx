@@ -1,5 +1,6 @@
 import loginSchema from '@storify/common/src/schemas/loginSchema';
 import { Formik, Form } from 'formik';
+import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,7 +17,7 @@ interface FormValues {
   password: string;
 }
 
-const Login = () => {
+const Login: NextPage = () => {
   const router = useRouter();
   const [, login] = useLoginMutation();
   return (

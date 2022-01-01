@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import Loader from '../components/Loader';
 import Page from '../components/Page';
@@ -8,7 +9,7 @@ import { createurqlClient } from '../utils/createUrqlClient';
 import { isServer } from '../utils/isServer';
 import styles from './index.module.scss';
 
-const Home = () => {
+const Home: NextPage = () => {
   const [{ data, fetching }] = useProductsQuery({
     pause: isServer(),
   });

@@ -1,4 +1,5 @@
 /* eslint-disable no-alert */
+import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import AdminRoute from '../../components/AdminRoute';
 import Loader from '../../components/Loader';
@@ -13,7 +14,7 @@ import { useIsAdmin } from '../../hooks/useIsAdmin';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import { isServer } from '../../utils/isServer';
 
-const Users = () => {
+const Users: NextPage = () => {
   const [, deleteUser] = useDeleteUserMutation();
   const [, makeUserAdmin] = useMakeUserAdminMutation();
   const [, makeUserRegularUser] = useMakeUserRegularUserMutation();
