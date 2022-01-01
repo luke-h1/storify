@@ -26,7 +26,7 @@ import { MyContext } from '../types/MyContext';
 import { validateRegister } from '../validations/register';
 
 @ObjectType()
-class FieldError {
+export class FieldError {
   @Field()
   field: string;
 

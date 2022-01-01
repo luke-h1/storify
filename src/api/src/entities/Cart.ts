@@ -1,46 +1,47 @@
-/* eslint-disable import/no-cycle */
 import { Max, Min } from 'class-validator';
 import { Field, Int, ObjectType } from 'type-graphql';
 import {
   Entity,
   BaseEntity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
   CreateDateColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
+  Column,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
+import { Product } from './Product';
 import { User } from './User';
 
 @ObjectType()
-@Entity('reviews')
-export class Review extends BaseEntity {
-  @Field()
+@Entity('cart')
+export class Cart extends BaseEntity {
+  @Field(() => Int)
   @PrimaryGeneratedColumn()
   readonly id!: number;
-
-  @Field(() => String)
-  @Column()
-  name!: string;
 
   @Field(() => Int)
   @Column()
   @Min(1)
-  @Max(5)
-  rating!: number;
-
-  @Field(() => String)
+  @Max(10)
   @Column()
-  comment!: string;
+  quantity: number;
 
   @Field(() => Int)
   @Column()
   creatorId: number;
 
-  @ManyToOne(() => User, u => u.reviews)
+  @ManyToOne(() => User, u => u.cart, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'creatorId' })
   creator: User;
+
+  @Field(() => Int)
+  @Column()
+  productId: number;
+
+  @ManyToOne(() => Product, p => p.cart, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'productId' })
+  product: Product;
 
   @Field(() => String)
   @CreateDateColumn({ type: 'date' })
