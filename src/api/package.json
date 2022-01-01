@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc --noEmit",
+    "build": "tsc",
     "clean": "rm -rf dist && docker-compose down && rm -rf .dbdata",
     "watch": "tsc -w",
     "dev": "cross-env NODE_ENV=development nodemon dist/index.js",
