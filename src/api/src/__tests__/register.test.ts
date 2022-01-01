@@ -16,6 +16,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await conn.dropDatabase();
   await conn.close();
   redis.disconnect();
 });
