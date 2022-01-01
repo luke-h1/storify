@@ -11,3 +11,19 @@
 .btn-blue:hover {
   @apply bg-blue-700;
 }
+
+.btn-red {
+  @apply bg-red-500 text-white;
+}
+
+.btn-warning {
+  @apply bg-orange-500 text-white;
+}
+
+.btn-warning:hover {
+  @apply bg-orange-700;
+}
+
+.btn-red:hover {
+  @apply bg-red-700;
+}

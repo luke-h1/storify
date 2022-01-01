@@ -11,8 +11,6 @@ import {
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Order } from '../entities/Order';
-import { Product } from '../entities/Product';
-import { ChargeInput } from '../inputs/order/ChargeInput';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 

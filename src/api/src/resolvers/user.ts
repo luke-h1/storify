@@ -130,11 +130,12 @@ export class UserResolver {
   @Query(() => [User], { nullable: true })
   @Authorized(isAdmin)
   async users() {
-    return User.find({
+    const users = await User.find({
       order: {
         createdAt: 'DESC',
       },
     });
+    return users;
   }
 
   @Query(() => User, { nullable: true })
