@@ -157,6 +157,31 @@ export class ProductResolver {
 
   @Mutation(() => Boolean)
   @Authorized(isAdmin)
+  async deleteProductAsAdmin(
+    @Arg('id', () => Int) id: number,
+    @Arg('stripeProductId') stripeProductId: string,
+  ): Promise<Boolean> {
+    const product = await Product.findOne(id);
+
+    if (!product) {
+      return false;
+    }
+
+    await stripe.prices.update(product.stripePriceId, {
+      active: false,
+    });
+
+    await stripe.products.update(stripeProductId, {
+      active: false,
+    });
+
+    await Product.delete({ id });
+
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized(isAdmin)
   async deleteAllProducts(): Promise<boolean> {
     await Product.delete({});
     return true;

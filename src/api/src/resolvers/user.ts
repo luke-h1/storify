@@ -19,6 +19,7 @@ import { v4 } from 'uuid';
 import { User } from '../entities/User';
 import { UserRegisterInput } from '../inputs/user/UserRegisterInput';
 import { isAdmin } from '../middleware/isAdmin';
+import { isAuth } from '../middleware/isAuth';
 import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from '../shared/constants';
 import { MyContext } from '../types/MyContext';
 import { validateRegister } from '../validations/register';
@@ -127,7 +128,7 @@ export class UserResolver {
 
   @Query(() => [User], { nullable: true })
   @Authorized(isAdmin)
-  users() {
+  async users() {
     return User.find({
       order: {
         createdAt: 'DESC',
@@ -279,5 +280,67 @@ export class UserResolver {
         resolve(true);
       }),
     );
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized(isAuth)
+  async deleteMyAccount(@Arg('id', () => Int) id: number): Promise<Boolean> {
+    const user = await User.find({ id });
+
+    if (!user) {
+      return false;
+    }
+    await User.delete({ id });
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized(isAdmin)
+  async makeUserAdmin(@Arg('id', () => Int) id: number): Promise<Boolean> {
+    const user = await User.find({ id });
+
+    if (!user) {
+      return false;
+    }
+    await User.update(
+      { id },
+      {
+        isAdmin: true,
+      },
+    );
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized(isAdmin)
+  async makeUserRegularUser(
+    @Arg('id', () => Int) id: number,
+  ): Promise<Boolean> {
+    const user = await User.find({ id });
+
+    if (!user) {
+      return false;
+    }
+
+    await User.update(
+      { id },
+      {
+        isAdmin: false,
+      },
+    );
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized(isAdmin)
+  async deleteUser(@Arg('id', () => Int) id: number): Promise<boolean> {
+    const user = await User.find({ id });
+
+    if (!user) {
+      return false;
+    }
+
+    await User.delete({ id });
+    return true;
   }
 }

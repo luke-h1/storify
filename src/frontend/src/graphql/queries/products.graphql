@@ -6,7 +6,10 @@ query Products {
     image
     name
     price
+    description
+    stripeProductId
     creator {
+      id
       fullName
     }
   }

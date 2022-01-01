@@ -8,5 +8,7 @@ declare namespace NodeJS {
     FRONTEND_URL: string;
     CLOUDINARY_SECRET: string;
     STRIPE_SECRET_KEY: string;
+    MAILGUN_API_KEY: string;
+    EMAIL_DOMAIN_NAME: string;
   }
 }

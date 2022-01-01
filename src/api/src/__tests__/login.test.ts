@@ -2,7 +2,6 @@
 import faker from 'faker';
 import { Connection } from 'typeorm';
 import redis from '../db/redis';
-import { User } from '../entities/User';
 import { createTestConn } from '../test/createTestConn';
 import { gCall } from '../test/gCall';
 
@@ -39,8 +38,29 @@ mutation Register($options: UserRegisterInput!) {
 }
 `;
 
-describe('Register', () => {
-  test('it creates the user', async () => {
+const loginMutation = `
+mutation Login($password: String!, $email: String!) {
+  login(password: $password, email: $email) {
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      firstName
+      lastName
+      email
+      isAdmin
+      createdAt
+      updatedAt
+      fullName
+    }
+  }
+}
+`;
+
+describe('login', () => {
+  test('it logins a valid user', async () => {
     const user = {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
@@ -48,29 +68,33 @@ describe('Register', () => {
       password: faker.internet.password(),
     };
 
-    const response = await gCall({
+    await gCall({
       source: registerMutation,
       variableValues: {
         options: user,
       },
     });
+
+    const response = await gCall({
+      source: loginMutation,
+      variableValues: {
+        email: user.email,
+        password: user.password,
+      },
+    });
     expect(response).toMatchObject({
       data: {
-        register: {
+        login: {
           errors: null,
           user: {
-            id: 1,
+            id: 2,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
             isAdmin: false,
-            fullName: user.firstName + ' ' + user.lastName,
           },
         },
       },
     });
-    const userInDb = await User.findOne({ where: { email: user.email } });
-    expect(userInDb).toBeDefined();
-    expect(userInDb?.email).toBe(user.email);
   });
 });

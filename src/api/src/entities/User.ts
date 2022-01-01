@@ -49,10 +49,10 @@ export class User extends BaseEntity {
   isAdmin: Boolean;
 
   @Field(() => String)
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ type: 'date' })
   readonly createdAt: Date;
 
   @Field(() => String)
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  @UpdateDateColumn({ type: 'date' })
   updatedAt: Date;
 }
