@@ -29,8 +29,8 @@ export const authLinks = [
   },
   {
     id: 3,
-    slug: '/me/profile',
-    text: 'profile',
+    slug: '/cart',
+    text: 'Cart',
   },
 ];
 

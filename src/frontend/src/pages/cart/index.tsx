@@ -28,8 +28,9 @@ const CartPage: NextPage = () => {
 
   return (
     <AuthRoute>
-      <Page title="Cart | Storify">
+      <Page title="Cart | Storify" flex={false}>
         <h1>Your Cart</h1>
+
         <table>
           <thead>
             <tr>
