@@ -8,7 +8,7 @@ export const createTestConn = (drop = false): Promise<Connection> =>
   createConnection({
     name: 'default',
     type: 'postgres',
-    port: process.env.CI ? process.env.DB_PORT : 5555,
+    port: 5555,
     username: 'storify',
     password: 'storify',
     database: 'storify',
