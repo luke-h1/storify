@@ -21,6 +21,7 @@
     "seed:db": "sh scripts/seed-db.sh"
   },
   "dependencies": {
+    "nodemailer": "^6.4.11",
     "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^27.0.1",
     "apollo-server-cache-redis": "^3.3.0",
@@ -53,6 +54,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/nodemailer": "^6.4.0",
     "@types/compression": "^1.7.2",
     "@types/connect-redis": "^0.0.18",
     "@types/cookie-parser": "^1.4.2",

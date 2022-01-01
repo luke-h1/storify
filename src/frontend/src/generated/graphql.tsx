@@ -255,6 +255,22 @@ export type UserResponseFragmentFragment = {
     | undefined;
 };
 
+export type ChangePasswordMutationVariables = Exact<{
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
+}>;
+
+export type ChangePasswordMutation = {
+  __typename?: 'Mutation';
+  changePassword: {
+    __typename?: 'UserResponse';
+    errors?:
+      | Array<{ __typename?: 'FieldError'; message: string; field: string }>
+      | null
+      | undefined;
+  };
+};
+
 export type ChargeMutationVariables = Exact<{
   options: ChargeInput;
 }>;
@@ -340,6 +356,15 @@ export type DeleteUserMutationVariables = Exact<{
 export type DeleteUserMutation = {
   __typename?: 'Mutation';
   deleteUser: boolean;
+};
+
+export type ForgotPasswordMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+export type ForgotPasswordMutation = {
+  __typename?: 'Mutation';
+  forgotPassword: boolean;
 };
 
 export type LoginMutationVariables = Exact<{
@@ -600,6 +625,23 @@ export const UserResponseFragmentFragmentDoc = gql`
   ${ErrorFragmentDoc}
   ${UserFragmentFragmentDoc}
 `;
+export const ChangePasswordDocument = gql`
+  mutation ChangePassword($newPassword: String!, $token: String!) {
+    changePassword(newPassword: $newPassword, token: $token) {
+      errors {
+        message
+        field
+      }
+    }
+  }
+`;
+
+export function useChangePasswordMutation() {
+  return Urql.useMutation<
+    ChangePasswordMutation,
+    ChangePasswordMutationVariables
+  >(ChangePasswordDocument);
+}
 export const ChargeDocument = gql`
   mutation Charge($options: ChargeInput!) {
     charge(options: $options) {
@@ -702,6 +744,18 @@ export function useDeleteUserMutation() {
   return Urql.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(
     DeleteUserDocument,
   );
+}
+export const ForgotPasswordDocument = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email)
+  }
+`;
+
+export function useForgotPasswordMutation() {
+  return Urql.useMutation<
+    ForgotPasswordMutation,
+    ForgotPasswordMutationVariables
+  >(ForgotPasswordDocument);
 }
 export const LoginDocument = gql`
   mutation Login($email: String!, $password: String!) {

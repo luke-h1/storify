@@ -20,6 +20,7 @@ import { User } from '../entities/User';
 import { UserRegisterInput } from '../inputs/user/UserRegisterInput';
 import { isAdmin } from '../middleware/isAdmin';
 import { isAuth } from '../middleware/isAuth';
+import emailService from '../services/emailService';
 import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from '../shared/constants';
 import { MyContext } from '../types/MyContext';
 import { validateRegister } from '../validations/register';
@@ -165,17 +166,21 @@ export class UserResolver {
     }
     const token = v4();
 
-    // user has 3 days to get a token to reset their password
-
     await redis.set(
       FORGET_PASSWORD_PREFIX + token,
       user.id,
       'ex',
-      1000 * 60 * 60 * 24 * 3,
+      1000 * 60 * 60 * 24 * 3, // 3 days to reset pwd
     );
 
-    // todo: setup SES email service here
-    // todo: send email here
+    await emailService.sendEmail(
+      'noreply@storify.com',
+      email,
+      'Storify | Forgot password',
+      `<div><h1>Change password | Storify</h1><a href="${process.env.FRONTEND_URL}/change-password/${token}">Reset password</a>
+    </div>
+    `,
+    );
     return true;
   }
 
@@ -285,11 +290,24 @@ export class UserResolver {
   @Mutation(() => Boolean)
   @Authorized(isAuth)
   async deleteMyAccount(@Arg('id', () => Int) id: number): Promise<Boolean> {
-    const user = await User.find({ id });
+    const user = await User.findOne({ id });
 
     if (!user) {
       return false;
     }
+
+    await emailService.sendEmail(
+      'noreply@storify.com',
+      user.email,
+      'Your account has been deleted | storify',
+      `
+    <div>
+    <h1>Hello ${user.firstName}</h1>
+    <p>Your account has been deleted. You will no longer have access to the service</p>
+    </div>
+    `,
+    );
+
     await User.delete({ id });
     return true;
   }
@@ -308,6 +326,7 @@ export class UserResolver {
         isAdmin: true,
       },
     );
+
     return true;
   }
 
