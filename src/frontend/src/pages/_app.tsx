@@ -6,20 +6,14 @@ import NProgress from 'nprogress';
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import Nav from '../components/Nav';
-import '../styles/index.scss';
-import '../styles/table.scss';
+import '../styles/index.css';
 import '../styles/nprogress.scss';
-
-import { setThemeClass, getTheme } from '../utils/theme';
 
 const toastStyles: React.CSSProperties = {
   minWidth: '300px',
   maxWidth: '95%',
   padding: '0.5rem 0.8rem',
   fontSize: '1rem',
-
-  background: 'var(--modal-bg)',
-  color: 'var(--dark)',
 };
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => {
@@ -41,11 +35,6 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
       Router.events.off('routeChangeComplete', done);
       Router.events.off('routeChangeError', done);
     };
-  }, []);
-
-  useEffect(() => {
-    const theme = getTheme();
-    setThemeClass(theme);
   }, []);
 
   return (

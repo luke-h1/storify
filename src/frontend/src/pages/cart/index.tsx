@@ -28,9 +28,9 @@ const CartPage: NextPage = () => {
 
   return (
     <AuthRoute>
-      <Page className="container" title="Cart | Storify">
-        <h1 style={{ marginBottom: '2rem' }}>Your Cart</h1>
-        <table style={{ marginTop: '0.5rem' }} className="table">
+      <Page title="Cart | Storify">
+        <h1>Your Cart</h1>
+        <table>
           <thead>
             <tr>
               <td>product ID</td>

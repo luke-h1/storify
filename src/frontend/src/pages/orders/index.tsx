@@ -14,10 +14,6 @@ const OrdersPage: NextPage = () => {
     <Page title="Orders Page | Storify" description="orders page">
       <h1>Orders</h1>
       <h2>These are your orders</h2>
-      {/* {data?.orders && data?.orders.map((order) => (
-        <div key={order.id}>
-        </div>
-      ))} */}
     </Page>
   );
 };

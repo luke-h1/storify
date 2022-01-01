@@ -7,8 +7,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import toast from 'react-hot-toast';
 import InputField from '../../components/InputField';
+import Page from '../../components/Page';
 import { useLoginMutation } from '../../generated/graphql';
-import styles from '../../styles/forms.module.scss';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import toErrorMap from '../../utils/toErrorMap';
 
@@ -21,7 +21,7 @@ const Login: NextPage = () => {
   const router = useRouter();
   const [, login] = useLoginMutation();
   return (
-    <div className={styles.container}>
+    <Page title="Login | Storify">
       <Formik<FormValues>
         initialValues={{ email: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
@@ -39,15 +39,15 @@ const Login: NextPage = () => {
         validationSchema={loginSchema}
       >
         {({ isSubmitting }) => (
-          <Form className={styles.form}>
+          <Form>
             <InputField label="email" name="email" />
             <InputField label="password" name="password" type="password" />
 
-            <Link href="/auth/forgot-password">Forgot password?</Link>
+            <Link href="/forgot-password">Forgot password?</Link>
             <button
               style={{ marginLeft: '1rem' }}
               disabled={isSubmitting}
-              className="btn success"
+              className="btn btn-blue"
               type="submit"
             >
               {isSubmitting ? 'submitting..' : 'Login'}
@@ -55,7 +55,7 @@ const Login: NextPage = () => {
           </Form>
         )}
       </Formik>
-    </div>
+    </Page>
   );
 };
 export default withUrqlClient(createurqlClient, { ssr: false })(Login);
