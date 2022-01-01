@@ -141,6 +141,7 @@ const UpdateProductPage = () => {
               >
                 {isSubmitting ? 'submitting..' : 'Add product'}
               </button>
+              {isSubmitting && <Loader />}
             </Form>
           )}
         </Formik>
