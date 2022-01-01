@@ -7,6 +7,7 @@ import {
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
+import { Order } from './Order';
 import { User } from './User';
 
 @ObjectType()
@@ -26,4 +27,12 @@ export class Payment extends BaseEntity {
   @ManyToOne(() => User, u => u.payments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'creatorId' })
   creator: User;
+
+  @Field(() => Int)
+  @Column()
+  orderId: number;
+
+  @ManyToOne(() => Order, o => o.payments, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'orderId' })
+  order: Order;
 }

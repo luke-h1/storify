@@ -11,6 +11,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { OrderDetails } from './OrderDetails';
+import { Payment } from './Payment';
 import { User } from './User';
 
 // eslint-disable-next-line no-shadow
@@ -48,6 +49,14 @@ export class Order extends BaseEntity {
   @OneToMany(() => OrderDetails, od => od.order, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'OrderDetailsId' })
   orderDetails: OrderDetails[];
+
+  @Field(() => Int)
+  @Column()
+  paymentId: number;
+
+  @OneToMany(() => Payment, p => p.order, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'paymentId' })
+  payments: Payment[];
 
   @ManyToOne(() => User, u => u.orders, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'creatorId' })
