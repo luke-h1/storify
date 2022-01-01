@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import AuthRoute from '../../components/AuthRoute';
 import InputField from '../../components/InputField';
+import Loader from '../../components/Loader';
 import {
   useCreateProductMutation,
   useCreateSignatureMutation,
@@ -136,6 +137,7 @@ const CreateProductPage = () => {
               {previewImage && (
                 <img src={previewImage} alt="some text" width="100%" />
               )}
+              {isSubmitting && <Loader />}
             </Form>
           )}
         </Formik>
