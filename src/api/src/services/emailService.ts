@@ -3,6 +3,7 @@
 
 import formData from 'form-data';
 import Mailgun from 'mailgun.js';
+import nodemailer from 'nodemailer';
 
 const mailgun = new Mailgun(formData);
 
@@ -16,19 +17,48 @@ const emailService = {
     from: string,
     to: string,
     subject: string,
-    text: string,
+    html: string,
   ) => {
-    try {
-      const res = await client.messages.create(process.env.EMAIL_DOMAIN_NAME, {
+    if (process.env.NODE_ENV === 'production') {
+      try {
+        const res = await client.messages.create(
+          process.env.EMAIL_DOMAIN_NAME,
+          {
+            from,
+            to,
+            subject,
+            text: html,
+          },
+        );
+
+        console.log('sent email', res);
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      const testAccount = await nodemailer.createTestAccount();
+
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        secure: false,
+        auth: {
+          user: testAccount.user,
+          pass: testAccount.pass,
+        },
+      });
+      const result = await transporter.sendMail({
         from,
         to,
         subject,
-        text,
+        html,
       });
-
-      console.log('sent email', res);
-    } catch (e) {
-      console.error(e);
+      if (result.accepted) {
+        console.log('Email sent: %s', result.messageId);
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(result));
+      } else {
+        console.error('Problem sending email');
+      }
     }
   },
 };
