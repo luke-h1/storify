@@ -20,6 +20,11 @@ const Home: NextPage = () => {
     <Page title="Home | Storify" flex={false}>
       <section className="text-gray-600 body-font max-w-800">
         <div className="container px-5 py-24 mx-auto">
+          <h1 className="text-4xl text-left mb-10">
+            {data?.products && data.products.length > 0
+              ? 'Latest products'
+              : 'No products'}
+          </h1>
           <div className="flex flex-wrap -m-4">
             {data?.products &&
               data?.products.map(p => (
