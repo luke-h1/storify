@@ -7,7 +7,7 @@ on:
 env: 
   CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
   SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-  DATABASE_URL: ${{ secrets.SESSION_SECRET }}
+  DB_PORT: ${{ secrets.DB_PORT }}
   REDIS_URL: ${{ secrets.REDIS_URL }}
   PORT: ${{ secrets.PORT }}
   FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
@@ -36,7 +36,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-
     steps:
       - name: Setup node
         uses: luke-h1/setup-node@v2
@@ -62,6 +61,8 @@ jobs:
         run: |
           yarn workspace @storify/api build
           yarn workspace @storify/api start
+        env:
+          DB_PORT: ${{ job.services.postgres.ports[5432] }}
 
       - name: Check backend is running
         run: | 
