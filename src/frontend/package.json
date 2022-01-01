@@ -11,7 +11,6 @@
     "gen": "graphql-codegen --config codegen.yml",
     "gen-env": "gen-env-types .env -o src/types/env.d.ts -e ."
   },
-  
   "dependencies": {
     "classnames": "2.3.1",
     "sass": "^1.43.4",
