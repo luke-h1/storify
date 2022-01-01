@@ -15,20 +15,26 @@ import { Product } from '../entities/Product';
 import { ChargeInput } from '../inputs/order/ChargeInput';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
-import { stripe } from '../utils/stripe';
 
 @Resolver(Order)
 export class OrderResolver {
-  @Mutation(() => Order)
+  @Mutation(() => Order, { nullable: true })
   @Authorized(isAuth)
   async createOrder(
     @Arg('total', () => Int) total: number,
     @Ctx() { req }: MyContext,
   ): Promise<Order> {
-    return Order.create({
-      creatorId: req.session.userId,
-      total,
-    });
+    const result = await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(Order)
+      .values({
+        creatorId: req.session.userId,
+        total,
+      })
+      .returning('*')
+      .execute();
+    return result.raw[0];
   }
 
   @Mutation(() => Order)
@@ -42,7 +48,7 @@ export class OrderResolver {
     }) as unknown as Order;
   }
 
-  @Mutation(() => [Order])
+  @Query(() => [Order])
   @Authorized(isAuth)
   async orders(@Ctx() { req }: MyContext): Promise<Order[]> {
     const orders = await Order.find({

@@ -22,14 +22,23 @@ export type Scalars = {
   Float: number;
 };
 
-export type ChargeInput = {
-  amount: Scalars['Int'];
-  description: Scalars['String'];
-  email: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
+export type Cart = {
+  __typename?: 'Cart';
+  createdAt: Scalars['String'];
+  creator: User;
+  creatorId: Scalars['Int'];
+  id: Scalars['Int'];
+  product: Product;
   productId: Scalars['Int'];
-  productTitle: Scalars['String'];
+  quantity: Scalars['Int'];
+  total: Scalars['Int'];
+  updatedAt: Scalars['String'];
+};
+
+export type CartResponse = {
+  __typename?: 'CartResponse';
+  cart?: Maybe<Cart>;
+  errors?: Maybe<Array<FieldError>>;
 };
 
 export type FieldError = {
@@ -46,11 +55,16 @@ export type ImageSignature = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  cancelOrder: Order;
   changePassword: UserResponse;
-  charge: Order;
+  createCart: Scalars['Boolean'];
   createImageSignature: ImageSignature;
+  createOrder?: Maybe<Order>;
+  createOrderDetails: OrderDetailsResponse;
+  createPayment: Scalars['Int'];
   createProduct: Product;
   deleteAllProducts: Scalars['Boolean'];
+  deleteCart: Scalars['Boolean'];
   deleteMyAccount: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
   deleteProductAsAdmin: Scalars['Boolean'];
@@ -61,7 +75,12 @@ export type Mutation = {
   makeUserAdmin: Scalars['Boolean'];
   makeUserRegularUser: Scalars['Boolean'];
   register: UserResponse;
+  updateCartQuantity: CartResponse;
   updateProduct?: Maybe<Product>;
+};
+
+export type MutationCancelOrderArgs = {
+  orderId: Scalars['Int'];
 };
 
 export type MutationChangePasswordArgs = {
@@ -69,8 +88,24 @@ export type MutationChangePasswordArgs = {
   token: Scalars['String'];
 };
 
-export type MutationChargeArgs = {
-  options: ChargeInput;
+export type MutationCreateCartArgs = {
+  productId: Scalars['Int'];
+  quantity: Scalars['Int'];
+};
+
+export type MutationCreateOrderArgs = {
+  total: Scalars['Int'];
+};
+
+export type MutationCreateOrderDetailsArgs = {
+  orderId: Scalars['Int'];
+  productId: Scalars['Int'];
+  quantity: Scalars['Int'];
+};
+
+export type MutationCreatePaymentArgs = {
+  orderId: Scalars['Int'];
+  token: Scalars['String'];
 };
 
 export type MutationCreateProductArgs = {
@@ -116,6 +151,11 @@ export type MutationRegisterArgs = {
   options: UserRegisterInput;
 };
 
+export type MutationUpdateCartQuantityArgs = {
+  id: Scalars['Int'];
+  quantity: Scalars['Int'];
+};
+
 export type MutationUpdateProductArgs = {
   id: Scalars['Int'];
   input: ProductUpdateInput;
@@ -123,23 +163,38 @@ export type MutationUpdateProductArgs = {
 
 export type Order = {
   __typename?: 'Order';
-  completed: Scalars['Boolean'];
   createdAt: Scalars['String'];
-  creatorId: Scalars['Float'];
-  email: Scalars['String'];
-  firstName: Scalars['String'];
+  creatorId: Scalars['Int'];
   id: Scalars['Int'];
-  lastName: Scalars['String'];
-  price: Scalars['Int'];
-  productTitle: Scalars['String'];
-  qty: Scalars['Int'];
-  transactionId: Scalars['String'];
+  orderDetails: Array<OrderDetails>;
+  orderDetailsId: Scalars['Int'];
+  paymentId: Scalars['Int'];
+  status: Scalars['String'];
+  total: Scalars['Int'];
   updatedAt: Scalars['String'];
+};
+
+export type OrderDetails = {
+  __typename?: 'OrderDetails';
+  createdAt: Scalars['String'];
+  creatorId: Scalars['Int'];
+  id: Scalars['Int'];
+  orderId: Scalars['Int'];
+  productId: Scalars['Int'];
+  quantity: Scalars['Int'];
+  updatedAt: Scalars['String'];
+};
+
+export type OrderDetailsResponse = {
+  __typename?: 'OrderDetailsResponse';
+  errors?: Maybe<Array<FieldError>>;
+  orderDetails?: Maybe<OrderDetails>;
 };
 
 export type Product = {
   __typename?: 'Product';
   brand: Scalars['String'];
+  cart: Cart;
   createdAt: Scalars['String'];
   creator: User;
   creatorId: Scalars['Int'];
@@ -148,11 +203,13 @@ export type Product = {
   id: Scalars['Int'];
   image: Scalars['String'];
   name: Scalars['String'];
+  orderDetails: OrderDetails;
   price: Scalars['Int'];
   publicId: Scalars['String'];
   stripePriceId: Scalars['String'];
   stripeProductId: Scalars['String'];
   updatedAt: Scalars['String'];
+  wishlist: Wishlist;
 };
 
 export type ProductCreateInput = {
@@ -175,8 +232,9 @@ export type ProductUpdateInput = {
 
 export type Query = {
   __typename?: 'Query';
+  OrderDetail?: Maybe<OrderDetails>;
+  carts: Array<Cart>;
   me?: Maybe<User>;
-  order: Order;
   orders: Array<Order>;
   product?: Maybe<Product>;
   products: Array<Product>;
@@ -184,8 +242,8 @@ export type Query = {
   users?: Maybe<Array<User>>;
 };
 
-export type QueryOrderArgs = {
-  id: Scalars['Int'];
+export type QueryOrderDetailArgs = {
+  orderId: Scalars['Int'];
 };
 
 export type QueryProductArgs = {
@@ -219,6 +277,14 @@ export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
+};
+
+export type Wishlist = {
+  __typename?: 'Wishlist';
+  creatorId: Scalars['Int'];
+  id: Scalars['Int'];
+  product: Product;
+  productId: Scalars['Int'];
 };
 
 export type ErrorFragment = {
@@ -281,6 +347,27 @@ export type UserResponseFragmentFragment = {
     | undefined;
 };
 
+export type CartsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type CartsQuery = {
+  __typename?: 'Query';
+  carts: Array<{
+    __typename?: 'Cart';
+    id: number;
+    quantity: number;
+    creatorId: number;
+    productId: number;
+    total: number;
+    product: {
+      __typename?: 'Product';
+      name: string;
+      image: string;
+      brand: string;
+      price: number;
+    };
+  }>;
+};
+
 export type ChangePasswordMutationVariables = Exact<{
   newPassword: Scalars['String'];
   token: Scalars['String'];
@@ -297,24 +384,39 @@ export type ChangePasswordMutation = {
   };
 };
 
-export type ChargeMutationVariables = Exact<{
-  options: ChargeInput;
+export type CreateCartMutationVariables = Exact<{
+  quantity: Scalars['Int'];
+  productId: Scalars['Int'];
 }>;
 
-export type ChargeMutation = {
+export type CreateCartMutation = {
   __typename?: 'Mutation';
-  charge: {
-    __typename?: 'Order';
-    id: number;
-    productTitle: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    transactionId: string;
-    creatorId: number;
-    completed: boolean;
-    price: number;
-    qty: number;
+  createCart: boolean;
+};
+
+export type CreateOrderMutationVariables = Exact<{
+  total: Scalars['Int'];
+}>;
+
+export type CreateOrderMutation = {
+  __typename?: 'Mutation';
+  createOrder?: { __typename?: 'Order'; id: number } | null | undefined;
+};
+
+export type CreateOrderDetailsMutationVariables = Exact<{
+  productId: Scalars['Int'];
+  orderId: Scalars['Int'];
+  quantity: Scalars['Int'];
+}>;
+
+export type CreateOrderDetailsMutation = {
+  __typename?: 'Mutation';
+  createOrderDetails: {
+    __typename?: 'OrderDetailsResponse';
+    errors?:
+      | Array<{ __typename?: 'FieldError'; message: string; field: string }>
+      | null
+      | undefined;
   };
 };
 
@@ -468,6 +570,22 @@ export type RegisterMutation = {
   };
 };
 
+export type UpdateCartQuantityMutationVariables = Exact<{
+  quantity: Scalars['Int'];
+  id: Scalars['Int'];
+}>;
+
+export type UpdateCartQuantityMutation = {
+  __typename?: 'Mutation';
+  updateCartQuantity: {
+    __typename?: 'CartResponse';
+    errors?:
+      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
+      | null
+      | undefined;
+  };
+};
+
 export type UpdateProductMutationVariables = Exact<{
   input: ProductUpdateInput;
   id: Scalars['Int'];
@@ -507,24 +625,6 @@ export type MeQuery = {
     | undefined;
 };
 
-export type OrderQueryVariables = Exact<{
-  orderId: Scalars['Int'];
-}>;
-
-export type OrderQuery = {
-  __typename?: 'Query';
-  order: {
-    __typename?: 'Order';
-    id: number;
-    completed: boolean;
-    email: string;
-    creatorId: number;
-    firstName: string;
-    lastName: string;
-    productTitle: string;
-  };
-};
-
 export type OrdersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type OrdersQuery = {
@@ -532,14 +632,11 @@ export type OrdersQuery = {
   orders: Array<{
     __typename?: 'Order';
     id: number;
-    productTitle: string;
-    firstName: string;
-    lastName: string;
-    qty: number;
-    email: string;
+    status: string;
+    total: number;
     creatorId: number;
-    completed: boolean;
-    price: number;
+    orderDetailsId: number;
+    paymentId: number;
   }>;
 };
 
@@ -682,6 +779,29 @@ export const UserResponseFragmentFragmentDoc = gql`
   ${ErrorFragmentDoc}
   ${UserFragmentFragmentDoc}
 `;
+export const CartsDocument = gql`
+  query Carts {
+    carts {
+      id
+      quantity
+      creatorId
+      productId
+      total
+      product {
+        name
+        image
+        brand
+        price
+      }
+    }
+  }
+`;
+
+export function useCartsQuery(
+  options: Omit<Urql.UseQueryArgs<CartsQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<CartsQuery>({ query: CartsDocument, ...options });
+}
 export const ChangePasswordDocument = gql`
   mutation ChangePassword($newPassword: String!, $token: String!) {
     changePassword(newPassword: $newPassword, token: $token) {
@@ -699,27 +819,54 @@ export function useChangePasswordMutation() {
     ChangePasswordMutationVariables
   >(ChangePasswordDocument);
 }
-export const ChargeDocument = gql`
-  mutation Charge($options: ChargeInput!) {
-    charge(options: $options) {
+export const CreateCartDocument = gql`
+  mutation CreateCart($quantity: Int!, $productId: Int!) {
+    createCart(quantity: $quantity, productId: $productId)
+  }
+`;
+
+export function useCreateCartMutation() {
+  return Urql.useMutation<CreateCartMutation, CreateCartMutationVariables>(
+    CreateCartDocument,
+  );
+}
+export const CreateOrderDocument = gql`
+  mutation CreateOrder($total: Int!) {
+    createOrder(total: $total) {
       id
-      productTitle
-      firstName
-      lastName
-      email
-      transactionId
-      creatorId
-      completed
-      price
-      qty
     }
   }
 `;
 
-export function useChargeMutation() {
-  return Urql.useMutation<ChargeMutation, ChargeMutationVariables>(
-    ChargeDocument,
+export function useCreateOrderMutation() {
+  return Urql.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(
+    CreateOrderDocument,
   );
+}
+export const CreateOrderDetailsDocument = gql`
+  mutation CreateOrderDetails(
+    $productId: Int!
+    $orderId: Int!
+    $quantity: Int!
+  ) {
+    createOrderDetails(
+      productId: $productId
+      orderId: $orderId
+      quantity: $quantity
+    ) {
+      errors {
+        message
+        field
+      }
+    }
+  }
+`;
+
+export function useCreateOrderDetailsMutation() {
+  return Urql.useMutation<
+    CreateOrderDetailsMutation,
+    CreateOrderDetailsMutationVariables
+  >(CreateOrderDetailsDocument);
 }
 export const CreateProductDocument = gql`
   mutation CreateProduct($input: ProductCreateInput!) {
@@ -875,6 +1022,23 @@ export function useRegisterMutation() {
     RegisterDocument,
   );
 }
+export const UpdateCartQuantityDocument = gql`
+  mutation UpdateCartQuantity($quantity: Int!, $id: Int!) {
+    updateCartQuantity(quantity: $quantity, id: $id) {
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export function useUpdateCartQuantityMutation() {
+  return Urql.useMutation<
+    UpdateCartQuantityMutation,
+    UpdateCartQuantityMutationVariables
+  >(UpdateCartQuantityDocument);
+}
 export const UpdateProductDocument = gql`
   mutation UpdateProduct($input: ProductUpdateInput!, $id: Int!) {
     updateProduct(input: $input, id: $id) {
@@ -911,37 +1075,15 @@ export function useMeQuery(
 ) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 }
-export const OrderDocument = gql`
-  query Order($orderId: Int!) {
-    order(id: $orderId) {
-      id
-      completed
-      email
-      creatorId
-      firstName
-      lastName
-      productTitle
-    }
-  }
-`;
-
-export function useOrderQuery(
-  options: Omit<Urql.UseQueryArgs<OrderQueryVariables>, 'query'> = {},
-) {
-  return Urql.useQuery<OrderQuery>({ query: OrderDocument, ...options });
-}
 export const OrdersDocument = gql`
   query Orders {
     orders {
       id
-      productTitle
-      firstName
-      lastName
-      qty
-      email
+      status
+      total
       creatorId
-      completed
-      price
+      orderDetailsId
+      paymentId
     }
   }
 `;

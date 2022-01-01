@@ -1,0 +1,15 @@
+query Carts {
+  carts {
+    id
+    quantity
+    creatorId
+    productId
+    total
+     product {
+      name
+      image
+      brand
+      price
+    }
+  }
+}

@@ -39,9 +39,15 @@ export class Cart extends BaseEntity {
   @Column()
   productId: number;
 
+  @Field(() => Product)
   @ManyToOne(() => Product, p => p.cart, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'productId' })
   product: Product;
+
+  @Field(() => Int)
+  total(): number {
+    return this.product.price * this.quantity;
+  }
 
   @Field(() => String)
   @CreateDateColumn({ type: 'date' })

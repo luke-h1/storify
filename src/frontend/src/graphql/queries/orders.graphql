@@ -1,13 +1,10 @@
 query Orders {
   orders {
     id
-    productTitle
-    firstName
-    lastName
-    qty
-    email
+    status
+    total
     creatorId
-    completed
-    price
+    orderDetailsId
+    paymentId
   }
 }

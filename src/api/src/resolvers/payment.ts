@@ -1,10 +1,10 @@
-import { stripe } from 'src/utils/stripe';
 import { Arg, Authorized, Ctx, Int, Mutation, Resolver } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Order, OrderStatus } from '../entities/Order';
 import { Payment } from '../entities/Payment';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
+import { stripe } from '../utils/stripe';
 
 @Resolver(Payment)
 export class PaymentResolver {

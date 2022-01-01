@@ -42,7 +42,7 @@ export class Order extends BaseEntity {
   creatorId: number;
 
   @Field(() => Int)
-  @Column()
+  @Column({ nullable: true })
   orderDetailsId: number;
 
   @Field(() => [OrderDetails])
@@ -51,7 +51,7 @@ export class Order extends BaseEntity {
   orderDetails: OrderDetails[];
 
   @Field(() => Int)
-  @Column()
+  @Column({ nullable: true })
   paymentId: number;
 
   @OneToMany(() => Payment, p => p.order, { onDelete: 'CASCADE' })

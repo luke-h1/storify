@@ -43,23 +43,16 @@ export class CartResolver {
     });
   }
 
-  @Mutation(() => CartResponse)
+  @Mutation(() => Boolean)
   async createCart(
     @Arg('productId', () => Int) productId: number,
     @Arg('quantity', () => Int) quantity: number,
     @Ctx() { req }: MyContext,
-  ): Promise<CartResponse> {
+  ): Promise<Boolean> {
     const product = await Product.findOne({ id: productId });
 
     if (!product) {
-      return {
-        errors: [
-          {
-            field: 'productId',
-            message: 'no product with that ID exists',
-          },
-        ],
-      };
+      throw new Error('no product');
     }
     // if a product already exists, update the qty by 1
     const existingCart = await Cart.findOne({
@@ -70,7 +63,7 @@ export class CartResolver {
     });
 
     if (existingCart) {
-      const result = await getConnection()
+      await getConnection()
         .createQueryBuilder()
         .update(Cart)
         .set({
@@ -79,19 +72,21 @@ export class CartResolver {
         .where({ productId, creatorId: req.session.userId })
         .returning('*')
         .execute();
-
-      return {
-        cart: result.raw[0],
-      };
+    } else {
+      await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(Cart)
+        .values({
+          productId,
+          creatorId: req.session.userId,
+          quantity,
+        })
+        .returning('*')
+        .execute();
     }
-    const newCart = await Cart.create({
-      productId,
-      creatorId: req.session.userId,
-      quantity,
-    });
-    return {
-      cart: newCart,
-    };
+
+    return true;
   }
 
   @Mutation(() => CartResponse)
