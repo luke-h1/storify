@@ -227,6 +227,32 @@ export type ErrorFragment = {
   message: string;
 };
 
+export type ProductFragmentFragment = {
+  __typename?: 'Product';
+  id: number;
+  brand: string;
+  description: string;
+  image: string;
+  price: number;
+  name: string;
+  stripePriceId: string;
+  stripeProductId: string;
+  creator: { __typename?: 'User'; id: number };
+};
+
+export type ProductsFragmentFragment = {
+  __typename?: 'Product';
+  id: number;
+  brand: string;
+  descriptionSnippet: string;
+  image: string;
+  name: string;
+  price: number;
+  description: string;
+  stripeProductId: string;
+  creator: { __typename?: 'User'; id: number; fullName: string };
+};
+
 export type UserFragmentFragment = {
   __typename?: 'User';
   id: number;
@@ -598,6 +624,37 @@ export type UsersQuery = {
     | undefined;
 };
 
+export const ProductFragmentFragmentDoc = gql`
+  fragment ProductFragment on Product {
+    id
+    brand
+    description
+    image
+    price
+    name
+    stripePriceId
+    stripeProductId
+    creator {
+      id
+    }
+  }
+`;
+export const ProductsFragmentFragmentDoc = gql`
+  fragment ProductsFragment on Product {
+    id
+    brand
+    descriptionSnippet
+    image
+    name
+    price
+    description
+    stripeProductId
+    creator {
+      id
+      fullName
+    }
+  }
+`;
 export const ErrorFragmentDoc = gql`
   fragment Error on FieldError {
     field
@@ -897,20 +954,10 @@ export function useOrdersQuery(
 export const ProductDocument = gql`
   query Product($id: Int!) {
     product(id: $id) {
-      id
-      brand
-      brand
-      description
-      image
-      price
-      name
-      stripePriceId
-      stripeProductId
-      creator {
-        id
-      }
+      ...ProductFragment
     }
   }
+  ${ProductFragmentFragmentDoc}
 `;
 
 export function useProductQuery(
@@ -921,20 +968,10 @@ export function useProductQuery(
 export const ProductsDocument = gql`
   query Products {
     products {
-      id
-      brand
-      descriptionSnippet
-      image
-      name
-      price
-      description
-      stripeProductId
-      creator {
-        id
-        fullName
-      }
+      ...ProductsFragment
     }
   }
+  ${ProductsFragmentFragmentDoc}
 `;
 
 export function useProductsQuery(
