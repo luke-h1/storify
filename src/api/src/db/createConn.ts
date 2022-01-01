@@ -8,10 +8,7 @@ import { User } from '../entities/User';
 const createConn = async () =>
   createConnection({
     type: 'postgres',
-    name: 'storify',
-    username: 'storfy',
-    password: 'storify',
-    port: process.env.DB_PORT,
+    url: process.env.DATABASE_URL,
     logging: true,
     migrations: [join(__dirname, '../migrations/*')],
     entities: [User, Product, Order, Review],
