@@ -34,7 +34,9 @@ const CartPage: NextPage = () => {
               {fetching ? (
                 <Loader />
               ) : (
-                data?.carts.map(c => <CartItem key={c.id} cart={c} id={c.id} />)
+                data?.carts.map(c => (
+                  <CartItem key={c.product.id} cart={c} id={c.id} />
+                ))
               )}
             </div>
             <div className="p-2">

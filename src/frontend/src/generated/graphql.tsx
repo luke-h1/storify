@@ -66,6 +66,7 @@ export type Mutation = {
   createWishlist: Scalars['Boolean'];
   deleteAllProducts: Scalars['Boolean'];
   deleteCart: Scalars['Boolean'];
+  deleteCartItem: Scalars['Boolean'];
   deleteMyAccount: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
   deleteProductAsAdmin: Scalars['Boolean'];
@@ -115,6 +116,10 @@ export type MutationCreateProductArgs = {
 
 export type MutationCreateWishlistArgs = {
   productId: Scalars['Int'];
+};
+
+export type MutationDeleteCartItemArgs = {
+  id: Scalars['Int'];
 };
 
 export type MutationDeleteMyAccountArgs = {
@@ -358,27 +363,6 @@ export type UserResponseFragmentFragment = {
     | undefined;
 };
 
-export type CartsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type CartsQuery = {
-  __typename?: 'Query';
-  carts: Array<{
-    __typename?: 'Cart';
-    id: number;
-    quantity: number;
-    creatorId: number;
-    productId: number;
-    total: number;
-    product: {
-      __typename?: 'Product';
-      name: string;
-      image: string;
-      brand: string;
-      price: number;
-    };
-  }>;
-};
-
 export type ChangePasswordMutationVariables = Exact<{
   newPassword: Scalars['String'];
   token: Scalars['String'];
@@ -466,6 +450,15 @@ export type CreateWishListMutationVariables = Exact<{
 export type CreateWishListMutation = {
   __typename?: 'Mutation';
   createWishlist: boolean;
+};
+
+export type DeleteCartItemMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteCartItemMutation = {
+  __typename?: 'Mutation';
+  deleteCartItem: boolean;
 };
 
 export type DeleteMyAccountMutationVariables = Exact<{
@@ -626,6 +619,28 @@ export type UpdateProductMutation = {
       }
     | null
     | undefined;
+};
+
+export type CartsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type CartsQuery = {
+  __typename?: 'Query';
+  carts: Array<{
+    __typename?: 'Cart';
+    id: number;
+    quantity: number;
+    creatorId: number;
+    productId: number;
+    total: number;
+    product: {
+      __typename?: 'Product';
+      id: number;
+      name: string;
+      image: string;
+      brand: string;
+      price: number;
+    };
+  }>;
 };
 
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
@@ -823,29 +838,6 @@ export const UserResponseFragmentFragmentDoc = gql`
   ${ErrorFragmentDoc}
   ${UserFragmentFragmentDoc}
 `;
-export const CartsDocument = gql`
-  query Carts {
-    carts {
-      id
-      quantity
-      creatorId
-      productId
-      total
-      product {
-        name
-        image
-        brand
-        price
-      }
-    }
-  }
-`;
-
-export function useCartsQuery(
-  options: Omit<Urql.UseQueryArgs<CartsQueryVariables>, 'query'> = {},
-) {
-  return Urql.useQuery<CartsQuery>({ query: CartsDocument, ...options });
-}
 export const ChangePasswordDocument = gql`
   mutation ChangePassword($newPassword: String!, $token: String!) {
     changePassword(newPassword: $newPassword, token: $token) {
@@ -957,6 +949,18 @@ export function useCreateWishListMutation() {
     CreateWishListMutation,
     CreateWishListMutationVariables
   >(CreateWishListDocument);
+}
+export const DeleteCartItemDocument = gql`
+  mutation DeleteCartItem($id: Int!) {
+    deleteCartItem(id: $id)
+  }
+`;
+
+export function useDeleteCartItemMutation() {
+  return Urql.useMutation<
+    DeleteCartItemMutation,
+    DeleteCartItemMutationVariables
+  >(DeleteCartItemDocument);
 }
 export const DeleteMyAccountDocument = gql`
   mutation DeleteMyAccount($id: Int!) {
@@ -1116,6 +1120,30 @@ export function useUpdateProductMutation() {
     UpdateProductMutation,
     UpdateProductMutationVariables
   >(UpdateProductDocument);
+}
+export const CartsDocument = gql`
+  query Carts {
+    carts {
+      id
+      quantity
+      creatorId
+      productId
+      total
+      product {
+        id
+        name
+        image
+        brand
+        price
+      }
+    }
+  }
+`;
+
+export function useCartsQuery(
+  options: Omit<Urql.UseQueryArgs<CartsQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<CartsQuery>({ query: CartsDocument, ...options });
 }
 export const MeDocument = gql`
   query Me {

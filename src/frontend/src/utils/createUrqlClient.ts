@@ -15,7 +15,9 @@ import {
   DeleteProductAsAdminMutationVariables,
   MakeUserAdminMutationVariables,
   MakeUserRegularUserMutationVariables,
-} from '../generated/graphql';
+  UpdateCartQuantityMutationVariables,
+  DeleteCartItemMutationVariables,
+ CreateCartMutationVariables } from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
 
@@ -25,7 +27,12 @@ const errorExchange: Exchange =
     return pipe(
       forward(ops$),
       tap(({ error }) => {
-        if (error?.message.includes('Not authenticated')) {
+        if (
+          error?.message.includes(
+            'Not authenticated' ||
+              "Access denied! You don't have permission for this action!",
+          )
+        ) {
           Router.push('/auth/login');
         }
       }),
@@ -48,6 +55,14 @@ function invalidateAllOrders(cache: Cache) {
   });
 }
 
+function invalidateAllCarts(cache: Cache) {
+  const allFields = cache.inspectFields('Query');
+  const fieldInfos = allFields.filter(info => info.fieldName === 'Cart');
+  fieldInfos.forEach(fi => {
+    cache.invalidate('Query', 'Cart', fi.arguments || {});
+  });
+}
+
 export const createurqlClient = (
   ssrExchange: SSRExchange,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -64,7 +79,7 @@ export const createurqlClient = (
       credentials: 'include',
       headers: cookie ? { cookie } : undefined,
     },
-    requestPolicy: 'cache-first',
+    requestPolicy: 'cache-and-network',
     exchanges: [
       dedupExchange,
       cacheExchange({
@@ -143,6 +158,21 @@ export const createurqlClient = (
             },
             createOrder: (_result, args, cache) => {
               invalidateAllOrders(cache);
+            },
+            createCart: (_result, args, cache) => {
+              cache.invalidate({
+                __typename: 'Cart',
+                id: (args as CreateCartMutationVariables).productId,
+              });
+            },
+            updateCartQuantity: (_result, args, cache) => {
+              invalidateAllCarts(cache);
+            },
+            deleteCartItem: (_result, args, cache) => {
+              cache.invalidate({
+                __typename: 'Cart',
+                id: (args as DeleteCartItemMutationVariables).id,
+              });
             },
           },
         },

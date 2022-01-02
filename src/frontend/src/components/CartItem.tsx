@@ -1,4 +1,8 @@
-import { Cart, useUpdateCartQuantityMutation } from '../generated/graphql';
+import {
+  Cart,
+  useUpdateCartQuantityMutation,
+  useDeleteCartItemMutation,
+} from '../generated/graphql';
 
 interface Props {
   id: number;
@@ -8,8 +12,10 @@ interface Props {
 const CartItem = ({ id, cart }: Props) => {
   const [, updateCartQuantity] = useUpdateCartQuantityMutation();
 
+  const [, deleteCartItem] = useDeleteCartItemMutation();
+
   return (
-    <div className="flex justify-between items-left p-3" key={id}>
+    <div className="flex justify-between items-left p-3" key={cart.product.id}>
       <div className="flex gap-2">
         <img
           className="h-28 rounded transform hover:scale-105 transition"
@@ -49,7 +55,15 @@ const CartItem = ({ id, cart }: Props) => {
               +
             </button>
           </div>
-          <button className="btn btn-red" type="button">
+          <button
+            className="btn btn-red"
+            type="button"
+            onClick={async () => {
+              await deleteCartItem({
+                id: cart.id,
+              });
+            }}
+          >
             Remove
           </button>
         </div>

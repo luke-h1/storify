@@ -6,6 +6,7 @@ query Carts {
     productId
     total
      product {
+      id
       name
       image
       brand

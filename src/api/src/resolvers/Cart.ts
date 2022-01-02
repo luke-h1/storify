@@ -67,7 +67,7 @@ export class CartResolver {
         .createQueryBuilder()
         .update(Cart)
         .set({
-          quantity: quantity + 1,
+          quantity,
         })
         .where({ productId, creatorId: req.session.userId })
         .returning('*')
@@ -125,6 +125,23 @@ export class CartResolver {
     return {
       cart: updatedCart,
     };
+  }
+
+  @Mutation(() => Boolean)
+  async deleteCartItem(
+    @Ctx() { req }: MyContext,
+    @Arg('id', () => Int) id: number,
+  ): Promise<Boolean> {
+    const cartItem = await Cart.findOne({
+      where: { id, creatorId: req.session.userId },
+    });
+
+    if (cartItem) {
+      await Cart.delete({ id, creatorId: req.session.userId });
+      return true;
+    }
+
+    return false;
   }
 
   @Mutation(() => Boolean)
