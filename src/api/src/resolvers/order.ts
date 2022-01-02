@@ -16,7 +16,7 @@ import { MyContext } from '../types/MyContext';
 
 @Resolver(Order)
 export class OrderResolver {
-  @Mutation(() => Order, { nullable: true })
+  @Mutation(() => Order)
   @Authorized(isAuth)
   async createOrder(
     @Arg('total', () => Int) total: number,
@@ -50,7 +50,7 @@ export class OrderResolver {
   // @Authorized(isAuth)
   async orders(@Ctx() { req }: MyContext): Promise<Order[]> {
     const orders = await Order.find({
-      relations: ['orderDetails'],
+      relations: ['orderDetails', 'orderDetails.product'],
       loadEagerRelations: true,
       // where: { creatorId: req.session.userId },
     });

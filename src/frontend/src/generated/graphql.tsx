@@ -59,7 +59,7 @@ export type Mutation = {
   changePassword: UserResponse;
   createCart: Scalars['Boolean'];
   createImageSignature: ImageSignature;
-  createOrder?: Maybe<Order>;
+  createOrder: Order;
   createOrderDetails: OrderDetailsResponse;
   createPayment: Scalars['Int'];
   createProduct: Product;
@@ -215,7 +215,6 @@ export type Product = {
   image: Scalars['String'];
   name: Scalars['String'];
   orderDetails: OrderDetails;
-  orders: Array<Order>;
   price: Scalars['Int'];
   publicId: Scalars['String'];
   stripePriceId: Scalars['String'];
@@ -245,6 +244,7 @@ export type ProductUpdateInput = {
 export type Query = {
   __typename?: 'Query';
   OrderDetail?: Maybe<OrderDetails>;
+  OrderDetails: Array<OrderDetails>;
   carts: Array<Cart>;
   me?: Maybe<User>;
   orders: Array<Order>;
@@ -397,7 +397,7 @@ export type CreateOrderMutationVariables = Exact<{
 
 export type CreateOrderMutation = {
   __typename?: 'Mutation';
-  createOrder?: { __typename?: 'Order'; id: number } | null | undefined;
+  createOrder: { __typename?: 'Order'; id: number };
 };
 
 export type CreateOrderDetailsMutationVariables = Exact<{
