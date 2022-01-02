@@ -13,55 +13,67 @@ const OrdersPage: NextPage = () => {
   });
 
   return (
-    <Page title="Orders Page | Storify" description="orders page">
-      <h1>Orders</h1>
-      <h2>These are your orders</h2>
+    <Page title="Orders Page | Storify" description="orders page" flex={false}>
       {fetching && !data ? (
         <Loader />
       ) : (
-        <ul className="grid lg:grid-cols-4 md:grid-cols-2 gap-4">
+        <div>
           {data?.orders &&
             data?.orders.map(o => (
-              <article className="p-4 bg-gray-100 rounded" key={o.id}>
+              <article className="p-4 rounded" key={o.id}>
+                <h1 className="text-4xl text-center mb-2">Orders</h1>
+                <h2 className="text-2xl text-center mb-5">
+                  These are your orders
+                </h2>
+                <div className="flex flex-col justify-between">
+                  <p className="text-gray-400">Order Status: </p>
+                  <p className="font-semibold">{o.status}</p>
+                </div>
+                <div className="flex flex-col justify-between">
+                  <p className="text-gray-400">Total cost</p>
+                  <p className="font-semibold">£{o.total.toFixed(2)}</p>
+                </div>
+
                 {o.orderDetails &&
                   o.orderDetails.map(od => (
-                    <div className="flex gap-3 justify-between" key={od.id}>
-                      <div className="flex gap-3">
-                        <img
-                          src={od.product.image}
-                          alt={od.product.name}
-                          className="flex-none rounded-lg object-cover bg-gray-100"
-                          width="120"
-                          height="120"
-                        />
-                        <div className="flex flex-col justify-between">
-                          <Link href={`/products/${od.product.id}`}>
-                            <a className="text-lg font-semibold text-blue-500 hover:underline">
-                              {od.product.name}
-                            </a>
-                          </Link>
+                    <div
+                      className="flex justify-between border-solid border-2 border-light-blue-500 p-4"
+                      key={od.id}
+                    >
+                      <img
+                        src={od.product.image}
+                        alt={od.product.name}
+                        className="flex-none rounded-lg object-cover bg-gray-100"
+                        width="120"
+                        height="120"
+                      />
+                      <div className="flex flex-col justify-between">
+                        <Link href={`/products/${od.product.id}`}>
+                          <a className="text-lg font-semibold text-blue-500 hover:underline">
+                            {od.product.name}
+                          </a>
+                        </Link>
 
-                          <div className="flex flex-row gap-1">
-                            <p className="text-gray-400">Quantity:</p>
-                            <p className="font-semibold">{od.quantity}</p>
-                          </div>
+                        <div className="flex flex-row gap-1">
+                          <p className="text-gray-400">Quantity:</p>
+                          <p className="font-semibold">{od.quantity}</p>
                         </div>
                       </div>
                       <div className="flex flex-col justify-between">
-                        <p className="text-gray-400">Total</p>
+                        <p className="text-gray-400">Total: </p>
                         <p className="font-semibold">
-                          {od.product.price * od.quantity}
+                          £{od.product.price * od.quantity}
                         </p>
                       </div>
                       <div className="flex flex-col justify-between">
-                        <p className="text-gray-400">Created at</p>
-                        <p className="font-semibold">test</p>
+                        <p className="text-gray-400">Date</p>
+                        <p className="font-semibold">{od.createdAt}</p>
                       </div>
                     </div>
                   ))}
               </article>
             ))}
-        </ul>
+        </div>
       )}
     </Page>
   );
