@@ -17,7 +17,8 @@ import {
   MakeUserRegularUserMutationVariables,
   UpdateCartQuantityMutationVariables,
   DeleteCartItemMutationVariables,
- CreateCartMutationVariables } from '../generated/graphql';
+  CreateCartMutationVariables,
+ UpdateCartQuantityMutationVariables } from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
 
@@ -166,7 +167,10 @@ export const createurqlClient = (
               });
             },
             updateCartQuantity: (_result, args, cache) => {
-              invalidateAllCarts(cache);
+              cache.invalidate({
+                __typename: 'Cart',
+                id: (args as UpdateCartQuantityMutationVariables).id,
+              });
             },
             deleteCartItem: (_result, args, cache) => {
               cache.invalidate({
