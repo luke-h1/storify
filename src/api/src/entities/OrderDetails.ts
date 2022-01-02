@@ -38,6 +38,7 @@ export class OrderDetails extends BaseEntity {
   @Column()
   productId: number;
 
+  @Field(() => Product)
   @ManyToOne(() => Product, p => p.orderDetails, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'productId' })
   product: Product;

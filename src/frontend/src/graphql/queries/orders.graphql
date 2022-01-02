@@ -4,7 +4,14 @@ query Orders {
     status
     total
     creatorId
-    orderDetailsId
-    paymentId
+    orderDetails {
+      createdAt
+      creatorId
+      id
+      orderId
+      quantity
+      productId
+      
+    }
   }
 }

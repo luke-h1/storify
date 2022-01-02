@@ -190,6 +190,7 @@ export type OrderDetails = {
   creatorId: Scalars['Int'];
   id: Scalars['Int'];
   orderId: Scalars['Int'];
+  product: Product;
   productId: Scalars['Int'];
   quantity: Scalars['Int'];
   updatedAt: Scalars['String'];
@@ -214,6 +215,7 @@ export type Product = {
   image: Scalars['String'];
   name: Scalars['String'];
   orderDetails: OrderDetails;
+  orders: Array<Order>;
   price: Scalars['Int'];
   publicId: Scalars['String'];
   stripePriceId: Scalars['String'];
@@ -677,8 +679,15 @@ export type OrdersQuery = {
     status: string;
     total: number;
     creatorId: number;
-    orderDetailsId: number;
-    paymentId: number;
+    orderDetails: Array<{
+      __typename?: 'OrderDetails';
+      createdAt: string;
+      creatorId: number;
+      id: number;
+      orderId: number;
+      quantity: number;
+      productId: number;
+    }>;
   }>;
 };
 
@@ -1184,8 +1193,14 @@ export const OrdersDocument = gql`
       status
       total
       creatorId
-      orderDetailsId
-      paymentId
+      orderDetails {
+        createdAt
+        creatorId
+        id
+        orderId
+        quantity
+        productId
+      }
     }
   }
 `;

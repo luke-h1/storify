@@ -47,11 +47,12 @@ export class OrderResolver {
   }
 
   @Query(() => [Order])
-  @Authorized(isAuth)
+  // @Authorized(isAuth)
   async orders(@Ctx() { req }: MyContext): Promise<Order[]> {
     const orders = await Order.find({
-      relations: ['user', 'order_details'],
-      where: { creatorId: req.session.userId },
+      relations: ['orderDetails'],
+      loadEagerRelations: true,
+      // where: { creatorId: req.session.userId },
     });
     return orders;
   }

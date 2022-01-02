@@ -36,6 +36,13 @@ export class OrderDetailsResolver {
     });
   }
 
+  @Query(() => [OrderDetails])
+  async OrderDetails(): Promise<OrderDetails[]> {
+    return OrderDetails.find({
+      relations: ['product', 'order'],
+    });
+  }
+
   @Mutation(() => OrderDetailsResponse)
   async createOrderDetails(
     @Arg('quantity', () => Int) quantity: number,

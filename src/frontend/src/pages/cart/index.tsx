@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
@@ -76,8 +77,25 @@ const CartPage: NextPage = () => {
                   }, 0)}
                 </p>
               </div>
-              <button className="btn btn-blue" type="button">
-                Order
+              <button
+                className="btn btn-blue"
+                type="button"
+                onClick={async () => {
+                  const res = await createOrder({
+                    total: data?.carts.reduce((tally, cartItem) => {
+                      return tally + cartItem.quantity * cartItem.product.price;
+                    }, 0) as number,
+                  });
+                  for (let i = 0; i < (data?.carts?.length as number); i += 1) {
+                    await createOrderDetails({
+                      orderId: res?.data?.createOrder?.id as number,
+                      productId: data?.carts[i].product.id as number,
+                      quantity: data?.carts[i].quantity as number,
+                    });
+                  }
+                }}
+              >
+                Checkout
               </button>
             </div>
           </div>
