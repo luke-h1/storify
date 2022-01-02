@@ -95,7 +95,7 @@ const CartPage: NextPage = () => {
                   }
                 }}
               >
-                Checkout
+                Create order
               </button>
             </div>
           </div>
