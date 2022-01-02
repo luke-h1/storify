@@ -19,7 +19,7 @@ const OrdersPage: NextPage = () => {
       {fetching && !data ? (
         <Loader />
       ) : (
-        <ul className="grid lg:grid-cols-2 md:grid-cols-2 gap-4">
+        <ul className="grid lg:grid-cols-4 md:grid-cols-2 gap-4">
           {data?.orders &&
             data?.orders.map(o => (
               <article className="p-4 bg-gray-100 rounded" key={o.id}>

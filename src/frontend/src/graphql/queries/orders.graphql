@@ -11,7 +11,13 @@ query Orders {
       orderId
       quantity
       productId
-      
+      product {
+        id
+        name
+        image
+        brand
+        price
+      }
     }
   }
 }

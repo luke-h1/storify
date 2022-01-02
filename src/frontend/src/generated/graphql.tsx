@@ -687,6 +687,14 @@ export type OrdersQuery = {
       orderId: number;
       quantity: number;
       productId: number;
+      product: {
+        __typename?: 'Product';
+        id: number;
+        name: string;
+        image: string;
+        brand: string;
+        price: number;
+      };
     }>;
   }>;
 };
@@ -1200,6 +1208,13 @@ export const OrdersDocument = gql`
         orderId
         quantity
         productId
+        product {
+          id
+          name
+          image
+          brand
+          price
+        }
       }
     }
   }
