@@ -18,7 +18,7 @@ import {
   UpdateCartQuantityMutationVariables,
   DeleteCartItemMutationVariables,
   CreateCartMutationVariables,
- UpdateCartQuantityMutationVariables } from '../generated/graphql';
+} from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
 
@@ -53,14 +53,6 @@ function invalidateAllOrders(cache: Cache) {
   const fieldInfos = allFields.filter(info => info.fieldName === 'Order');
   fieldInfos.forEach(fi => {
     cache.invalidate('Query', 'Order', fi.arguments || {});
-  });
-}
-
-function invalidateAllCarts(cache: Cache) {
-  const allFields = cache.inspectFields('Query');
-  const fieldInfos = allFields.filter(info => info.fieldName === 'Cart');
-  fieldInfos.forEach(fi => {
-    cache.invalidate('Query', 'Cart', fi.arguments || {});
   });
 }
 

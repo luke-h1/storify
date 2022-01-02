@@ -67,7 +67,7 @@ export class CartResolver {
         .createQueryBuilder()
         .update(Cart)
         .set({
-          quantity,
+          quantity: quantity + 1,
         })
         .where({ productId, creatorId: req.session.userId })
         .returning('*')
