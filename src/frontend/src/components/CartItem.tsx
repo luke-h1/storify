@@ -39,17 +39,17 @@ const CartItem = ({ id, cart }: Props) => {
             <button
               type="button"
               className="rounded-full h-8 w-8 text-2xl border cursor-pointer transform hover:scale-125 transition"
+              onClick={async () => {
+                await updateCartQuantity({
+                  id: cart.id,
+                  quantity: cart.quantity + 1,
+                });
+              }}
             >
               +
             </button>
           </div>
-          <button
-            className="btn btn-red"
-            type="button"
-            onClick={() => {
-              console.log('hi');
-            }}
-          >
+          <button className="btn btn-red" type="button">
             Remove
           </button>
         </div>
