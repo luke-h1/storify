@@ -600,7 +600,7 @@ export type UpdateCartQuantityMutation = {
   updateCartQuantity: {
     __typename?: 'CartResponse';
     errors?:
-      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
+      | Array<{ __typename?: 'FieldError'; message: string; field: string }>
       | null
       | undefined;
   };
@@ -1082,8 +1082,8 @@ export const UpdateCartQuantityDocument = gql`
   mutation UpdateCartQuantity($quantity: Int!, $id: Int!) {
     updateCartQuantity(quantity: $quantity, id: $id) {
       errors {
-        field
         message
+        field
       }
     }
   }

@@ -9,6 +9,7 @@ import {
   useCartsQuery,
   useCreateOrderMutation,
   useCreateOrderDetailsMutation,
+  useUpdateCartQuantityMutation,
 } from '../../generated/graphql';
 import { useIsAuth } from '../../hooks/useIsAuth';
 import { createurqlClient } from '../../utils/createUrqlClient';
@@ -33,7 +34,7 @@ const CartPage: NextPage = () => {
               {fetching ? (
                 <Loader />
               ) : (
-                data?.carts.map(c => <CartItem key={c.id} cart={c} />)
+                data?.carts.map(c => <CartItem key={c.id} cart={c} id={c.id} />)
               )}
             </div>
             <div className="p-2">
@@ -56,14 +57,11 @@ const CartPage: NextPage = () => {
                   <p className="text-gray-500 font-light">Items:</p>
                   <p>{data?.carts && data?.carts.length}</p>
                 </div>
-                <div className="flex gap-1">
-                  <p className="text-gray-500 font-light">Kind of items</p>
-                  <p>test</p>
-                </div>
               </div>
               <div className="flex justify-between font-semibold sm:my-6">
                 <p>Total Amount</p>
                 <p>
+                  £
                   {data?.carts.reduce((tally, cartItem) => {
                     return tally + cartItem.quantity * cartItem.product.price;
                   }, 0)}

@@ -1,4 +1,4 @@
-import { Cart } from '../generated/graphql';
+import { Cart, useUpdateCartQuantityMutation } from '../generated/graphql';
 
 interface Props {
   id: number;
@@ -6,6 +6,8 @@ interface Props {
 }
 
 const CartItem = ({ id, cart }: Props) => {
+  const [, updateCartQuantity] = useUpdateCartQuantityMutation();
+
   return (
     <div className="flex justify-between items-left p-3" key={id}>
       <div className="flex gap-2">
@@ -24,6 +26,12 @@ const CartItem = ({ id, cart }: Props) => {
             <button
               type="button"
               className="rounded-full h-8 w-8  text-2xl border cursor-buttonointer transform hover:scale-125 transition mr-2 ml-2"
+              onClick={async () => {
+                await updateCartQuantity({
+                  id: cart.id,
+                  quantity: cart.quantity - 1,
+                });
+              }}
             >
               -
             </button>
