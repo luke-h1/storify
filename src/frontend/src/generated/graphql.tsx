@@ -63,6 +63,7 @@ export type Mutation = {
   createOrderDetails: OrderDetailsResponse;
   createPayment: Scalars['Int'];
   createProduct: Product;
+  createWishlist: Scalars['Boolean'];
   deleteAllProducts: Scalars['Boolean'];
   deleteCart: Scalars['Boolean'];
   deleteMyAccount: Scalars['Boolean'];
@@ -110,6 +111,10 @@ export type MutationCreatePaymentArgs = {
 
 export type MutationCreateProductArgs = {
   input: ProductCreateInput;
+};
+
+export type MutationCreateWishlistArgs = {
+  productId: Scalars['Int'];
 };
 
 export type MutationDeleteMyAccountArgs = {
@@ -240,6 +245,8 @@ export type Query = {
   products: Array<Product>;
   user?: Maybe<User>;
   users?: Maybe<Array<User>>;
+  wishlist: Wishlist;
+  wishlists: Array<Wishlist>;
 };
 
 export type QueryOrderDetailArgs = {
@@ -252,6 +259,10 @@ export type QueryProductArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['Int'];
+};
+
+export type QueryWishlistArgs = {
+  productId: Scalars['Int'];
 };
 
 export type User = {
@@ -446,6 +457,15 @@ export type CreateSignatureMutation = {
     signature: string;
     timestamp: number;
   };
+};
+
+export type CreateWishListMutationVariables = Exact<{
+  productId: Scalars['Int'];
+}>;
+
+export type CreateWishListMutation = {
+  __typename?: 'Mutation';
+  createWishlist: boolean;
 };
 
 export type DeleteMyAccountMutationVariables = Exact<{
@@ -721,6 +741,27 @@ export type UsersQuery = {
     | undefined;
 };
 
+export type WishlistQueryVariables = Exact<{
+  productId: Scalars['Int'];
+}>;
+
+export type WishlistQuery = {
+  __typename?: 'Query';
+  wishlist: {
+    __typename?: 'Wishlist';
+    id: number;
+    productId: number;
+    creatorId: number;
+  };
+};
+
+export type QueryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryQuery = {
+  __typename?: 'Query';
+  wishlists: Array<{ __typename?: 'Wishlist'; id: number; productId: number }>;
+};
+
 export const ProductFragmentFragmentDoc = gql`
   fragment ProductFragment on Product {
     id
@@ -901,6 +942,18 @@ export function useCreateSignatureMutation() {
     CreateSignatureMutation,
     CreateSignatureMutationVariables
   >(CreateSignatureDocument);
+}
+export const CreateWishListDocument = gql`
+  mutation CreateWishList($productId: Int!) {
+    createWishlist(productId: $productId)
+  }
+`;
+
+export function useCreateWishListMutation() {
+  return Urql.useMutation<
+    CreateWishListMutation,
+    CreateWishListMutationVariables
+  >(CreateWishListDocument);
 }
 export const DeleteMyAccountDocument = gql`
   mutation DeleteMyAccount($id: Int!) {
@@ -1159,4 +1212,33 @@ export function useUsersQuery(
   options: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'> = {},
 ) {
   return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options });
+}
+export const WishlistDocument = gql`
+  query Wishlist($productId: Int!) {
+    wishlist(productId: $productId) {
+      id
+      productId
+      creatorId
+    }
+  }
+`;
+
+export function useWishlistQuery(
+  options: Omit<Urql.UseQueryArgs<WishlistQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<WishlistQuery>({ query: WishlistDocument, ...options });
+}
+export const QueryDocument = gql`
+  query Query {
+    wishlists {
+      id
+      productId
+    }
+  }
+`;
+
+export function useQueryQuery(
+  options: Omit<Urql.UseQueryArgs<QueryQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<QueryQuery>({ query: QueryDocument, ...options });
 }

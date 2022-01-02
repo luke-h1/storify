@@ -2,6 +2,7 @@ import { buildSchema } from 'type-graphql';
 import { isAuth } from '../middleware/isAuth';
 import { CartResolver } from '../resolvers/Cart';
 import { OrderDetailsResolver } from '../resolvers/OrderDetails';
+import { WishlistResolver } from '../resolvers/Wishlist';
 import { ImageResolver } from '../resolvers/image';
 import { OrderResolver } from '../resolvers/order';
 import { PaymentResolver } from '../resolvers/payment';
@@ -18,6 +19,7 @@ const createSchema = async () =>
       OrderDetailsResolver,
       PaymentResolver,
       CartResolver,
+      WishlistResolver,
     ],
     validate: false,
     authChecker: isAuth,

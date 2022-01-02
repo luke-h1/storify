@@ -1,0 +1,3 @@
+mutation CreateWishList($productId: Int!) {
+  createWishlist(productId: $productId)
+}

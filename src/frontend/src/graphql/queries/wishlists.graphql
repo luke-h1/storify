@@ -1,0 +1,6 @@
+query Query {
+  wishlists {
+    id
+    productId
+  }
+}

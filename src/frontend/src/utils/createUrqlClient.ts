@@ -34,17 +34,17 @@ const errorExchange: Exchange =
 
 function invalidateAllProducts(cache: Cache) {
   const allFields = cache.inspectFields('Query');
-  const fieldInfos = allFields.filter(info => info.fieldName === 'products');
+  const fieldInfos = allFields.filter(info => info.fieldName === 'Product');
   fieldInfos.forEach(fi => {
-    cache.invalidate('Query', 'products', fi.arguments || {});
+    cache.invalidate('Query', 'Product', fi.arguments || {});
   });
 }
 
 function invalidateAllOrders(cache: Cache) {
   const allFields = cache.inspectFields('Query');
-  const fieldInfos = allFields.filter(info => info.fieldName === 'orders');
+  const fieldInfos = allFields.filter(info => info.fieldName === 'Order');
   fieldInfos.forEach(fi => {
-    cache.invalidate('Query', 'orders', fi.arguments || {});
+    cache.invalidate('Query', 'Order', fi.arguments || {});
   });
 }
 
