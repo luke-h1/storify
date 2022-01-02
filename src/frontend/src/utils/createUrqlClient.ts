@@ -64,6 +64,7 @@ export const createurqlClient = (
       credentials: 'include',
       headers: cookie ? { cookie } : undefined,
     },
+    requestPolicy: 'cache-first',
     exchanges: [
       dedupExchange,
       cacheExchange({

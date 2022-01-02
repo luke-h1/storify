@@ -242,7 +242,7 @@ export type Query = {
   me?: Maybe<User>;
   orders: Array<Order>;
   product?: Maybe<Product>;
-  products: Array<Product>;
+  products?: Maybe<Array<Product>>;
   user?: Maybe<User>;
   users?: Maybe<Array<User>>;
   wishlist: Wishlist;
@@ -687,18 +687,21 @@ export type ProductsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ProductsQuery = {
   __typename?: 'Query';
-  products: Array<{
-    __typename?: 'Product';
-    id: number;
-    brand: string;
-    descriptionSnippet: string;
-    image: string;
-    name: string;
-    price: number;
-    description: string;
-    stripeProductId: string;
-    creator: { __typename?: 'User'; id: number; fullName: string };
-  }>;
+  products?:
+    | Array<{
+        __typename?: 'Product';
+        id: number;
+        brand: string;
+        descriptionSnippet: string;
+        image: string;
+        name: string;
+        price: number;
+        description: string;
+        stripeProductId: string;
+        creator: { __typename?: 'User'; id: number; fullName: string };
+      }>
+    | null
+    | undefined;
 };
 
 export type UserQueryVariables = Exact<{
@@ -755,9 +758,9 @@ export type WishlistQuery = {
   };
 };
 
-export type QueryQueryVariables = Exact<{ [key: string]: never }>;
+export type WishlistsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type QueryQuery = {
+export type WishlistsQuery = {
   __typename?: 'Query';
   wishlists: Array<{ __typename?: 'Wishlist'; id: number; productId: number }>;
 };
@@ -1228,8 +1231,8 @@ export function useWishlistQuery(
 ) {
   return Urql.useQuery<WishlistQuery>({ query: WishlistDocument, ...options });
 }
-export const QueryDocument = gql`
-  query Query {
+export const WishlistsDocument = gql`
+  query Wishlists {
     wishlists {
       id
       productId
@@ -1237,8 +1240,11 @@ export const QueryDocument = gql`
   }
 `;
 
-export function useQueryQuery(
-  options: Omit<Urql.UseQueryArgs<QueryQueryVariables>, 'query'> = {},
+export function useWishlistsQuery(
+  options: Omit<Urql.UseQueryArgs<WishlistsQueryVariables>, 'query'> = {},
 ) {
-  return Urql.useQuery<QueryQuery>({ query: QueryDocument, ...options });
+  return Urql.useQuery<WishlistsQuery>({
+    query: WishlistsDocument,
+    ...options,
+  });
 }

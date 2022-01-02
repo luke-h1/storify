@@ -31,7 +31,7 @@ export class ProductResolver {
     return userLoader.load(product.creatorId);
   }
 
-  @Query(() => [Product])
+  @Query(() => [Product], { nullable: true })
   async products(): Promise<Product[]> {
     return Product.find({
       order: {

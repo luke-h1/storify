@@ -38,7 +38,7 @@ export class WishlistResolver {
   async wishlists(@Ctx() { req }: MyContext): Promise<Wishlist[]> {
     return Wishlist.find({
       where: { creatorId: req.session.userId },
-      relations: ['product', 'user'],
+      relations: ['product'],
     });
   }
 
@@ -48,7 +48,7 @@ export class WishlistResolver {
     @Arg('productId', () => Int) productId: number,
   ): Promise<Wishlist> {
     return Wishlist.findOne({
-      relations: ['product', 'user'],
+      relations: ['product'],
       where: { productId, creatorId: req.session.userId },
     }) as unknown as Wishlist;
   }

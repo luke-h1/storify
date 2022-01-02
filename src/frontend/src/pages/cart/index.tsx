@@ -2,6 +2,8 @@ import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import toast from 'react-hot-toast';
 import AuthRoute from '../../components/AuthRoute';
+import CartItem from '../../components/CartItem';
+import Loader from '../../components/Loader';
 import Page from '../../components/Page';
 import {
   useCartsQuery,
@@ -15,7 +17,7 @@ import toErrorMap from '../../utils/toErrorMap';
 
 const CartPage: NextPage = () => {
   useIsAuth();
-  const [{ data }] = useCartsQuery({
+  const [{ data, fetching }] = useCartsQuery({
     pause: isServer(),
   });
   const [, createOrder] = useCreateOrderMutation();
@@ -24,113 +26,52 @@ const CartPage: NextPage = () => {
   return (
     <Page flex={false} title="Cart">
       <AuthRoute>
-        <div className="bg-white p-8 rounded-md w-full max-w-800">
-          <div className=" flex items-center justify-between pb-6">
+        <h1 className="text-4xl">Your cart</h1>
+        <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 p-4">
+          <div className="col-span-4 shadow">
             <div>
-              <h2 className="text-gray-600 font-semibold">Your cart</h2>
+              {fetching ? (
+                <Loader />
+              ) : (
+                data?.carts.map(c => <CartItem key={c.id} cart={c} />)
+              )}
+            </div>
+            <div className="p-2">
+              <button
+                type="button"
+                onClick={() => {
+                  console.log('hi');
+                }}
+                className="m-auto text-center text-red-600 cursor-pointer block px-4 py-2 rounded-md bg-red-100 hover:bg-red-200"
+              >
+                Empty shopping cart
+              </button>
             </div>
           </div>
-          <div>
-            <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-              <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-                <table className="min-w-full leading-normal">
-                  <thead>
-                    <tr>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Product ID
-                      </th>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Quantity
-                      </th>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Name
-                      </th>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Image
-                      </th>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Total
-                      </th>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Actions
-                      </th>{' '}
-                    </tr>
-                  </thead>
-                  {data?.carts &&
-                    data?.carts.map(c => (
-                      <tbody key={c.id}>
-                        <tr>
-                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <div className="flex items-center">
-                              <div className="ml-3">
-                                <p className="text-gray-900 whitespace-no-wrap">
-                                  {c.productId}
-                                </p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              {c.quantity}
-                            </p>
-                          </td>
-                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              {c.product.name}
-                            </p>
-                          </td>
-                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <img
-                              src={c.product.image}
-                              alt={c.product.name}
-                              className="max-w-xs"
-                            />
-                          </td>
-                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                              <span
-                                aria-hidden
-                                className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-                              />
-                              <span className="relative">
-                                £{c.total.toFixed(2)}
-                              </span>
-                            </span>
-                          </td>
-                          <td>
-                            <button
-                              type="button"
-                              className="btn btn-blue"
-                              onClick={async () => {
-                                const res = await createOrder({
-                                  total: c.total,
-                                });
-
-                                const orderDetails = await createOrderDetails({
-                                  orderId: res?.data?.createOrder?.id as number,
-                                  productId: c.productId,
-                                  quantity: c.quantity,
-                                });
-                                if (
-                                  orderDetails.data?.createOrderDetails.errors
-                                ) {
-                                  toErrorMap(
-                                    orderDetails.data?.createOrderDetails
-                                      .errors,
-                                  );
-                                } else {
-                                  toast.success('Succesfully created order');
-                                }
-                              }}
-                            >
-                              Finish order
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    ))}
-                </table>
+          <div className="col-span-2 p-3 rounded shadow">
+            <div className="flex flex-col justify-between h-full">
+              <h2 className="text-xl font-semibold text-left">Order Summary</h2>
+              <div className="flex justify-between font-semibold sm:my-6">
+                <div className="flex gap-1">
+                  <p className="text-gray-500 font-light">Items:</p>
+                  <p>{data?.carts && data?.carts.length}</p>
+                </div>
+                <div className="flex gap-1">
+                  <p className="text-gray-500 font-light">Kind of items</p>
+                  <p>test</p>
+                </div>
               </div>
+              <div className="flex justify-between font-semibold sm:my-6">
+                <p>Total Amount</p>
+                <p>
+                  {data?.carts.reduce((tally, cartItem) => {
+                    return tally + cartItem.quantity * cartItem.product.price;
+                  }, 0)}
+                </p>
+              </div>
+              <button className="btn btn-blue" type="button">
+                Order
+              </button>
             </div>
           </div>
         </div>
