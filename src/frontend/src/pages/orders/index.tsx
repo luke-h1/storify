@@ -1,12 +1,13 @@
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
+import Loader from '../../components/Loader';
 import Page from '../../components/Page';
 import { useOrdersQuery } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import { isServer } from '../../utils/isServer';
 
 const OrdersPage: NextPage = () => {
-  const [{ data }] = useOrdersQuery({
+  const [{ data, fetching }] = useOrdersQuery({
     pause: isServer(),
   });
 

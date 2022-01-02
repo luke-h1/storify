@@ -56,6 +56,14 @@ function invalidateAllOrders(cache: Cache) {
   });
 }
 
+function invalidateAllCarts(cache: Cache) {
+  const allFields = cache.inspectFields('Query');
+  const fieldInfos = allFields.filter(info => info.fieldName === 'Cart');
+  fieldInfos.forEach(fi => {
+    cache.invalidate('Query', 'Cart', fi.arguments || {});
+  });
+}
+
 export const createurqlClient = (
   ssrExchange: SSRExchange,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -78,7 +86,7 @@ export const createurqlClient = (
       cacheExchange({
         updates: {
           Mutation: {
-            login: (_result, args, cache) => {
+            login: (_result, _args, cache) => {
               CustomUpdateQuery<LoginMutation, MeQuery>(
                 cache,
                 { query: MeDocument },
@@ -93,7 +101,7 @@ export const createurqlClient = (
                 },
               );
             },
-            register: (_result, args, cache) => {
+            register: (_result, _args, cache) => {
               CustomUpdateQuery<RegisterMutation, MeQuery>(
                 cache,
                 { query: MeDocument },
@@ -108,7 +116,7 @@ export const createurqlClient = (
                 },
               );
             },
-            logout: (_result, args, cache) => {
+            logout: (_result, _args, cache) => {
               CustomUpdateQuery<LogoutMutation, MeQuery>(
                 cache,
                 { query: MeDocument },
@@ -140,7 +148,7 @@ export const createurqlClient = (
                 id: (args as MakeUserRegularUserMutationVariables).id,
               });
             },
-            createProduct: (_result, args, cache) => {
+            createProduct: (_result, _args, cache) => {
               invalidateAllProducts(cache);
             },
             deleteProduct: (_result, args, cache) => {
@@ -149,7 +157,7 @@ export const createurqlClient = (
                 id: (args as DeleteProductMutationVariables).id,
               });
             },
-            createOrder: (_result, args, cache) => {
+            createOrder: (_result, _args, cache) => {
               invalidateAllOrders(cache);
             },
             createCart: (_result, args, cache) => {
@@ -169,6 +177,9 @@ export const createurqlClient = (
                 __typename: 'Cart',
                 id: (args as DeleteCartItemMutationVariables).id,
               });
+            },
+            deleteCart: (_result, _args, cache) => {
+              invalidateAllCarts(cache);
             },
           },
         },

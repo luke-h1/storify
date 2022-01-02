@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
+import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import AuthRoute from '../../components/AuthRoute';
 import CartItem from '../../components/CartItem';
@@ -9,7 +10,7 @@ import {
   useCartsQuery,
   useCreateOrderMutation,
   useCreateOrderDetailsMutation,
-  useUpdateCartQuantityMutation,
+  useDeleteCartMutation,
 } from '../../generated/graphql';
 import { useIsAuth } from '../../hooks/useIsAuth';
 import { createurqlClient } from '../../utils/createUrqlClient';
@@ -17,12 +18,15 @@ import { isServer } from '../../utils/isServer';
 import toErrorMap from '../../utils/toErrorMap';
 
 const CartPage: NextPage = () => {
+  const router = useRouter();
   useIsAuth();
   const [{ data, fetching }] = useCartsQuery({
     pause: isServer(),
   });
   const [, createOrder] = useCreateOrderMutation();
   const [, createOrderDetails] = useCreateOrderDetailsMutation();
+
+  const [, deleteCart] = useDeleteCartMutation();
 
   return (
     <Page flex={false} title="Cart">
@@ -42,10 +46,13 @@ const CartPage: NextPage = () => {
             <div className="p-2">
               <button
                 type="button"
-                onClick={() => {
-                  console.log('hi');
-                }}
                 className="m-auto text-center text-red-600 cursor-pointer block px-4 py-2 rounded-md bg-red-100 hover:bg-red-200"
+                onClick={async () => {
+                  if (window.confirm('Are you sure?')) {
+                    await deleteCart();
+                    router.reload();
+                  }
+                }}
               >
                 Empty shopping cart
               </button>

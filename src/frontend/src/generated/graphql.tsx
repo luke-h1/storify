@@ -452,6 +452,13 @@ export type CreateWishListMutation = {
   createWishlist: boolean;
 };
 
+export type DeleteCartMutationVariables = Exact<{ [key: string]: never }>;
+
+export type DeleteCartMutation = {
+  __typename?: 'Mutation';
+  deleteCart: boolean;
+};
+
 export type DeleteCartItemMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -949,6 +956,17 @@ export function useCreateWishListMutation() {
     CreateWishListMutation,
     CreateWishListMutationVariables
   >(CreateWishListDocument);
+}
+export const DeleteCartDocument = gql`
+  mutation DeleteCart {
+    deleteCart
+  }
+`;
+
+export function useDeleteCartMutation() {
+  return Urql.useMutation<DeleteCartMutation, DeleteCartMutationVariables>(
+    DeleteCartDocument,
+  );
 }
 export const DeleteCartItemDocument = gql`
   mutation DeleteCartItem($id: Int!) {
