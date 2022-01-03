@@ -78,6 +78,7 @@ export type Mutation = {
   makeUserRegularUser: Scalars['Boolean'];
   register: UserResponse;
   updateCartQuantity: CartResponse;
+  updateOrderStatus: Order;
   updateProduct?: Maybe<Product>;
 };
 
@@ -165,6 +166,10 @@ export type MutationUpdateCartQuantityArgs = {
   quantity: Scalars['Int'];
 };
 
+export type MutationUpdateOrderStatusArgs = {
+  paymentId: Scalars['String'];
+};
+
 export type MutationUpdateProductArgs = {
   id: Scalars['Int'];
   input: ProductUpdateInput;
@@ -177,7 +182,7 @@ export type Order = {
   id: Scalars['Int'];
   orderDetails: Array<OrderDetails>;
   orderDetailsId: Scalars['Int'];
-  paymentId: Scalars['Int'];
+  paymentId: Scalars['String'];
   status: Scalars['String'];
   total: Scalars['Int'];
   updatedAt: Scalars['String'];
@@ -622,6 +627,15 @@ export type UpdateCartQuantityMutation = {
       | null
       | undefined;
   };
+};
+
+export type UpdateOrderStatusMutationVariables = Exact<{
+  paymentId: Scalars['String'];
+}>;
+
+export type UpdateOrderStatusMutation = {
+  __typename?: 'Mutation';
+  updateOrderStatus: { __typename?: 'Order'; id: number; status: string };
 };
 
 export type UpdateProductMutationVariables = Exact<{
@@ -1163,6 +1177,21 @@ export function useUpdateCartQuantityMutation() {
     UpdateCartQuantityMutation,
     UpdateCartQuantityMutationVariables
   >(UpdateCartQuantityDocument);
+}
+export const UpdateOrderStatusDocument = gql`
+  mutation UpdateOrderStatus($paymentId: String!) {
+    updateOrderStatus(paymentId: $paymentId) {
+      id
+      status
+    }
+  }
+`;
+
+export function useUpdateOrderStatusMutation() {
+  return Urql.useMutation<
+    UpdateOrderStatusMutation,
+    UpdateOrderStatusMutationVariables
+  >(UpdateOrderStatusDocument);
 }
 export const UpdateProductDocument = gql`
   mutation UpdateProduct($input: ProductUpdateInput!, $id: Int!) {
