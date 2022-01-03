@@ -14,7 +14,6 @@
 
 
 # :rocket: Features
-
 * User registration, login & authentication flow with forgot password & password resets
 * Full product creation user flow (with Stripe integration)
 * Full Cart management flow
@@ -94,12 +93,11 @@ The backend will now be listening on `http://localhost:<PORT>/api/graphql`
 
 **Question** Why use GraphQL & not REST? 
 
-**Answer:** While I could've chosen to write this API purely in a RESTful manner, this would've extended the amount of time spent on this project significantly. This project uses GraphQL codegen which significatlly cut down the amount of development & testing resource it would've taken to manually write hooks & manage state. In addition to this, I wanted to encounter n+1 problems with a real GraphQL API and learn how to fix this. 
-
+**Answer:** While I could've chosen to write this API purely in a RESTful manner, this would've extended the amount of time spent on this project significantly. This project uses GraphQL codegen which significatlly cut down the amount of development & testing resource it would've taken to manually write hooks & manage state.
 
 # :bug: Issues
 
-Feel free to **file a new issue** with a respective title and description in the [Storify](https://github.com/luke-h1/storify/issues) repository. If you already found a solution to your problem, **I would love to review your pull request**! Have a look at the [contribution guidelines](https://github.com/luke-h1/storify/blob/dev/CONTRIBUTING.md) to find out about the coding standards.
+Feel free to **file a new issue** with a respective title and description in the [Storify](https://github.com/luke-h1/storify/issues) repository. If you already found a solution to your problem, **Feel free to make a PR**! Have a look at the [contribution guidelines](https://github.com/luke-h1/storify/blob/dev/CONTRIBUTING.md) to find out about the coding standards.
 
 
 # :tada: Contributing
@@ -108,7 +106,7 @@ Check out the [contributing](https://github.com/luke-h1/storify/blob/dev/CONTRIB
 
 
 # :closed_book: License
-This project is under the [MIT license](https://github.com/luke-h1/storify/dev/LICENSE.md).
+This project is licensed under the [Apache 2 license](https://github.com/luke-h1/storify/blob/dev/LICENSE.md).
 
 
 Made with love by [Luke Howsam](https://github.com/luke-h1) 💜 🚀💥
