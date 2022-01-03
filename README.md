@@ -14,7 +14,6 @@
 
 
 # :rocket: Features
-
 * User registration, login & authentication flow with forgot password & password resets
 * Full product creation user flow (with Stripe integration)
 * Full Cart management flow
@@ -98,7 +97,7 @@ The backend will now be listening on `http://localhost:<PORT>/api/graphql`
 
 # :bug: Issues
 
-Feel free to **file a new issue** with a respective title and description in the [Storify](https://github.com/luke-h1/storify/issues) repository. If you already found a solution to your problem, **I would love to review your pull request**! Have a look at the [contribution guidelines](https://github.com/luke-h1/storify/blob/dev/CONTRIBUTING.md) to find out about the coding standards.
+Feel free to **file a new issue** with a respective title and description in the [Storify](https://github.com/luke-h1/storify/issues) repository. If you already found a solution to your problem, **Feel free to make a PR**! Have a look at the [contribution guidelines](https://github.com/luke-h1/storify/blob/dev/CONTRIBUTING.md) to find out about the coding standards.
 
 
 # :tada: Contributing
@@ -107,7 +106,7 @@ Check out the [contributing](https://github.com/luke-h1/storify/blob/dev/CONTRIB
 
 
 # :closed_book: License
-This project is under the [Apache 2 license](https://github.com/luke-h1/storify/blob/dev/LICENSE.md).
+This project is licensed under the [Apache 2 license](https://github.com/luke-h1/storify/blob/dev/LICENSE.md).
 
 
 Made with love by [Luke Howsam](https://github.com/luke-h1) 💜 🚀💥
