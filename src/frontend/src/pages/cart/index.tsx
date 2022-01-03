@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable no-await-in-loop */
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
@@ -38,9 +39,7 @@ const CartPage: NextPage = () => {
               {fetching ? (
                 <Loader />
               ) : (
-                data?.carts.map(c => (
-                  <CartItem key={c.product.id} cart={c} id={c.id} />
-                ))
+                data?.carts.map(c => <CartItem key={c.product.id} cart={c} />)
               )}
             </div>
             <div className="p-2">

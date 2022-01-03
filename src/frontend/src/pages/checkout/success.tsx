@@ -2,18 +2,17 @@ import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Loader from 'src/frontend/src/components/Loader';
-import Page from 'src/frontend/src/components/Page';
-import { useUpdateOrderStatusMutation } from 'src/frontend/src/generated/graphql';
-import { createurqlClient } from 'src/frontend/src/utils/createUrqlClient';
-// cs_test_b1K2XXyJ19Ge6zV6EWZdhFlDoPzNfZtPssRUp8TQTR11zSBTidYO9rk46E
+import Loader from '../../components/Loader';
+import Page from '../../components/Page';
+import { useUpdateOrderStatusMutation } from '../../generated/graphql';
+import { createurqlClient } from '../../utils/createUrqlClient';
+
 const SuccessPage: NextPage = () => {
   const [loading, setLoading] = useState<Boolean>(false);
   const router = useRouter();
   const [, updateOrderStatus] = useUpdateOrderStatusMutation();
 
   useEffect(() => {
-    console.log(router.query.source);
     const updateOrder = async () => {
       setLoading(true);
       const res = await updateOrderStatus({
@@ -24,6 +23,7 @@ const SuccessPage: NextPage = () => {
         setLoading(false);
       }
     };
+    updateOrder();
   }, []);
 
   return (

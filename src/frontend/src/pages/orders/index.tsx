@@ -1,14 +1,8 @@
-import {
-  useStripe,
-  Elements,
-  useElements,
-  CardElement,
-} from '@stripe/react-stripe-js';
-import { loadStripe, StripeCardElement } from '@stripe/stripe-js';
+import { useStripe, Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import Link from 'next/link';
-import { useEffect } from 'react';
 import Loader from '../../components/Loader';
 import Page from '../../components/Page';
 import {
@@ -27,29 +21,17 @@ interface Props {
 const CheckoutForm = ({ orderId }: Props) => {
   const stripe = useStripe();
   const [, createPayment] = useCreatePaymentMutation();
-  // const stripe = useStripe();
-  // const elements = useElements();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     e.preventDefault();
-
-    // if (elements == null) {
-    //   return;
-    // }
-
-    // const res = await stripe!.createPaymentMethod({
-    //   type: 'card',
-    //   card: elements.getElement(CardElement) as StripeCardElement,
-    // });
-
-    // TODO: call createPayment mutation here
 
     const res = await createPayment({
       orderId,
     });
 
     if (res.data?.createPayment.stripeTransactionId) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       stripe!.redirectToCheckout({
         sessionId: res.data?.createPayment.stripeTransactionId,
       });

@@ -1,15 +1,28 @@
 import {
-  Cart,
   useUpdateCartQuantityMutation,
   useDeleteCartItemMutation,
 } from '../generated/graphql';
 
 interface Props {
-  id: number;
-  cart: Cart;
+  cart: {
+    __typename?: 'Cart' | undefined;
+    id: number;
+    quantity: number;
+    creatorId: number;
+    productId: number;
+    total: number;
+    product: {
+      __typename?: 'Product' | undefined;
+      id: number;
+      name: string;
+      image: string;
+      brand: string;
+      price: number;
+    };
+  };
 }
 
-const CartItem = ({ id, cart }: Props) => {
+const CartItem = ({ cart }: Props) => {
   const [, updateCartQuantity] = useUpdateCartQuantityMutation();
 
   const [, deleteCartItem] = useDeleteCartItemMutation();
