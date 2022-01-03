@@ -53,7 +53,7 @@ yarn
 
 **Setting up environment variables** 
 
-Both the `frontend` and `api` project have a `.env.example` which provides an example of what `.env` variables are required & their type (i.e. string, number etc). If you fail to provide these values, the frontend & api will fail to start.
+Both the `frontend` and `api` project have a `.env.example` which provides an example of what `.env` variables are required & their type (i.e. string, number etc). If you fail to provide these values, the frontend & api **will fail to start**.
 
 Create your environment variables based on the examples of the relevant `.env.example`
 
