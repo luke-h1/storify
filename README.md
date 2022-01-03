@@ -116,7 +116,7 @@ Check out the [contributing](https://github.com/luke-h1/storify/blob/master/CONT
 
 
 # :closed_book: License
-This project is under the [MIT license](https://github.com/luke-h1/storify/master/LICENSE.MD).
+This project is under the [MIT license](https://github.com/luke-h1/storify/master/LICENSE.md).
 
 
 Made with love by [Luke Howsam](https://github.com/luke-h1) 💜 🚀💥
