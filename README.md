@@ -94,8 +94,7 @@ The backend will now be listening on `http://localhost:<PORT>/api/graphql`
 
 **Question** Why use GraphQL & not REST? 
 
-**Answer:** While I could've chosen to write this API purely in a RESTful manner, this would've extended the amount of time spent on this project significantly. This project uses GraphQL codegen which significatlly cut down the amount of development & testing resource it would've taken to manually write hooks & manage state. In addition to this, I wanted to encounter n+1 problems with a real GraphQL API and learn how to fix this. 
-
+**Answer:** While I could've chosen to write this API purely in a RESTful manner, this would've extended the amount of time spent on this project significantly. This project uses GraphQL codegen which significatlly cut down the amount of development & testing resource it would've taken to manually write hooks & manage state.
 
 # :bug: Issues
 
