@@ -19,7 +19,7 @@ const SuccessPage: NextPage = () => {
         paymentId:
           typeof router.query.source === 'string' ? router.query.source : '',
       });
-      if (res.data?.updateOrderStatus.id) {
+      if (res.data?.updateOrderStatus) {
         setLoading(false);
       }
     };
