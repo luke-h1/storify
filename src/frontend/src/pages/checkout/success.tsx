@@ -24,6 +24,7 @@ const SuccessPage: NextPage = () => {
       }
     };
     updateOrder();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
