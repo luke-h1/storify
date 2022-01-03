@@ -3,10 +3,9 @@ import { loadStripe } from '@stripe/stripe-js';
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import Link from 'next/link';
+import AuthRoute from '../../components/AuthRoute';
 import Loader from '../../components/Loader';
 import Page from '../../components/Page';
-import TabItem from '../../components/tabs/TabItem';
-import { TabsContextProvider } from '../../context/TabsContext';
 import {
   useOrdersQuery,
   useCreatePaymentMutation,
@@ -56,7 +55,7 @@ const OrdersPage: NextPage = () => {
 
   return (
     <Page title="Orders Page | Storify" description="orders page" flex={false}>
-      <TabsContextProvider>
+      <AuthRoute>
         <Elements stripe={stripePromise}>
           {fetching && !data ? (
             <Loader />
@@ -125,7 +124,7 @@ const OrdersPage: NextPage = () => {
             </div>
           )}
         </Elements>
-      </TabsContextProvider>
+      </AuthRoute>
     </Page>
   );
 };

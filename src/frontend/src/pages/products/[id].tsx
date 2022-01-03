@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import AuthRoute from '../../components/AuthRoute';
 import Loader from '../../components/Loader';
 import {
   useCreateCartMutation,
@@ -15,7 +16,6 @@ import { createurqlClient } from '../../utils/createUrqlClient';
 
 const SingleProductPage: NextPage = () => {
   const router = useRouter();
-  useIsAuth();
   const [, createCart] = useCreateCartMutation();
   const intId = useGetIntId();
   const [{ data: user }] = useMeQuery();
@@ -188,6 +188,10 @@ const SingleProductPage: NextPage = () => {
                 className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
                 type="button"
                 onClick={async () => {
+                  if (!user?.me) {
+                    toast.error('You must be logged in to perform this action');
+                    router.push('/auth/login');
+                  }
                   const result = await createCart({
                     productId: data?.product?.id as number,
                     quantity: 1,
