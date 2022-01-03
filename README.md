@@ -107,7 +107,7 @@ Check out the [contributing](https://github.com/luke-h1/storify/blob/dev/CONTRIB
 
 
 # :closed_book: License
-This project is under the [MIT license](https://github.com/luke-h1/storify/dev/LICENSE.md).
+This project is under the [Apache license](https://github.com/luke-h1/storify/dev/LICENSE.md).
 
 
 Made with love by [Luke Howsam](https://github.com/luke-h1) 💜 🚀💥
