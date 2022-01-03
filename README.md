@@ -71,7 +71,7 @@ docker-compose up
 
 # :runner: Getting started 
 
-Now that the databases are started we can startup the API for the first time. It's worth nothing that when the server is in development, we automatically run migrations in order to save time when changing database columns. If you want to generate a migration however you can turn this feature off by setting `synchronize: false` in `src/api/src/db/createConn.ts`
+Now that the databases are started we can start the API for the first time. It's worth nothing that when the server is in development, we automatically run migrations in order to save time when changing database columns.
 
 Run the following commands to start the API (ensure the databases are running): 
 
@@ -102,7 +102,7 @@ The backend will now be listening on `http://localhost:<PORT>/api/graphql`
 
 **Question** Why use GraphQL & not REST? 
 
-**Answer:** While I could've chosen to write this API purely in a RESTful manner, this would've extended the amount of time spent on this project. This project uses GraphQL codegen which significatlly cut down the amount of development & testing resource it would've taken to manually write hooks & manage state.
+**Answer:** While I could've chosen to write this API purely in a RESTful manner, this would've extended the amount of time spent on this project significantly. This project uses GraphQL codegen which significatlly cut down the amount of development & testing resource it would've taken to manually write hooks & manage state. In addition to this, I wanted to encounter n+1 problems with a real GraphQL API and learn how to fix this. 
 
 
 # :bug: Issues
