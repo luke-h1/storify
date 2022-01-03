@@ -1,7 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
 import AWS from 'aws-sdk';
-import { Destination } from 'aws-sdk/clients/ses';
 import nodemailer from 'nodemailer';
 
 const ses = new AWS.SES({
@@ -21,21 +20,29 @@ const emailService = {
   ) => {
     if (process.env.NODE_ENV === 'production') {
       try {
-        const res = ses.sendEmail({
-          Destination: to as Destination,
-          Source: process.env.AWS_SES_FROM_EMAIL_ADDRESS,
-          Message: {
-            Body: {
-              Text: {
-                Data: html,
+        ses
+          .sendEmail({
+            Destination: {
+              ToAddresses: [to],
+            },
+            Source: process.env.AWS_SES_FROM_EMAIL_ADDRESS,
+            Message: {
+              Body: {
+                Text: {
+                  Data: html,
+                  Charset: 'utf-8',
+                },
+              },
+              Subject: {
+                Data: subject,
               },
             },
-            Subject: {
-              Data: subject,
-            },
-          },
-        });
-        console.log('send ses email', res);
+          })
+          .promise()
+          .then(val => {
+            console.log(val);
+          })
+          .catch(e => console.error(e));
       } catch (e) {
         console.error(e);
       }
