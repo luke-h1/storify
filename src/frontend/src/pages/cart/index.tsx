@@ -36,26 +36,28 @@ const CartPage: NextPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 p-4">
           <div className="col-span-4 shadow">
             <div>
-              {fetching ? (
+              {!data && fetching ? (
                 <Loader />
               ) : (
                 data?.carts.map(c => <CartItem key={c.product.id} cart={c} />)
               )}
             </div>
-            <div className="p-2">
-              <button
-                type="button"
-                className="m-auto text-center text-red-600 cursor-pointer block px-4 py-2 rounded-md bg-red-100 hover:bg-red-200"
-                onClick={async () => {
-                  if (window.confirm('Are you sure?')) {
-                    await deleteCart();
-                    router.reload();
-                  }
-                }}
-              >
-                Empty shopping cart
-              </button>
-            </div>
+            {data?.carts && data?.carts.length > 0 && (
+              <div className="p-2">
+                <button
+                  type="button"
+                  className="m-auto text-center text-red-600 cursor-pointer block px-4 py-2 rounded-md bg-red-100 hover:bg-red-200"
+                  onClick={async () => {
+                    if (window.confirm('Are you sure?')) {
+                      await deleteCart();
+                      router.reload();
+                    }
+                  }}
+                >
+                  Empty shopping cart
+                </button>
+              </div>
+            )}
           </div>
           <div className="col-span-2 p-3 rounded shadow">
             <div className="flex flex-col justify-between h-full">
@@ -76,8 +78,11 @@ const CartPage: NextPage = () => {
                 </p>
               </div>
               <button
-                className="btn btn-blue"
+                className={
+                  !data?.carts.length ? 'btn bg-gray-300' : 'btn btn-blue'
+                }
                 type="button"
+                disabled={!data?.carts.length}
                 onClick={async () => {
                   const res = await createOrder({
                     total: data?.carts.reduce((tally, cartItem) => {
