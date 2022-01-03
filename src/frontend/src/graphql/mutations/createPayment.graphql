@@ -1,0 +1,3 @@
+mutation CreatePayment($orderId: Int!, $token: String!) {
+  createPayment(orderId: $orderId, token: $token)
+}

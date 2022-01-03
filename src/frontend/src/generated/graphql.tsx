@@ -417,6 +417,16 @@ export type CreateOrderDetailsMutation = {
   };
 };
 
+export type CreatePaymentMutationVariables = Exact<{
+  orderId: Scalars['Int'];
+  token: Scalars['String'];
+}>;
+
+export type CreatePaymentMutation = {
+  __typename?: 'Mutation';
+  createPayment: number;
+};
+
 export type CreateProductMutationVariables = Exact<{
   input: ProductCreateInput;
 }>;
@@ -927,6 +937,18 @@ export function useCreateOrderDetailsMutation() {
     CreateOrderDetailsMutation,
     CreateOrderDetailsMutationVariables
   >(CreateOrderDetailsDocument);
+}
+export const CreatePaymentDocument = gql`
+  mutation CreatePayment($orderId: Int!, $token: String!) {
+    createPayment(orderId: $orderId, token: $token)
+  }
+`;
+
+export function useCreatePaymentMutation() {
+  return Urql.useMutation<
+    CreatePaymentMutation,
+    CreatePaymentMutationVariables
+  >(CreatePaymentDocument);
 }
 export const CreateProductDocument = gql`
   mutation CreateProduct($input: ProductCreateInput!) {
