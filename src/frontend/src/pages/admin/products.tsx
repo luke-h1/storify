@@ -28,7 +28,7 @@ const Products: NextPage = () => {
 
   return (
     <AdminRoute>
-      <Page className="container" title="Users - Admin | Storify">
+      <Page title="Users - Admin | Storify">
         <h1 style={{ marginBottom: '2rem' }}>Manage products on the service</h1>
         <table style={{ marginTop: '0.5rem' }} className="table">
           <thead>

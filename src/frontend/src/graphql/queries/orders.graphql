@@ -1,13 +1,23 @@
 query Orders {
   orders {
     id
-    productTitle
-    firstName
-    lastName
-    qty
-    email
+    status
+    total
     creatorId
-    completed
-    price
+    orderDetails {
+      createdAt
+      creatorId
+      id
+      orderId
+      quantity
+      productId
+      product {
+        id
+        name
+        image
+        brand
+        price
+      }
+    }
   }
 }

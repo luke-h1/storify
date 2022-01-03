@@ -1,0 +1,5 @@
+mutation CreatePayment($orderId: Int!) {
+  createPayment(orderId: $orderId) {
+    stripeTransactionId
+  }
+}

@@ -1,13 +1,11 @@
-import classnames from 'classnames';
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
+import Link from 'next/link';
 import Loader from '../components/Loader';
 import Page from '../components/Page';
-import Snap from '../components/Snap';
 import { useProductsQuery } from '../generated/graphql';
 import { createurqlClient } from '../utils/createUrqlClient';
 import { isServer } from '../utils/isServer';
-import styles from './index.module.scss';
 
 const Home: NextPage = () => {
   const [{ data, fetching }] = useProductsQuery({
@@ -19,20 +17,61 @@ const Home: NextPage = () => {
   }
 
   return (
-    <Page className="container" title="Home | storify" description="Home page">
-      <div className={classnames('container', styles.hero)}>
-        <h1 className={styles.greeting}>
-          <span>Welcome to storify</span>
-          <br />
-          <p>Fictional ecommerce store</p>
-        </h1>
-      </div>
-      <div className={classnames('container', styles.projectContainer)}>
-        <div className={styles.cardContainer}>
-          {data?.products &&
-            data?.products.map(p => <Snap product={p} key={p.id} />)}
+    <Page title="Home | Storify" flex={false}>
+      <section className="text-gray-600 body-font max-w-800">
+        <div className="container px-5 py-24 mx-auto">
+          <h1 className="text-4xl text-left mb-10">
+            {data?.products && data.products.length > 0
+              ? 'Latest products'
+              : 'No products'}
+          </h1>
+          <div className="flex flex-wrap -m-4">
+            {data?.products &&
+              data?.products.map(p => (
+                // eslint-disable-next-line @next/next/link-passhref
+                <div className="p-4 md:w-1/3" key={p.id}>
+                  <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+                    <img
+                      className="lg:h-48 md:h-36 w-full object-cover object-center"
+                      src={p.image}
+                      alt={p.name}
+                    />
+                    <div className="p-6">
+                      <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
+                        <strong>£{p.price.toFixed(2)}</strong>
+                      </h2>
+                      <h1 className="title-font text-lg font-medium text-gray-900 mb-3">
+                        {p.name}
+                      </h1>
+                      <p className="leading-relaxed mb-3">
+                        {p.descriptionSnippet}
+                      </p>
+                      <Link href={`/products/${p.id}`}>
+                        <a className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0 hover: cursor-pointer">
+                          <div className="flex items-center flex-wrap ">
+                            View Product
+                            <svg
+                              className="w-4 h-4 ml-2"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              fill="none"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M5 12h14" />
+                              <path d="M12 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
-      </div>
+      </section>
     </Page>
   );
 };

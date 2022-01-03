@@ -7,6 +7,7 @@ import { toast } from 'react-hot-toast';
 import AuthRoute from '../../../components/AuthRoute';
 import InputField from '../../../components/InputField';
 import Loader from '../../../components/Loader';
+import Page from '../../../components/Page';
 import {
   useCreateSignatureMutation,
   useUpdateProductMutation,
@@ -14,7 +15,6 @@ import {
 } from '../../../generated/graphql';
 import useGetIntId from '../../../hooks/useGetIntId';
 import { useIsAuth } from '../../../hooks/useIsAuth';
-import styles from '../../../styles/forms.module.scss';
 import { createurqlClient } from '../../../utils/createUrqlClient';
 import uploadImage from '../../../utils/uploadImage';
 
@@ -50,7 +50,7 @@ const UpdateProductPage: NextPage = () => {
 
   return (
     <AuthRoute>
-      <div className={styles.container}>
+      <Page title="Update product">
         <Formik<FormValues>
           initialValues={{
             name: data?.product?.name as string,
@@ -95,7 +95,7 @@ const UpdateProductPage: NextPage = () => {
           }}
         >
           {({ isSubmitting, setFieldValue }) => (
-            <Form className={styles.form}>
+            <Form>
               <InputField label="Name" name="name" placeholder="Iphone" />
               <InputField label="Brand" name="brand" placeholder="Apple" />
               <InputField
@@ -129,10 +129,18 @@ const UpdateProductPage: NextPage = () => {
                 }}
               />
               {data?.product?.image && !previewImage && (
-                <img src={data?.product.image} alt="some text" width="100%" />
+                <div className="max-w-sm">
+                  <img
+                    src={data?.product?.image}
+                    alt="some text"
+                    width="100%"
+                  />
+                </div>
               )}
               {previewImage && (
-                <img src={previewImage} alt="some text" width="100%" />
+                <div className="max-w-sm">
+                  <img src={previewImage} alt="some text" width="100%" />
+                </div>
               )}
               <button
                 style={{ marginLeft: '1rem' }}
@@ -146,7 +154,7 @@ const UpdateProductPage: NextPage = () => {
             </Form>
           )}
         </Formik>
-      </div>
+      </Page>
     </AuthRoute>
   );
 };

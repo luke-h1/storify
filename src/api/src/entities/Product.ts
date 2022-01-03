@@ -9,8 +9,12 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Cart } from './Cart';
+import { OrderDetails } from './OrderDetails';
 import { User } from './User';
+import { Wishlist } from './Wishlist';
 
 @ObjectType()
 @Entity('products')
@@ -61,11 +65,23 @@ export class Product extends BaseEntity {
   @Column()
   price: number;
 
+  @Field(() => Wishlist)
+  @OneToMany(() => Wishlist, w => w.product, { onDelete: 'CASCADE' })
+  wishlist: Wishlist;
+
+  @Field(() => OrderDetails)
+  @OneToMany(() => OrderDetails, od => od.product, { onDelete: 'CASCADE' })
+  orderDetails: OrderDetails;
+
+  @Field(() => Cart)
+  @OneToMany(() => Cart, c => c.product, { onDelete: 'CASCADE' })
+  cart: Cart;
+
   @Field(() => String)
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ type: 'date' })
   readonly createdAt: Date;
 
   @Field(() => String)
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  @UpdateDateColumn({ type: 'date' })
   updatedAt: Date;
 }

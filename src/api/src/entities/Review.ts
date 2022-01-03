@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
-import { Field, ObjectType } from 'type-graphql';
+import { Max, Min } from 'class-validator';
+import { Field, Int, ObjectType } from 'type-graphql';
 import {
   Entity,
   BaseEntity,
@@ -23,15 +24,17 @@ export class Review extends BaseEntity {
   @Column()
   name!: string;
 
-  @Field(() => Number)
+  @Field(() => Int)
   @Column()
+  @Min(1)
+  @Max(5)
   rating!: number;
 
   @Field(() => String)
   @Column()
   comment!: string;
 
-  @Field()
+  @Field(() => Int)
   @Column()
   creatorId: number;
 
@@ -40,10 +43,10 @@ export class Review extends BaseEntity {
   creator: User;
 
   @Field(() => String)
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ type: 'date' })
   readonly createdAt: Date;
 
   @Field(() => String)
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  @UpdateDateColumn({ type: 'date' })
   updatedAt: Date;
 }

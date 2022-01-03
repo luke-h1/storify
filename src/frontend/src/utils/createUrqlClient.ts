@@ -15,6 +15,9 @@ import {
   DeleteProductAsAdminMutationVariables,
   MakeUserAdminMutationVariables,
   MakeUserRegularUserMutationVariables,
+  UpdateCartQuantityMutationVariables,
+  DeleteCartItemMutationVariables,
+  CreateCartMutationVariables,
 } from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
@@ -25,7 +28,12 @@ const errorExchange: Exchange =
     return pipe(
       forward(ops$),
       tap(({ error }) => {
-        if (error?.message.includes('Not authenticated')) {
+        if (
+          error?.message.includes(
+            'Not authenticated' ||
+              "Access denied! You don't have permission for this action!",
+          )
+        ) {
           Router.push('/auth/login');
         }
       }),
@@ -34,17 +42,25 @@ const errorExchange: Exchange =
 
 function invalidateAllProducts(cache: Cache) {
   const allFields = cache.inspectFields('Query');
-  const fieldInfos = allFields.filter(info => info.fieldName === 'products');
+  const fieldInfos = allFields.filter(info => info.fieldName === 'Product');
   fieldInfos.forEach(fi => {
-    cache.invalidate('Query', 'products', fi.arguments || {});
+    cache.invalidate('Query', 'Product', fi.arguments || {});
   });
 }
 
 function invalidateAllOrders(cache: Cache) {
   const allFields = cache.inspectFields('Query');
-  const fieldInfos = allFields.filter(info => info.fieldName === 'orders');
+  const fieldInfos = allFields.filter(info => info.fieldName === 'Order');
   fieldInfos.forEach(fi => {
-    cache.invalidate('Query', 'orders', fi.arguments || {});
+    cache.invalidate('Query', 'Order', fi.arguments || {});
+  });
+}
+
+function invalidateAllCarts(cache: Cache) {
+  const allFields = cache.inspectFields('Query');
+  const fieldInfos = allFields.filter(info => info.fieldName === 'Cart');
+  fieldInfos.forEach(fi => {
+    cache.invalidate('Query', 'Cart', fi.arguments || {});
   });
 }
 
@@ -64,12 +80,13 @@ export const createurqlClient = (
       credentials: 'include',
       headers: cookie ? { cookie } : undefined,
     },
+    requestPolicy: 'cache-and-network',
     exchanges: [
       dedupExchange,
       cacheExchange({
         updates: {
           Mutation: {
-            login: (_result, args, cache) => {
+            login: (_result, _args, cache) => {
               CustomUpdateQuery<LoginMutation, MeQuery>(
                 cache,
                 { query: MeDocument },
@@ -84,7 +101,7 @@ export const createurqlClient = (
                 },
               );
             },
-            register: (_result, args, cache) => {
+            register: (_result, _args, cache) => {
               CustomUpdateQuery<RegisterMutation, MeQuery>(
                 cache,
                 { query: MeDocument },
@@ -99,7 +116,7 @@ export const createurqlClient = (
                 },
               );
             },
-            logout: (_result, args, cache) => {
+            logout: (_result, _args, cache) => {
               CustomUpdateQuery<LogoutMutation, MeQuery>(
                 cache,
                 { query: MeDocument },
@@ -131,7 +148,7 @@ export const createurqlClient = (
                 id: (args as MakeUserRegularUserMutationVariables).id,
               });
             },
-            createProduct: (_result, args, cache) => {
+            createProduct: (_result, _args, cache) => {
               invalidateAllProducts(cache);
             },
             deleteProduct: (_result, args, cache) => {
@@ -140,8 +157,29 @@ export const createurqlClient = (
                 id: (args as DeleteProductMutationVariables).id,
               });
             },
-            createOrder: (_result, args, cache) => {
+            createOrder: (_result, _args, cache) => {
               invalidateAllOrders(cache);
+            },
+            createCart: (_result, args, cache) => {
+              cache.invalidate({
+                __typename: 'Cart',
+                id: (args as CreateCartMutationVariables).productId,
+              });
+            },
+            updateCartQuantity: (_result, args, cache) => {
+              cache.invalidate({
+                __typename: 'Cart',
+                id: (args as UpdateCartQuantityMutationVariables).id,
+              });
+            },
+            deleteCartItem: (_result, args, cache) => {
+              cache.invalidate({
+                __typename: 'Cart',
+                id: (args as DeleteCartItemMutationVariables).id,
+              });
+            },
+            deleteCart: (_result, _args, cache) => {
+              invalidateAllCarts(cache);
             },
           },
         },

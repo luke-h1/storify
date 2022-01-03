@@ -1,12 +1,11 @@
 import Head from './Head';
-import styles from './page.module.scss';
 
 interface Props {
-  className?: string;
   children: React.ReactNode;
   description?: string;
   ogImage?: string;
   title: string;
+  flex?: boolean;
 }
 
 const Page = ({
@@ -14,13 +13,17 @@ const Page = ({
   description,
   ogImage,
   title,
-  className = 'container',
+  flex = true,
 }: Props) => {
   return (
     <>
       <Head title={title} description={description} ogImage={ogImage} />
-      <div className={className}>
-        <div className={styles.content}>{children}</div>
+      <div
+        className={`max-w-800 w-full ${
+          flex && 'flex flex-col align-center items-center'
+        }`}
+      >
+        {children}
       </div>
     </>
   );

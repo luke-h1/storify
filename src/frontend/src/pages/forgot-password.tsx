@@ -13,8 +13,8 @@ const ForgotPassword: NextPage = () => {
 
   return (
     <Page title="Reset Password | Storify" description="reset password">
-      <h1 style={{ marginBottom: '3.5rem' }}>Forgot password</h1>
-      <p style={{ marginBottom: '2rem' }}>
+      <h1 className="mb-2">Forgot password</h1>
+      <p className="mb-2">
         Enter your email in the form below to reset your password
       </p>
       <Formik
