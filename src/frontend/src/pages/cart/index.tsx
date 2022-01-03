@@ -16,7 +16,6 @@ import {
 import { useIsAuth } from '../../hooks/useIsAuth';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import { isServer } from '../../utils/isServer';
-import toErrorMap from '../../utils/toErrorMap';
 
 const CartPage: NextPage = () => {
   const router = useRouter();
@@ -93,6 +92,8 @@ const CartPage: NextPage = () => {
                       quantity: data?.carts[i].quantity as number,
                     });
                   }
+                  toast.success('Succesfully created order!');
+                  router.push('/orders');
                 }}
               >
                 Create order

@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 
-import { Cart } from 'src/entities/Cart';
 import {
   Arg,
   Authorized,
@@ -11,7 +10,8 @@ import {
   Resolver,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
-import { Order } from '../entities/Order';
+import { Cart } from '../entities/Cart';
+import { Order, OrderStatus } from '../entities/Order';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
@@ -60,7 +60,7 @@ export class OrderResolver {
     const orders = await Order.find({
       relations: ['orderDetails', 'orderDetails.product'],
       loadEagerRelations: true,
-      // where: { creatorId: req.session.userId },
+      where: { creatorId: req.session.userId },
     });
     return orders;
   }
@@ -84,12 +84,16 @@ export class OrderResolver {
 
     const session = await stripe.checkout.sessions.retrieve(paymentId);
 
+    if (!session) {
+      throw new Error('not valid session ');
+    }
+
     // update order status
     const updatedOrder = await getConnection()
       .createQueryBuilder()
       .update(Order)
       .set({
-        status: session.status as string,
+        status: OrderStatus.Completed,
       })
       .where('paymentId = :paymentId and "creatorId" = :creatorId', {
         paymentId,

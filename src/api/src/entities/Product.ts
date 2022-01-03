@@ -12,7 +12,6 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Cart } from './Cart';
-import { Order } from './Order';
 import { OrderDetails } from './OrderDetails';
 import { User } from './User';
 import { Wishlist } from './Wishlist';

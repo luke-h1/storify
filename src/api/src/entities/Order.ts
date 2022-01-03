@@ -12,7 +12,6 @@ import {
 } from 'typeorm';
 import { OrderDetails } from './OrderDetails';
 import { Payment } from './Payment';
-import { Product } from './Product';
 import { User } from './User';
 
 // eslint-disable-next-line no-shadow

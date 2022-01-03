@@ -14,6 +14,11 @@ export const adminLinks = [
     slug: '/admin/orders',
     text: 'Manage orders',
   },
+  {
+    id: 4,
+    slug: '/orders',
+    text: 'Orders',
+  },
 ];
 
 export const authLinks = [
@@ -31,6 +36,11 @@ export const authLinks = [
     id: 3,
     slug: '/cart',
     text: 'Cart',
+  },
+  {
+    id: 4,
+    slug: '/orders',
+    text: 'Orders',
   },
 ];
 

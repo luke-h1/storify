@@ -1,32 +1,24 @@
 import { NextPage } from 'next';
+import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Loader from '../../components/Loader';
-import Page from '../../components/Page';
-import { useUpdateOrderStatusMutation } from '../../generated/graphql';
+import Loader from 'src/frontend/src/components/Loader';
+import Page from 'src/frontend/src/components/Page';
+import { useUpdateOrderStatusMutation } from 'src/frontend/src/generated/graphql';
+import { createurqlClient } from 'src/frontend/src/utils/createUrqlClient';
 // cs_test_b1K2XXyJ19Ge6zV6EWZdhFlDoPzNfZtPssRUp8TQTR11zSBTidYO9rk46E
 const SuccessPage: NextPage = () => {
   const [loading, setLoading] = useState<Boolean>(false);
   const router = useRouter();
   const [, updateOrderStatus] = useUpdateOrderStatusMutation();
 
-  const updateorder = async () => {
-    setLoading(true);
-    const res = await updateOrderStatus({
-      paymentId:
-        typeof router.query.token === 'string' ? router.query.token : '',
-    });
-    if (res.data?.updateOrderStatus.id) {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    console.log(router.query.source);
     const updateOrder = async () => {
       setLoading(true);
       const res = await updateOrderStatus({
         paymentId:
-          typeof router.query.token === 'string' ? router.query.token : '',
+          typeof router.query.source === 'string' ? router.query.source : '',
       });
       if (res.data?.updateOrderStatus.id) {
         setLoading(false);
@@ -42,4 +34,4 @@ const SuccessPage: NextPage = () => {
     </Page>
   );
 };
-export default SuccessPage;
+export default withUrqlClient(createurqlClient, { ssr: false })(SuccessPage);
