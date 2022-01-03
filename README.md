@@ -1,5 +1,5 @@
 <p align="left">
-  <img src='.github/docs/logo.png' width='200'> />
+  <img src='.github/docs/logo.svg' width='200' />
 </p>
 
 # Storify 
