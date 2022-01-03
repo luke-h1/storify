@@ -23,7 +23,7 @@
 * User registration, login & authentication flow with forgot password & password resets
 * Email notification with Amazon SES 
 * Full product creation user flow (with Stripe integration)
-* Full Cart management flow (users can CRUD products in their cart)
+* Full Cart management flow
 * Create and cancel orders 
 * Payments via Stripe (current in test-mode on development & production sites)
 
