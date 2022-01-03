@@ -1,15 +1,15 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
-
-import formData from 'form-data';
-import Mailgun from 'mailgun.js';
+import AWS from 'aws-sdk';
+import { Destination } from 'aws-sdk/clients/ses';
 import nodemailer from 'nodemailer';
 
-const mailgun = new Mailgun(formData);
-
-const client = mailgun.client({
-  username: 'api',
-  key: process.env.MAILGUN_API_KEY,
+const ses = new AWS.SES({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 });
 
 const emailService = {
@@ -21,17 +21,21 @@ const emailService = {
   ) => {
     if (process.env.NODE_ENV === 'production') {
       try {
-        const res = await client.messages.create(
-          process.env.EMAIL_DOMAIN_NAME,
-          {
-            from,
-            to,
-            subject,
-            text: html,
+        const res = ses.sendEmail({
+          Destination: to as Destination,
+          Source: process.env.AWS_SES_FROM_EMAIL_ADDRESS,
+          Message: {
+            Body: {
+              Text: {
+                Data: html,
+              },
+            },
+            Subject: {
+              Data: subject,
+            },
           },
-        );
-
-        console.log('sent email', res);
+        });
+        console.log('send ses email', res);
       } catch (e) {
         console.error(e);
       }
