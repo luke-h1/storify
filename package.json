@@ -39,6 +39,7 @@
     "stylelint-prettier": "^2.0.0"
   },
   "scripts": {
+    "local:ci": "yarn format:check && yarn format && yarn lint && yarn tsc && yarn build",
     "prepare": "husky install",
     "clean": "lerna clean -y",
     "bootstrap": "lerna bootstrap --ci --force-local",
