@@ -1,3 +1,4 @@
+import Stripe from 'stripe';
 import { Arg, Authorized, Ctx, Int, Mutation, Resolver } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Order, OrderStatus } from '../entities/Order';
@@ -8,14 +9,18 @@ import { stripe } from '../utils/stripe';
 
 @Resolver(Payment)
 export class PaymentResolver {
-  @Mutation(() => Int)
+  @Mutation(() => Payment)
   @Authorized(isAuth)
   async createPayment(
-    @Arg('token') token: string,
     @Arg('orderId', () => Int) orderId: number,
     @Ctx() { req }: MyContext,
-  ): Promise<number> {
-    const order = await Order.findOne({ id: orderId });
+  ): Promise<Payment> {
+    const order = await Order.findOne({
+      relations: ['orderDetails', 'orderDetails.product'],
+      where: {
+        id: orderId,
+      },
+    });
 
     if (!order) {
       throw new Error('no order');
@@ -30,26 +35,49 @@ export class PaymentResolver {
       );
     }
 
-    const charge = await stripe.charges.create({
-      currency: 'gbp',
-      amount: order.total * 100,
-      source: token,
+    // eslint-disable-next-line camelcase
+    const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+
+    for (let i = 0; i < order.orderDetails.length; i += 1) {
+      line_items.push({
+        name: order.orderDetails[i].product.name,
+        currency: 'gbp',
+        description: order.orderDetails[i].product.description,
+        images: [order.orderDetails[i].product.image],
+        quantity: order.orderDetails[i].quantity,
+        amount: order.total * 100,
+        // price: order.orderDetails[i].product.stripePriceId,
+      });
+    }
+
+    const source = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      cancel_url: 'http://localhost:3000/checkout/error',
+      success_url:
+        'http://localhost:3000/checkout/success?source={CHECKOUT_SESSION_ID}',
+      mode: 'payment',
+      line_items,
     });
 
-    const payment = await Payment.create({
-      stripeId: charge.id,
-      creatorId: req.session.userId,
-      orderId,
-    });
-
-    // at this point the user has paid for the product,
-    // update the status of the order to completed
+    const result = await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(Payment)
+      .values({
+        stripeTransactionId: source.id,
+        creatorId: req.session.userId,
+        orderId: order.id,
+      })
+      .returning('*')
+      .execute();
 
     await getConnection()
       .createQueryBuilder()
       .update(Order)
       .set({
-        status: OrderStatus.Completed,
+        status: source.status as string,
+        creatorId: req.session.userId,
+        paymentId: source.id,
       })
       .where({
         creatorId: req.session.userId,
@@ -57,6 +85,7 @@ export class PaymentResolver {
       })
       .returning('*')
       .execute();
-    return payment.id;
+
+    return result.raw[0];
   }
 }

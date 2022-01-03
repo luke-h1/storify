@@ -17,8 +17,9 @@ export class Payment extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id!: number;
 
-  @Field(() => String)
-  stripeId: string;
+  @Field()
+  @Column()
+  stripeTransactionId: string;
 
   @Field(() => Int)
   @Column()

@@ -47,7 +47,7 @@ export class OrderResolver {
   }
 
   @Query(() => [Order])
-  // @Authorized(isAuth)
+  @Authorized(isAuth)
   async orders(@Ctx() { req }: MyContext): Promise<Order[]> {
     const orders = await Order.find({
       relations: ['orderDetails', 'orderDetails.product'],

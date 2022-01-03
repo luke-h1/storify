@@ -51,9 +51,9 @@ export class Order extends BaseEntity {
   @JoinColumn({ name: 'OrderDetailsId' })
   orderDetails: OrderDetails[];
 
-  @Field(() => Int)
+  @Field()
   @Column({ nullable: true })
-  paymentId: number;
+  paymentId: string;
 
   @OneToMany(() => Payment, p => p.order, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'paymentId' })

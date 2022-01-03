@@ -61,7 +61,7 @@ export type Mutation = {
   createImageSignature: ImageSignature;
   createOrder: Order;
   createOrderDetails: OrderDetailsResponse;
-  createPayment: Scalars['Int'];
+  createPayment: Payment;
   createProduct: Product;
   createWishlist: Scalars['Boolean'];
   deleteAllProducts: Scalars['Boolean'];
@@ -107,7 +107,6 @@ export type MutationCreateOrderDetailsArgs = {
 
 export type MutationCreatePaymentArgs = {
   orderId: Scalars['Int'];
-  token: Scalars['String'];
 };
 
 export type MutationCreateProductArgs = {
@@ -200,6 +199,14 @@ export type OrderDetailsResponse = {
   __typename?: 'OrderDetailsResponse';
   errors?: Maybe<Array<FieldError>>;
   orderDetails?: Maybe<OrderDetails>;
+};
+
+export type Payment = {
+  __typename?: 'Payment';
+  creatorId: Scalars['Int'];
+  id: Scalars['Int'];
+  orderId: Scalars['Int'];
+  stripeTransactionId: Scalars['String'];
 };
 
 export type Product = {
@@ -419,12 +426,11 @@ export type CreateOrderDetailsMutation = {
 
 export type CreatePaymentMutationVariables = Exact<{
   orderId: Scalars['Int'];
-  token: Scalars['String'];
 }>;
 
 export type CreatePaymentMutation = {
   __typename?: 'Mutation';
-  createPayment: number;
+  createPayment: { __typename?: 'Payment'; stripeTransactionId: string };
 };
 
 export type CreateProductMutationVariables = Exact<{
@@ -939,8 +945,10 @@ export function useCreateOrderDetailsMutation() {
   >(CreateOrderDetailsDocument);
 }
 export const CreatePaymentDocument = gql`
-  mutation CreatePayment($orderId: Int!, $token: String!) {
-    createPayment(orderId: $orderId, token: $token)
+  mutation CreatePayment($orderId: Int!) {
+    createPayment(orderId: $orderId) {
+      stripeTransactionId
+    }
   }
 `;
 
