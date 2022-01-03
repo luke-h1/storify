@@ -1,16 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
-
-import formData from 'form-data';
-import Mailgun from 'mailgun.js';
 import nodemailer from 'nodemailer';
-
-const mailgun = new Mailgun(formData);
-
-const client = mailgun.client({
-  username: 'api',
-  key: process.env.MAILGUN_API_KEY,
-});
 
 const emailService = {
   sendEmail: async (
@@ -21,17 +11,7 @@ const emailService = {
   ) => {
     if (process.env.NODE_ENV === 'production') {
       try {
-        const res = await client.messages.create(
-          process.env.EMAIL_DOMAIN_NAME,
-          {
-            from,
-            to,
-            subject,
-            text: html,
-          },
-        );
-
-        console.log('sent email', res);
+        console.log('send grid email');
       } catch (e) {
         console.error(e);
       }
