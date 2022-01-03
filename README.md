@@ -107,16 +107,16 @@ The backend will now be listening on `http://localhost:<PORT>/api/graphql`
 
 # :bug: Issues
 
-Feel free to **file a new issue** with a respective title and description in the [Storify](https://github.com/luke-h1/storify/issues) repository. If you already found a solution to your problem, **I would love to review your pull request**! Have a look at the [contribution guidelines](https://github.com/luke-h1/blob/master/CONTRIBUTING.MD) to find out about the coding standards.
+Feel free to **file a new issue** with a respective title and description in the [Storify](https://github.com/luke-h1/storify/issues) repository. If you already found a solution to your problem, **I would love to review your pull request**! Have a look at the [contribution guidelines](https://github.com/luke-h1/storify/blob/dev/CONTRIBUTING.md) to find out about the coding standards.
 
 
 # :tada: Contributing
 
-Check out the [contributing](https://github.com/luke-h1/storify/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions and begin contributing.
+Check out the [contributing](https://github.com/luke-h1/storify/blob/dev/CONTRIBUTING.md) page to see the best places to file issues, start discussions and begin contributing.
 
 
 # :closed_book: License
-This project is under the [MIT license](https://github.com/luke-h1/storify/master/LICENSE.md).
+This project is under the [MIT license](https://github.com/luke-h1/storify/dev/LICENSE.md).
 
 
 Made with love by [Luke Howsam](https://github.com/luke-h1) 💜 🚀💥
