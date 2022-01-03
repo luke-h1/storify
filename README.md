@@ -5,11 +5,6 @@
 # Storify 
 > A mock e commerce store built to learn clean GraphQL schema design, database relationships & React
 
-> [Click here to see the database model](TODO)
-> (Development site)[]
-> (Production site)[]
-
-
 # :pushpin: Table of contents 
 * [Features](#rocket-features)
 * [Getting started](#runner-getting-started)
@@ -21,12 +16,9 @@
 # :rocket: Features
 
 * User registration, login & authentication flow with forgot password & password resets
-* Email notification with Amazon SES 
 * Full product creation user flow (with Stripe integration)
 * Full Cart management flow
-* Create and cancel orders 
-* Payments via Stripe (current in test-mode on development & production sites)
-
+* Create orders 
 
 # :construction_worker: Getting Started
 
