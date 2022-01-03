@@ -1,5 +1,5 @@
+import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
-import { useRouter } from 'next/router';
 import AdminRoute from '../../components/AdminRoute';
 import Loader from '../../components/Loader';
 import Page from '../../components/Page';
@@ -11,7 +11,7 @@ import { useIsAdmin } from '../../hooks/useIsAdmin';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import { isServer } from '../../utils/isServer';
 
-const Products = () => {
+const Products: NextPage = () => {
   useIsAdmin();
   const [{ data, fetching }] = useProductsQuery({
     pause: isServer(),
@@ -28,7 +28,7 @@ const Products = () => {
 
   return (
     <AdminRoute>
-      <Page className="container" title="Users - Admin | Storify">
+      <Page title="Users - Admin | Storify">
         <h1 style={{ marginBottom: '2rem' }}>Manage products on the service</h1>
         <table style={{ marginTop: '0.5rem' }} className="table">
           <thead>

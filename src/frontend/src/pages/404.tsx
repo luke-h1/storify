@@ -1,12 +1,10 @@
+import { NextPage } from 'next';
 import Page from '../components/Page';
-import styles from '../styles/404.module.scss';
 
-const NotFound = () => {
+const NotFound: NextPage = () => {
   return (
     <Page title="Not Found" description="route not found">
-      <div className={styles.notFoundText}>
-        <p>404 - page not found</p>
-      </div>
+      <h1 className="text-4xl">404 page not found</h1>
     </Page>
   );
 };

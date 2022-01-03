@@ -31,7 +31,7 @@ export class ProductResolver {
     return userLoader.load(product.creatorId);
   }
 
-  @Query(() => [Product])
+  @Query(() => [Product], { nullable: true })
   async products(): Promise<Product[]> {
     return Product.find({
       order: {
@@ -146,10 +146,15 @@ export class ProductResolver {
     @Arg('stripeProductId') stripeProductId: string,
     @Ctx() { req }: MyContext,
   ): Promise<boolean> {
-    await stripe.products.del(stripeProductId);
-
     const product = await Product.findOne(id);
+
     if (product) {
+      await stripe.prices.update(product.stripePriceId, {
+        active: false,
+      });
+      await stripe.products.update(stripeProductId, {
+        active: false,
+      });
       await Product.delete({ id, creatorId: req.session.userId });
     }
     return true;

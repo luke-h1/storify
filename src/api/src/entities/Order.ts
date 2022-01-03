@@ -8,8 +8,19 @@ import {
   UpdateDateColumn,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
+import { OrderDetails } from './OrderDetails';
+import { Payment } from './Payment';
 import { User } from './User';
+
+// eslint-disable-next-line no-shadow
+export enum OrderStatus {
+  Created = 'created',
+  Cancelled = 'cancelled',
+  AwaitingPayment = 'awaiting:payment',
+  Completed = 'completed',
+}
 
 @ObjectType()
 @Entity('orders')
@@ -19,50 +30,43 @@ export class Order extends BaseEntity {
   readonly id!: number;
 
   @Field(() => String)
+  @Column({ default: OrderStatus.Created })
+  status: string;
+
+  @Field(() => Int)
   @Column()
-  productTitle: string;
+  total: number;
 
-  @Field(() => String)
-  @Column()
-  firstName: string;
-
-  @Field(() => String)
-  @Column()
-  lastName: string;
-
-  @Field(() => String)
-  @Column()
-  email: string;
-
-  @Field(() => String)
-  @Column({ nullable: true })
-  transactionId: string;
-
-  @Field()
+  @Field(() => Int)
   @Column()
   creatorId: number;
+
+  @Field(() => Int)
+  @Column({ nullable: true })
+  orderDetailsId: number;
+
+  @Field(() => [OrderDetails])
+  @OneToMany(() => OrderDetails, od => od.order, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'OrderDetailsId' })
+  orderDetails: OrderDetails[];
+
+  @Field()
+  @Column({ nullable: true })
+  paymentId: string;
+
+  @OneToMany(() => Payment, p => p.order, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'paymentId' })
+  payments: Payment[];
 
   @ManyToOne(() => User, u => u.orders, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 
-  @Field(() => Boolean)
-  @Column({ default: false })
-  completed: boolean;
-
-  @Field(() => Int)
-  @Column()
-  qty: number;
-
-  @Field(() => Int)
-  @Column()
-  price: number;
-
   @Field(() => String)
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ type: 'date' })
   readonly createdAt: Date;
 
   @Field(() => String)
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  @UpdateDateColumn({ type: 'date' })
   updatedAt: Date;
 }

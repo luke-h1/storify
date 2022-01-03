@@ -1,18 +1,19 @@
 import productCreateSchema from '@storify/common/src/schemas/productCreateSchema';
 import { Formik, Form } from 'formik';
+import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import AuthRoute from '../../components/AuthRoute';
 import InputField from '../../components/InputField';
+import Loader from '../../components/Loader';
+import Page from '../../components/Page';
 import {
   useCreateProductMutation,
   useCreateSignatureMutation,
 } from '../../generated/graphql';
 import { useIsAuth } from '../../hooks/useIsAuth';
-import styles from '../../styles/forms.module.scss';
 import { createurqlClient } from '../../utils/createUrqlClient';
 
 interface IUploadImageResponse {
@@ -47,7 +48,7 @@ interface FormValues {
   price: number;
 }
 
-const CreateProductPage = () => {
+const CreateProductPage: NextPage = () => {
   const [previewImage, setPreviewImage] = useState<string>('');
   const router = useRouter();
   useIsAuth();
@@ -55,7 +56,8 @@ const CreateProductPage = () => {
   const [, createSignature] = useCreateSignatureMutation();
   return (
     <AuthRoute>
-      <div className={styles.container}>
+      <Page title="create product">
+        <h1 className="text-black text-4xl mb-5">Create a new product</h1>
         <Formik<FormValues>
           validationSchema={productCreateSchema}
           initialValues={{
@@ -92,7 +94,7 @@ const CreateProductPage = () => {
           }}
         >
           {({ isSubmitting, setFieldValue }) => (
-            <Form className={styles.form}>
+            <Form>
               <InputField label="Name" name="name" placeholder="iphone" />
               <InputField label="Brand" name="brand" placeholder="apple" />
               <InputField
@@ -128,18 +130,21 @@ const CreateProductPage = () => {
               <button
                 style={{ marginLeft: '1rem' }}
                 disabled={isSubmitting}
-                className="btn success"
+                className="btn btn-blue"
                 type="submit"
               >
                 {isSubmitting ? 'submitting..' : 'Add product'}
               </button>
               {previewImage && (
-                <img src={previewImage} alt="some text" width="100%" />
+                <div className="max-w-sm">
+                  <img src={previewImage} alt="some text" width="100%" />
+                </div>
               )}
+              {isSubmitting && <Loader />}
             </Form>
           )}
         </Formik>
-      </div>
+      </Page>
     </AuthRoute>
   );
 };

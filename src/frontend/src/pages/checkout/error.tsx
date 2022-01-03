@@ -1,9 +1,10 @@
+import { NextPage } from 'next';
 import Page from '../../components/Page';
 
-const ErrorPage = () => {
+const ErrorPage: NextPage = () => {
   return (
     <Page title="Checkout error | Storify" description="Checkout error">
-      <h1 className="error">Checkout error</h1>
+      <h1>Checkout error</h1>
       <p>Something went wrong, you haven't been charged. Try again later</p>
     </Page>
   );

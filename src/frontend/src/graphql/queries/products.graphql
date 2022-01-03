@@ -1,16 +1,5 @@
 query Products {
   products {
-    id
-    brand
-    descriptionSnippet
-    image
-    name
-    price
-    description
-    stripeProductId
-    creator {
-      id
-      fullName
-    }
+    ...ProductsFragment
   }
 }

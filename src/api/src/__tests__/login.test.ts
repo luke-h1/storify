@@ -27,7 +27,6 @@ mutation Register($options: UserRegisterInput!) {
       field
     }
     user {
-      id
       firstName
       lastName
       email
@@ -87,7 +86,6 @@ describe('login', () => {
         login: {
           errors: null,
           user: {
-            id: 2,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,

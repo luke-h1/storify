@@ -9,9 +9,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Cart } from './Cart';
 import { Order } from './Order';
+import { OrderDetails } from './OrderDetails';
+import { Payment } from './Payment';
 import { Product } from './Product';
 import { Review } from './Review';
+import { Wishlist } from './Wishlist';
 
 @ObjectType()
 @Entity('users')
@@ -41,8 +45,20 @@ export class User extends BaseEntity {
   @OneToMany(() => Order, o => o.creator, { onDelete: 'CASCADE' })
   orders: Order[];
 
+  @OneToMany(() => Payment, p => p.creator, { onDelete: 'CASCADE' })
+  payments: Payment[];
+
+  @OneToMany(() => Wishlist, w => w.creator, { onDelete: 'CASCADE' })
+  wishlist: Wishlist;
+
   @OneToMany(() => Review, r => r.creator, { onDelete: 'CASCADE' })
   reviews: Review[];
+
+  @OneToMany(() => Cart, c => c.creator, { onDelete: 'CASCADE' })
+  cart: Cart;
+
+  @OneToMany(() => OrderDetails, od => od.creator, { onDelete: 'CASCADE' })
+  orderDetails: OrderDetails;
 
   @Field(() => Boolean)
   @Column({ default: false })

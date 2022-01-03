@@ -1,11 +1,12 @@
 import { Formik, Form } from 'formik';
+import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { toast } from 'react-hot-toast';
 import InputField from '../../components/InputField';
+import Page from '../../components/Page';
 import { useRegisterMutation } from '../../generated/graphql';
-import styles from '../../styles/forms.module.scss';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import toErrorMap from '../../utils/toErrorMap';
 
@@ -16,11 +17,11 @@ interface FormValues {
   lastName: string;
 }
 
-const Register = () => {
+const Register: NextPage = () => {
   const router = useRouter();
   const [, register] = useRegisterMutation();
   return (
-    <div className={styles.container}>
+    <Page title="Register | Storify">
       <Formik<FormValues>
         initialValues={{
           email: '',
@@ -50,7 +51,7 @@ const Register = () => {
       >
         {({ isSubmitting }) => (
           <Form>
-            <div className={styles.form}>
+            <div>
               <InputField label="First Name" name="firstName" />
               <InputField label="Last Name" name="lastName" />
 
@@ -60,16 +61,16 @@ const Register = () => {
               <button
                 style={{ marginLeft: '1rem' }}
                 disabled={isSubmitting}
-                className="btn success"
+                className="btn btn-blue"
                 type="submit"
               >
-                {isSubmitting ? 'submitting..' : 'Add product'}
+                {isSubmitting ? 'submitting..' : 'Register'}
               </button>
             </div>
           </Form>
         )}
       </Formik>
-    </div>
+    </Page>
   );
 };
 export default withUrqlClient(createurqlClient, { ssr: false })(Register);
