@@ -11,7 +11,7 @@ import {
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Cart } from '../entities/Cart';
-import { Order, OrderStatus } from '../entities/Order';
+import { Order } from '../entities/Order';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
@@ -65,6 +65,23 @@ export class OrderResolver {
     return orders;
   }
 
+  @Query(() => Order)
+  @Authorized(isAuth)
+  async order(
+    @Ctx() { req }: MyContext,
+    @Arg('paymentId') paymentId: string,
+  ): Promise<Order | null> {
+    const order = await Order.findOne({
+      paymentId,
+      creatorId: req.session.userId,
+    });
+
+    if (!order) {
+      return null;
+    }
+    return order;
+  }
+
   @Mutation(() => Order)
   @Authorized(isAuth)
   async updateOrderStatus(
@@ -85,7 +102,7 @@ export class OrderResolver {
     const session = await stripe.checkout.sessions.retrieve(paymentId);
 
     if (!session) {
-      throw new Error('not valid session ');
+      throw new Error('not valid session');
     }
 
     // update order status
@@ -93,7 +110,7 @@ export class OrderResolver {
       .createQueryBuilder()
       .update(Order)
       .set({
-        status: OrderStatus.Completed,
+        status: 'complete',
       })
       .where('paymentId = :paymentId and "creatorId" = :creatorId', {
         paymentId,

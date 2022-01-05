@@ -260,6 +260,7 @@ export type Query = {
   OrderDetails: Array<OrderDetails>;
   carts: Array<Cart>;
   me?: Maybe<User>;
+  order: Order;
   orders: Array<Order>;
   product?: Maybe<Product>;
   products?: Maybe<Array<Product>>;
@@ -269,6 +270,10 @@ export type Query = {
 
 export type QueryOrderDetailArgs = {
   orderId: Scalars['Int'];
+};
+
+export type QueryOrderArgs = {
+  paymentId: Scalars['String'];
 };
 
 export type QueryProductArgs = {
@@ -575,6 +580,15 @@ export type MakeUserRegularUserMutationVariables = Exact<{
 export type MakeUserRegularUserMutation = {
   __typename?: 'Mutation';
   makeUserRegularUser: boolean;
+};
+
+export type OrderQueryVariables = Exact<{
+  paymentId: Scalars['String'];
+}>;
+
+export type OrderQuery = {
+  __typename?: 'Query';
+  order: { __typename?: 'Order'; paymentId: string };
 };
 
 export type RegisterMutationVariables = Exact<{
@@ -1118,6 +1132,19 @@ export function useMakeUserRegularUserMutation() {
     MakeUserRegularUserMutation,
     MakeUserRegularUserMutationVariables
   >(MakeUserRegularUserDocument);
+}
+export const OrderDocument = gql`
+  query Order($paymentId: String!) {
+    order(paymentId: $paymentId) {
+      paymentId
+    }
+  }
+`;
+
+export function useOrderQuery(
+  options: Omit<Urql.UseQueryArgs<OrderQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<OrderQuery>({ query: OrderDocument, ...options });
 }
 export const RegisterDocument = gql`
   mutation Register($options: UserRegisterInput!) {

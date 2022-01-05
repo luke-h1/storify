@@ -1,4 +1,4 @@
-import { Min } from 'class-validator';
+import { Max, Min } from 'class-validator';
 import { Field, Int, ObjectType } from 'type-graphql';
 import {
   Entity,
@@ -24,6 +24,7 @@ export class OrderDetails extends BaseEntity {
   @Field(() => Int)
   @Column()
   @Min(1)
+  @Max(10)
   quantity: number;
 
   @Field(() => Int)

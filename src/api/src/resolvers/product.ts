@@ -3,11 +3,9 @@ import {
   Arg,
   Authorized,
   Ctx,
-  Field,
   FieldResolver,
   Int,
   Mutation,
-  ObjectType,
   Query,
   Resolver,
   Root,
@@ -21,16 +19,6 @@ import { isAdmin } from '../middleware/isAdmin';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
-import { FieldError } from './user';
-
-@ObjectType()
-class ProductResponse {
-  @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
-
-  @Field(() => Product, { nullable: true })
-  product?: Product;
-}
 
 @Resolver(Product)
 export class ProductResolver {
