@@ -11,7 +11,7 @@ import {
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Cart } from '../entities/Cart';
-import { Order } from '../entities/Order';
+import { Order, OrderStatus } from '../entities/Order';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
@@ -30,6 +30,7 @@ export class OrderResolver {
       .into(Order)
       .values({
         creatorId: req.session.userId,
+        status: OrderStatus.AwaitingPayment,
         total,
       })
       .returning('*')
@@ -110,7 +111,7 @@ export class OrderResolver {
       .createQueryBuilder()
       .update(Order)
       .set({
-        status: 'complete',
+        status: OrderStatus.Completed,
       })
       .where('paymentId = :paymentId and "creatorId" = :creatorId', {
         paymentId,
