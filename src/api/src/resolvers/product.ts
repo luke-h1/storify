@@ -1,10 +1,13 @@
+/* eslint-disable no-console */
 import {
   Arg,
   Authorized,
   Ctx,
+  Field,
   FieldResolver,
   Int,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   Root,
@@ -18,6 +21,16 @@ import { isAdmin } from '../middleware/isAdmin';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
+import { FieldError } from './user';
+
+@ObjectType()
+class ProductResponse {
+  @Field(() => [FieldError], { nullable: true })
+  errors?: FieldError[];
+
+  @Field(() => Product, { nullable: true })
+  product?: Product;
+}
 
 @Resolver(Product)
 export class ProductResolver {
@@ -43,6 +56,33 @@ export class ProductResolver {
   @Query(() => Product, { nullable: true })
   product(@Arg('id', () => Int) id: number): Promise<Product | undefined> {
     return Product.findOne(id);
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized(isAuth)
+  async likeProduct(
+    @Arg('id', () => Int) id: number,
+    @Arg('value') value: boolean,
+    @Ctx() { req }: MyContext,
+  ): Promise<Boolean> {
+    try {
+      await getConnection()
+        .createQueryBuilder()
+        .update(Product)
+        .set({
+          liked: value,
+        })
+        .where('id = :id and "creatorId" = :creatorId', {
+          id,
+          creatorId: req.session.userId,
+        })
+        .returning('*')
+        .execute();
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
 
   @Mutation(() => Product)
@@ -76,6 +116,7 @@ export class ProductResolver {
       .into(Product)
       .values({
         ...input,
+        liked: false,
         stripeProductId: stripeProduct.id,
         stripePriceId: stripePrice.id,
         creatorId: req.session.userId,

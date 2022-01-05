@@ -1,9 +1,10 @@
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import Link from 'next/link';
+import { AiFillHeart } from 'react-icons/ai';
 import Loader from '../components/Loader';
 import Page from '../components/Page';
-import { useProductsQuery } from '../generated/graphql';
+import { useLikeProductMutation, useProductsQuery } from '../generated/graphql';
 import { createurqlClient } from '../utils/createUrqlClient';
 import { isServer } from '../utils/isServer';
 
@@ -11,6 +12,8 @@ const Home: NextPage = () => {
   const [{ data, fetching }] = useProductsQuery({
     pause: isServer(),
   });
+
+  const [, likeProduct] = useLikeProductMutation();
 
   if (!data && fetching) {
     return <Loader />;
@@ -43,6 +46,17 @@ const Home: NextPage = () => {
                       <h1 className="title-font text-lg font-medium text-gray-900 mb-3">
                         {p.name}
                       </h1>
+                      <AiFillHeart
+                        style={{ cursor: 'pointer' }}
+                        fontSize="25px"
+                        fill={p.liked ? 'red' : 'black'}
+                        onClick={async () => {
+                          await likeProduct({
+                            likeProductId: p.id,
+                            value: !p.liked,
+                          });
+                        }}
+                      />
                       <p className="leading-relaxed mb-3">
                         {p.descriptionSnippet}
                       </p>

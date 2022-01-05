@@ -15,7 +15,6 @@ import { OrderDetails } from './OrderDetails';
 import { Payment } from './Payment';
 import { Product } from './Product';
 import { Review } from './Review';
-import { Wishlist } from './Wishlist';
 
 @ObjectType()
 @Entity('users')
@@ -47,9 +46,6 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Payment, p => p.creator, { onDelete: 'CASCADE' })
   payments: Payment[];
-
-  @OneToMany(() => Wishlist, w => w.creator, { onDelete: 'CASCADE' })
-  wishlist: Wishlist;
 
   @OneToMany(() => Review, r => r.creator, { onDelete: 'CASCADE' })
   reviews: Review[];

@@ -7,7 +7,6 @@ import { Payment } from '../entities/Payment';
 import { Product } from '../entities/Product';
 import { Review } from '../entities/Review';
 import { User } from '../entities/User';
-import { Wishlist } from '../entities/Wishlist';
 
 const createConn = async () =>
   createConnection({
@@ -15,16 +14,7 @@ const createConn = async () =>
     url: process.env.DATABASE_URL,
     logging: true,
     migrations: [join(__dirname, '../migrations/*')],
-    entities: [
-      User,
-      Product,
-      Order,
-      Cart,
-      OrderDetails,
-      Payment,
-      Wishlist,
-      Review,
-    ],
+    entities: [User, Product, Order, Cart, OrderDetails, Payment, Review],
     synchronize: true,
   });
 export default createConn;

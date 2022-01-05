@@ -157,6 +157,12 @@ export const createurqlClient = (
                 id: (args as DeleteProductMutationVariables).id,
               });
             },
+            likeProduct: (_result, args, cache) => {
+              cache.invalidate({
+                __typename: 'Product',
+                id: (args as DeleteProductMutationVariables).id,
+              });
+            },
             createOrder: (_result, _args, cache) => {
               invalidateAllOrders(cache);
             },
