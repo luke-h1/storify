@@ -6,6 +6,7 @@ fragment ProductsFragment on Product {
     name
     price
     description
+    liked
     stripeProductId
     creator {
       id

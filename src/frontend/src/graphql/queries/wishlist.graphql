@@ -1,7 +1,0 @@
-query Wishlist($productId: Int!) {
-  wishlist(productId: $productId) {
-    id
-    productId
-    creatorId
-  }
-}

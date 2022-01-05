@@ -1,6 +1,0 @@
-query Wishlists {
-  wishlists {
-    id
-    productId
-  }
-}
