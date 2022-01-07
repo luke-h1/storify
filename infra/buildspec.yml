@@ -22,9 +22,8 @@ phases:
   #install:
     #If you use the Ubuntu standard image 2.0 or later, you must specify runtime-versions.
     #If you specify runtime-versions and use an image other than Ubuntu standard image 2.0, the build fails.
-    #runtime-versions:
-      # name: version
-      # name: version
+    runtime-versions:
+      nodejs: 14
     #commands:
       # - command
       # - command
