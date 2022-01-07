@@ -24,7 +24,6 @@ phases:
     #If you specify runtime-versions and use an image other than Ubuntu standard image 2.0, the build fails.
     runtime-versions:
       nodejs: 14
-      
   pre_build:
     commands:
       - cd src/api && docker-compose up
@@ -39,27 +38,4 @@ phases:
         - yarn workspace @storify/api build
         - yarn workspace @storify/common build
         - yarn workspace @storify/frontend build
-      # - command
-      # - command
-  #post_build:
-    #commands:
-      # - command
-      # - command
-#reports:
-  #report-name-or-arn:
-    #files:
-      # - location
-      # - location
-    #base-directory: location
-    #discard-paths: yes
-    #file-format: JunitXml | CucumberJson
-#artifacts:
-  #files:
-    # - location
-    # - location
-  #name: $(date +%Y-%m-%d)
-  #discard-paths: yes
-  #base-directory: location
-#cache:
-  #paths:
-    # - paths
+        - yarn workspace @storify/api test
