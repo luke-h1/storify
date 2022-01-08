@@ -21,18 +21,10 @@ import { UserRegisterInput } from '../inputs/user/UserRegisterInput';
 import { isAdmin } from '../middleware/isAdmin';
 import { isAuth } from '../middleware/isAuth';
 import emailService from '../services/emailService';
+import { FieldError } from '../shared/FieldError';
 import { FORGET_PASSWORD_PREFIX, COOKIE_NAME } from '../shared/constants';
 import { MyContext } from '../types/MyContext';
 import { validateRegister } from '../validations/register';
-
-@ObjectType()
-export class FieldError {
-  @Field()
-  field: string;
-
-  @Field()
-  message: string;
-}
 
 @ObjectType()
 class UserResponse {

@@ -14,8 +14,8 @@ import { Order } from '../entities/Order';
 import { OrderDetails } from '../entities/OrderDetails';
 import { Product } from '../entities/Product';
 import { isAuth } from '../middleware/isAuth';
+import { FieldError } from '../shared/FieldError';
 import { MyContext } from '../types/MyContext';
-import { FieldError } from './user';
 
 @ObjectType()
 class OrderDetailsResponse {

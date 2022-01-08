@@ -15,6 +15,6 @@ const createConn = async () =>
     logging: true,
     migrations: [join(__dirname, '../migrations/*')],
     entities: [User, Product, Order, Cart, OrderDetails, Payment, Review],
-    synchronize: false,
+    synchronize: true,
   });
 export default createConn;

@@ -62,12 +62,14 @@ export type Mutation = {
   createOrderDetails: OrderDetailsResponse;
   createPayment: Payment;
   createProduct: Product;
+  createReview: ReviewResponse;
   deleteAllProducts: Scalars['Boolean'];
   deleteCart: Scalars['Boolean'];
   deleteCartItem: Scalars['Boolean'];
   deleteMyAccount: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
   deleteProductAsAdmin: Scalars['Boolean'];
+  deleteReview: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   likeProduct: Scalars['Boolean'];
@@ -79,6 +81,7 @@ export type Mutation = {
   updateCartQuantity: CartResponse;
   updateOrderStatus: Order;
   updateProduct?: Maybe<Product>;
+  updateReview: ReviewResponse;
 };
 
 export type MutationChangePasswordArgs = {
@@ -109,6 +112,13 @@ export type MutationCreateProductArgs = {
   input: ProductCreateInput;
 };
 
+export type MutationCreateReviewArgs = {
+  comment: Scalars['String'];
+  productId: Scalars['Int'];
+  rating: Scalars['Int'];
+  title: Scalars['String'];
+};
+
 export type MutationDeleteCartItemArgs = {
   id: Scalars['Int'];
 };
@@ -125,6 +135,10 @@ export type MutationDeleteProductArgs = {
 export type MutationDeleteProductAsAdminArgs = {
   id: Scalars['Int'];
   stripeProductId: Scalars['String'];
+};
+
+export type MutationDeleteReviewArgs = {
+  id: Scalars['Int'];
 };
 
 export type MutationDeleteUserArgs = {
@@ -169,6 +183,13 @@ export type MutationUpdateOrderStatusArgs = {
 export type MutationUpdateProductArgs = {
   id: Scalars['Int'];
   input: ProductUpdateInput;
+};
+
+export type MutationUpdateReviewArgs = {
+  comment: Scalars['String'];
+  rating: Scalars['Int'];
+  reviewId: Scalars['Int'];
+  title: Scalars['String'];
 };
 
 export type Order = {
@@ -226,6 +247,7 @@ export type Product = {
   orderDetails: OrderDetails;
   price: Scalars['Int'];
   publicId: Scalars['String'];
+  review: Review;
   stripePriceId: Scalars['String'];
   stripeProductId: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -259,6 +281,8 @@ export type Query = {
   orders: Array<Order>;
   product?: Maybe<Product>;
   products?: Maybe<Array<Product>>;
+  review?: Maybe<Review>;
+  reviews?: Maybe<Array<Review>>;
   user?: Maybe<User>;
   users?: Maybe<Array<User>>;
 };
@@ -275,8 +299,34 @@ export type QueryProductArgs = {
   id: Scalars['Int'];
 };
 
+export type QueryReviewArgs = {
+  id: Scalars['Int'];
+};
+
+export type QueryReviewsArgs = {
+  productId: Scalars['Int'];
+};
+
 export type QueryUserArgs = {
   id: Scalars['Int'];
+};
+
+export type Review = {
+  __typename?: 'Review';
+  comment: Scalars['String'];
+  createdAt: Scalars['String'];
+  creatorId: Scalars['Int'];
+  id: Scalars['Float'];
+  productId: Scalars['Int'];
+  rating: Scalars['Int'];
+  title: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type ReviewResponse = {
+  __typename?: 'ReviewResponse';
+  errors?: Maybe<Array<FieldError>>;
+  review?: Maybe<Review>;
 };
 
 export type User = {
@@ -444,6 +494,36 @@ export type CreateProductMutation = {
   };
 };
 
+export type CreateReviewMutationVariables = Exact<{
+  productId: Scalars['Int'];
+  comment: Scalars['String'];
+  rating: Scalars['Int'];
+  title: Scalars['String'];
+}>;
+
+export type CreateReviewMutation = {
+  __typename?: 'Mutation';
+  createReview: {
+    __typename?: 'ReviewResponse';
+    errors?:
+      | Array<{ __typename?: 'FieldError'; message: string; field: string }>
+      | null
+      | undefined;
+    review?:
+      | {
+          __typename?: 'Review';
+          id: number;
+          title: string;
+          rating: number;
+          comment: string;
+          createdAt: string;
+          updatedAt: string;
+        }
+      | null
+      | undefined;
+  };
+};
+
 export type CreateSignatureMutationVariables = Exact<{ [key: string]: never }>;
 
 export type CreateSignatureMutation = {
@@ -498,6 +578,15 @@ export type DeleteProductAsAdminMutationVariables = Exact<{
 export type DeleteProductAsAdminMutation = {
   __typename?: 'Mutation';
   deleteProductAsAdmin: boolean;
+};
+
+export type DeleteReviewMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteReviewMutation = {
+  __typename?: 'Mutation';
+  deleteReview: boolean;
 };
 
 export type DeleteUserMutationVariables = Exact<{
@@ -659,6 +748,38 @@ export type UpdateProductMutation = {
     | undefined;
 };
 
+export type UpdateReviewMutationVariables = Exact<{
+  comment: Scalars['String'];
+  rating: Scalars['Int'];
+  title: Scalars['String'];
+  reviewId: Scalars['Int'];
+}>;
+
+export type UpdateReviewMutation = {
+  __typename?: 'Mutation';
+  updateReview: {
+    __typename?: 'ReviewResponse';
+    errors?:
+      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
+      | null
+      | undefined;
+    review?:
+      | {
+          __typename?: 'Review';
+          id: number;
+          title: string;
+          comment: string;
+          rating: number;
+          productId: number;
+          creatorId: number;
+          updatedAt: string;
+          createdAt: string;
+        }
+      | null
+      | undefined;
+  };
+};
+
 export type CartsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type CartsQuery = {
@@ -769,6 +890,50 @@ export type ProductsQuery = {
         liked: boolean;
         stripeProductId: string;
         creator: { __typename?: 'User'; id: number; fullName: string };
+      }>
+    | null
+    | undefined;
+};
+
+export type ReviewQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type ReviewQuery = {
+  __typename?: 'Query';
+  review?:
+    | {
+        __typename?: 'Review';
+        id: number;
+        title: string;
+        comment: string;
+        rating: number;
+        creatorId: number;
+        productId: number;
+        createdAt: string;
+        updatedAt: string;
+      }
+    | null
+    | undefined;
+};
+
+export type ReviewsQueryVariables = Exact<{
+  productId: Scalars['Int'];
+}>;
+
+export type ReviewsQuery = {
+  __typename?: 'Query';
+  reviews?:
+    | Array<{
+        __typename?: 'Review';
+        id: number;
+        title: string;
+        rating: number;
+        comment: string;
+        productId: number;
+        creatorId: number;
+        createdAt: string;
+        updatedAt: string;
       }>
     | null
     | undefined;
@@ -973,6 +1138,40 @@ export function useCreateProductMutation() {
     CreateProductMutationVariables
   >(CreateProductDocument);
 }
+export const CreateReviewDocument = gql`
+  mutation CreateReview(
+    $productId: Int!
+    $comment: String!
+    $rating: Int!
+    $title: String!
+  ) {
+    createReview(
+      productId: $productId
+      comment: $comment
+      rating: $rating
+      title: $title
+    ) {
+      errors {
+        message
+        field
+      }
+      review {
+        id
+        title
+        rating
+        comment
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export function useCreateReviewMutation() {
+  return Urql.useMutation<CreateReviewMutation, CreateReviewMutationVariables>(
+    CreateReviewDocument,
+  );
+}
 export const CreateSignatureDocument = gql`
   mutation CreateSignature {
     createImageSignature {
@@ -1046,6 +1245,17 @@ export function useDeleteProductAsAdminMutation() {
     DeleteProductAsAdminMutation,
     DeleteProductAsAdminMutationVariables
   >(DeleteProductAsAdminDocument);
+}
+export const DeleteReviewDocument = gql`
+  mutation DeleteReview($id: Int!) {
+    deleteReview(id: $id)
+  }
+`;
+
+export function useDeleteReviewMutation() {
+  return Urql.useMutation<DeleteReviewMutation, DeleteReviewMutationVariables>(
+    DeleteReviewDocument,
+  );
 }
 export const DeleteUserDocument = gql`
   mutation DeleteUser($id: Int!) {
@@ -1209,6 +1419,42 @@ export function useUpdateProductMutation() {
     UpdateProductMutationVariables
   >(UpdateProductDocument);
 }
+export const UpdateReviewDocument = gql`
+  mutation UpdateReview(
+    $comment: String!
+    $rating: Int!
+    $title: String!
+    $reviewId: Int!
+  ) {
+    updateReview(
+      comment: $comment
+      rating: $rating
+      title: $title
+      reviewId: $reviewId
+    ) {
+      errors {
+        field
+        message
+      }
+      review {
+        id
+        title
+        comment
+        rating
+        productId
+        creatorId
+        updatedAt
+        createdAt
+      }
+    }
+  }
+`;
+
+export function useUpdateReviewMutation() {
+  return Urql.useMutation<UpdateReviewMutation, UpdateReviewMutationVariables>(
+    UpdateReviewDocument,
+  );
+}
 export const CartsDocument = gql`
   query Carts {
     carts {
@@ -1305,6 +1551,46 @@ export function useProductsQuery(
   options: Omit<Urql.UseQueryArgs<ProductsQueryVariables>, 'query'> = {},
 ) {
   return Urql.useQuery<ProductsQuery>({ query: ProductsDocument, ...options });
+}
+export const ReviewDocument = gql`
+  query Review($id: Int!) {
+    review(id: $id) {
+      id
+      title
+      comment
+      rating
+      creatorId
+      productId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export function useReviewQuery(
+  options: Omit<Urql.UseQueryArgs<ReviewQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<ReviewQuery>({ query: ReviewDocument, ...options });
+}
+export const ReviewsDocument = gql`
+  query Reviews($productId: Int!) {
+    reviews(productId: $productId) {
+      id
+      title
+      rating
+      comment
+      productId
+      creatorId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export function useReviewsQuery(
+  options: Omit<Urql.UseQueryArgs<ReviewsQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<ReviewsQuery>({ query: ReviewsDocument, ...options });
 }
 export const UserDocument = gql`
   query User($userId: Int!) {

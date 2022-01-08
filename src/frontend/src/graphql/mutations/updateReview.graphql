@@ -1,0 +1,18 @@
+mutation UpdateReview($comment: String!, $rating: Int!, $title: String!, $reviewId: Int!) {
+  updateReview(comment: $comment, rating: $rating, title: $title, reviewId: $reviewId) {
+    errors {
+      field
+      message
+    }
+    review {
+      id
+      title
+      comment
+      rating
+      productId
+      creatorId
+      updatedAt
+      createdAt
+    }
+  }
+}
