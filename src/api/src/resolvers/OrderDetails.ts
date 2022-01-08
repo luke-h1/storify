@@ -13,7 +13,7 @@ import { Order } from '../entities/Order';
 import { OrderDetails } from '../entities/OrderDetails';
 import { Product } from '../entities/Product';
 import { MyContext } from '../types/MyContext';
-import { FieldError } from './User';
+import { FieldError } from './user';
 
 @ObjectType()
 class OrderDetailsResponse {
