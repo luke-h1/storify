@@ -784,7 +784,7 @@
   dependencies:
     chalk "^4.0.0"
 
-"@corex/deepmerge@^2.6.34":
+"@corex/deepmerge@^2.6.148":
   version "2.6.148"
   resolved "https://registry.yarnpkg.com/@corex/deepmerge/-/deepmerge-2.6.148.tgz#8fa825d53ffd1cbcafce1b6a830eefd3dcc09dd5"
   integrity sha512-6QMz0/2h5C3ua51iAnXMPWFbb1QOU1UvSM4bKBw5mzdT+WtLgjbETBBIQZ+Sh9WvEcGwlAt/DEdRpIC3XlDBMA==
@@ -9268,11 +9268,11 @@ next-seo@^4.28.1:
   integrity sha512-WZgwdM+UhpNF3A37zFllzmPhnOVJ9vYeYlc0n3Z/kYfz/QQgy8NEdncNNggS9dU4JD8xriaCcyknhy5OsrFsJw==
 
 next-sitemap@^1.6.184:
-  version "1.6.203"
-  resolved "https://registry.yarnpkg.com/next-sitemap/-/next-sitemap-1.6.203.tgz#bfa2e67fea2bab1efed60cda743e7f98dc00bb46"
-  integrity sha512-WigcoqIUNbXQa2GnwOiCOydGx/XHCS4kRtIPNEsc8DGX2XvJtbAJKRxcidZZ2KihTAtwwCu1XQ4Hbof4mJbvLg==
+  version "1.6.261"
+  resolved "https://registry.yarnpkg.com/next-sitemap/-/next-sitemap-1.6.261.tgz#550aeb40b6b1273628237ff7efcfacf9d0244f26"
+  integrity sha512-4RGogAJE2IsMffeH1Lfa6eT85BI1TWO8Fn1hmwX1h40UnvIaJKephlLnp+3F4C4jXKDAZ6P+xHLtVPmyQznVPQ==
   dependencies:
-    "@corex/deepmerge" "^2.6.34"
+    "@corex/deepmerge" "^2.6.148"
     matcher "^4.0.0"
     minimist "^1.2.5"
 
