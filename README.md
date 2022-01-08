@@ -2,6 +2,9 @@
   <img src='.github/docs/logo.svg' width='200' />
 </p>
 
+
+[![CI / build & test](https://github.com/luke-h1/storify/actions/workflows/build.yml/badge.svg)](https://github.com/luke-h1/storify/actions/workflows/build.yml)
+
 # Storify 
 > A mock e commerce store built to learn clean GraphQL schema design, database relationships & React
 
