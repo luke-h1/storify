@@ -55,7 +55,6 @@ export type ImageSignature = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  cancelOrder: Order;
   changePassword: UserResponse;
   createCart: Scalars['Boolean'];
   createImageSignature: ImageSignature;
@@ -80,10 +79,6 @@ export type Mutation = {
   updateCartQuantity: CartResponse;
   updateOrderStatus: Order;
   updateProduct?: Maybe<Product>;
-};
-
-export type MutationCancelOrderArgs = {
-  orderId: Scalars['Int'];
 };
 
 export type MutationChangePasswordArgs = {

@@ -12,6 +12,7 @@ import {
 import { getConnection } from 'typeorm';
 import { Cart } from '../entities/Cart';
 import { Order, OrderStatus } from '../entities/Order';
+import { OrderDetails } from '../entities/OrderDetails';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
@@ -42,17 +43,6 @@ export class OrderResolver {
     });
 
     return result.raw[0];
-  }
-
-  @Mutation(() => Order)
-  @Authorized(isAuth)
-  async cancelOrder(
-    @Arg('orderId', () => Int) orderId: number,
-    @Ctx() { req }: MyContext,
-  ): Promise<Order> {
-    return Order.findOne({
-      where: { creatorId: req.session.userId, id: orderId },
-    }) as unknown as Order;
   }
 
   @Query(() => [Order])
