@@ -9,7 +9,6 @@ import Page from '../../components/Page';
 import {
   useOrdersQuery,
   useCreatePaymentMutation,
-  useCancelOrderMutation,
 } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import { isServer } from '../../utils/isServer';
