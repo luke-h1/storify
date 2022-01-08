@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { MeQuery, useDeleteReviewMutation } from '../generated/graphql';
 
 interface Props {
@@ -13,9 +14,11 @@ interface Props {
     updatedAt: string;
   };
   user: MeQuery | undefined;
+  productId: number;
 }
 
-const ReviewCard = ({ review, user }: Props) => {
+const ReviewCard = ({ review, user, productId }: Props) => {
+  const router = useRouter();
   const [, deleteReview] = useDeleteReviewMutation();
   return (
     <div className="p-2">
@@ -30,7 +33,7 @@ const ReviewCard = ({ review, user }: Props) => {
             {user?.me?.id === review.creatorId && (
               <div className="flex flex-col align-left mt-5">
                 <button
-                  className="btn btn-red"
+                  className="btn btn-red mb-5"
                   type="button"
                   onClick={async () => {
                     await deleteReview({
@@ -39,6 +42,17 @@ const ReviewCard = ({ review, user }: Props) => {
                   }}
                 >
                   Delete Review
+                </button>
+                <button
+                  className="btn btn-blue"
+                  type="button"
+                  onClick={async () => {
+                    router.push(
+                      `/reviews/update/?reviewId=${review.id}&productId=${productId}`,
+                    );
+                  }}
+                >
+                  Update Review
                 </button>
               </div>
             )}

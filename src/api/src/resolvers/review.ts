@@ -45,10 +45,8 @@ export class ReviewResolver {
 
   @Query(() => Review, { nullable: true })
   @Authorized(isAuth)
-  async review(
-    @Arg('productId', () => Int) productId: number,
-  ): Promise<Review | undefined> {
-    const review = Review.findOne({ productId });
+  async review(@Arg('id', () => Int) id: number): Promise<Review | undefined> {
+    const review = Review.findOne({ id });
 
     if (!review) {
       return undefined;
