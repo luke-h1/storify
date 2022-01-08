@@ -1,6 +1,9 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
+import sendGrid from '@sendgrid/mail';
 import nodemailer from 'nodemailer';
+
+sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 const emailService = {
   sendEmail: async (
@@ -11,7 +14,12 @@ const emailService = {
   ) => {
     if (process.env.NODE_ENV === 'production') {
       try {
-        console.log('send grid email');
+        await sendGrid.send({
+          from: 'noreply@storify.com',
+          to,
+          subject,
+          html,
+        });
       } catch (e) {
         console.error(e);
       }
