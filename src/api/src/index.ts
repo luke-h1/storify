@@ -20,7 +20,9 @@ import { isProd } from './shared/constants';
 import createSchema from './utils/createSchema';
 
 const main = async () => {
-  await createConn();
+  const conn = await createConn();
+
+  await conn.runMigrations();
 
   const app = express();
 
