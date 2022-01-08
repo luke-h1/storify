@@ -45,6 +45,7 @@ export class ProductResolver {
   }
 
   @Query(() => Product, { nullable: true })
+  @Authorized(isAuth)
   product(
     @Ctx() { req }: MyContext,
     @Arg('id', () => Int) id: number,
