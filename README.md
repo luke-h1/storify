@@ -84,14 +84,7 @@ Start the API in a development environment:
 yarn dev 
 ```
 
-The backend will now be listening on `http://localhost:<PORT>/api/graphql`
-
-
-At this stage migrations are ready to be ran: http
-
-```
-cd src/api && yarn migrate:up 
-```
+The backend will now be listening on `http://localhost:<PORT>/api/graphql`(migrations are automatically ran if needed)
 
 # :postbox: FAQ 
 
