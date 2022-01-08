@@ -2,7 +2,6 @@ import { Field, Form, Formik } from 'formik';
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import AuthRoute from '../../../components/AuthRoute';
 import InputField from '../../../components/InputField';
