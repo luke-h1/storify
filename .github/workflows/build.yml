@@ -28,7 +28,7 @@ jobs:
         run: yarn
 
       - name: start docker DBs
-        run: cd src/api && docker-compose up -d && cd ../../
+        run: yarn workspace @storify/api docker-compose up -d
 
       - name: format:check
         run: yarn format:check 
