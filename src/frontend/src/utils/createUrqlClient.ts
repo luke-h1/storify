@@ -18,6 +18,7 @@ import {
   UpdateCartQuantityMutationVariables,
   DeleteCartItemMutationVariables,
   CreateCartMutationVariables,
+  DeleteReviewMutationVariables,
 } from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
@@ -64,6 +65,13 @@ function invalidateAllCarts(cache: Cache) {
   });
 }
 
+function invalidateAllReviews(cache: Cache) {
+  const allFields = cache.inspectFields('Query');
+  const fieldInfos = allFields.filter(info => info.fieldName === 'Review');
+  fieldInfos.forEach(fi => {
+    cache.invalidate('Query', 'Review', fi.arguments || {});
+  });
+}
 export const createurqlClient = (
   ssrExchange: SSRExchange,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -186,6 +194,15 @@ export const createurqlClient = (
             },
             deleteCart: (_result, _args, cache) => {
               invalidateAllCarts(cache);
+            },
+            createReview: (_result, _args, cache) => {
+              invalidateAllReviews(cache);
+            },
+            deleteReview: (_result, args, cache) => {
+              cache.invalidate({
+                __typename: 'Review',
+                id: (args as DeleteReviewMutationVariables).id,
+              });
             },
           },
         },

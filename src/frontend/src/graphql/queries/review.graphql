@@ -1,0 +1,12 @@
+query Review($id: Int!) {
+  review(id: $id) {
+    id
+    title
+    comment
+    rating
+    creatorId
+    productId
+    createdAt
+    updatedAt
+  }
+}
