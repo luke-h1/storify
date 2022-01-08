@@ -20,31 +20,38 @@ const Orders: NextPage = () => {
 
   return (
     <AdminRoute>
-      <Page title="Users - Admin | Storify">
-        <h1 style={{ marginBottom: '2rem' }}>Manage users on the service</h1>
+      <Page title="Orders (admin) | Storify">
+        <h1 style={{ marginBottom: '2rem' }}>Manage orders on the service</h1>
         <table style={{ marginTop: '0.5rem' }} className="table">
           <thead>
-            <tr>
-              <td>ID</td>
-              <td>Creator ID</td>
-              <td>Product Title</td>
-              <td>QTY</td>
-              <td>Completed</td>
-              <td>Price</td>
-              <td>User email:</td>
-            </tr>
+            <td>Order ID</td>
+            <td>Order Status</td>
+            <td>Total</td>
+            <td>User ID</td>
+            <td>QTY</td>
+            <td>Product ID</td>
+            <td>Product Name</td>
+            <td>Product image</td>
+            <td>Product Price</td>
           </thead>
           {data?.orders &&
-            data?.orders.map(o => (
-              <tbody key={o.id}>
-                <tr key={o.id}>
-                  <td>{o.id}</td>
-                  <td>{o.creatorId}</td>
-                  <td>{o.productTitle}</td>
-                  <td>{o.qty}</td>
-                  <td>{o.completed ? 'true' : 'false'}</td>
-                  <td>{o.price}</td>
-                  <td>{o.email}</td>
+            data?.orders.map(order => (
+              <tbody key={order.id}>
+                <tr key={order.id}>
+                  <td>{order.id}</td>
+                  <td>{order.status}</td>
+                  <td>{order.total}</td>
+                  <td>{order.creatorId}</td>
+                  {order?.orderDetails &&
+                    order?.orderDetails.map(od => (
+                      <>
+                        <td>{od.quantity}</td>
+                        <td>{od.product.id}</td>
+                        <td>{od.product.name}</td>
+                        <td>{od.product.image}</td>
+                        <td>{od.product.price}</td>
+                      </>
+                    ))}
                 </tr>
               </tbody>
             ))}
