@@ -63,7 +63,6 @@ export type Mutation = {
   createOrderDetails: OrderDetailsResponse;
   createPayment: Payment;
   createProduct: Product;
-  createWishlist: Scalars['Boolean'];
   deleteAllProducts: Scalars['Boolean'];
   deleteCart: Scalars['Boolean'];
   deleteCartItem: Scalars['Boolean'];
@@ -72,6 +71,7 @@ export type Mutation = {
   deleteProductAsAdmin: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
+  likeProduct: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
   makeUserAdmin: Scalars['Boolean'];
@@ -114,10 +114,6 @@ export type MutationCreateProductArgs = {
   input: ProductCreateInput;
 };
 
-export type MutationCreateWishlistArgs = {
-  productId: Scalars['Int'];
-};
-
 export type MutationDeleteCartItemArgs = {
   id: Scalars['Int'];
 };
@@ -142,6 +138,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
+};
+
+export type MutationLikeProductArgs = {
+  id: Scalars['Int'];
+  value: Scalars['Boolean'];
 };
 
 export type MutationLoginArgs = {
@@ -225,6 +226,7 @@ export type Product = {
   descriptionSnippet: Scalars['String'];
   id: Scalars['Int'];
   image: Scalars['String'];
+  liked: Scalars['Boolean'];
   name: Scalars['String'];
   orderDetails: OrderDetails;
   price: Scalars['Int'];
@@ -232,7 +234,6 @@ export type Product = {
   stripePriceId: Scalars['String'];
   stripeProductId: Scalars['String'];
   updatedAt: Scalars['String'];
-  wishlist: Wishlist;
 };
 
 export type ProductCreateInput = {
@@ -259,17 +260,20 @@ export type Query = {
   OrderDetails: Array<OrderDetails>;
   carts: Array<Cart>;
   me?: Maybe<User>;
+  order: Order;
   orders: Array<Order>;
   product?: Maybe<Product>;
   products?: Maybe<Array<Product>>;
   user?: Maybe<User>;
   users?: Maybe<Array<User>>;
-  wishlist: Wishlist;
-  wishlists: Array<Wishlist>;
 };
 
 export type QueryOrderDetailArgs = {
   orderId: Scalars['Int'];
+};
+
+export type QueryOrderArgs = {
+  paymentId: Scalars['String'];
 };
 
 export type QueryProductArgs = {
@@ -278,10 +282,6 @@ export type QueryProductArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['Int'];
-};
-
-export type QueryWishlistArgs = {
-  productId: Scalars['Int'];
 };
 
 export type User = {
@@ -309,14 +309,6 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type Wishlist = {
-  __typename?: 'Wishlist';
-  creatorId: Scalars['Int'];
-  id: Scalars['Int'];
-  product: Product;
-  productId: Scalars['Int'];
-};
-
 export type ErrorFragment = {
   __typename?: 'FieldError';
   field: string;
@@ -331,6 +323,7 @@ export type ProductFragmentFragment = {
   image: string;
   price: number;
   name: string;
+  liked: boolean;
   stripePriceId: string;
   stripeProductId: string;
   creator: { __typename?: 'User'; id: number };
@@ -345,6 +338,7 @@ export type ProductsFragmentFragment = {
   name: string;
   price: number;
   description: string;
+  liked: boolean;
   stripeProductId: string;
   creator: { __typename?: 'User'; id: number; fullName: string };
 };
@@ -466,15 +460,6 @@ export type CreateSignatureMutation = {
   };
 };
 
-export type CreateWishListMutationVariables = Exact<{
-  productId: Scalars['Int'];
-}>;
-
-export type CreateWishListMutation = {
-  __typename?: 'Mutation';
-  createWishlist: boolean;
-};
-
 export type DeleteCartMutationVariables = Exact<{ [key: string]: never }>;
 
 export type DeleteCartMutation = {
@@ -538,6 +523,16 @@ export type ForgotPasswordMutation = {
   forgotPassword: boolean;
 };
 
+export type LikeProductMutationVariables = Exact<{
+  value: Scalars['Boolean'];
+  likeProductId: Scalars['Int'];
+}>;
+
+export type LikeProductMutation = {
+  __typename?: 'Mutation';
+  likeProduct: boolean;
+};
+
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -585,6 +580,15 @@ export type MakeUserRegularUserMutationVariables = Exact<{
 export type MakeUserRegularUserMutation = {
   __typename?: 'Mutation';
   makeUserRegularUser: boolean;
+};
+
+export type OrderQueryVariables = Exact<{
+  paymentId: Scalars['String'];
+}>;
+
+export type OrderQuery = {
+  __typename?: 'Query';
+  order: { __typename?: 'Order'; paymentId: string };
 };
 
 export type RegisterMutationVariables = Exact<{
@@ -744,6 +748,7 @@ export type ProductQuery = {
         image: string;
         price: number;
         name: string;
+        liked: boolean;
         stripePriceId: string;
         stripeProductId: string;
         creator: { __typename?: 'User'; id: number };
@@ -766,6 +771,7 @@ export type ProductsQuery = {
         name: string;
         price: number;
         description: string;
+        liked: boolean;
         stripeProductId: string;
         creator: { __typename?: 'User'; id: number; fullName: string };
       }>
@@ -813,27 +819,6 @@ export type UsersQuery = {
     | undefined;
 };
 
-export type WishlistQueryVariables = Exact<{
-  productId: Scalars['Int'];
-}>;
-
-export type WishlistQuery = {
-  __typename?: 'Query';
-  wishlist: {
-    __typename?: 'Wishlist';
-    id: number;
-    productId: number;
-    creatorId: number;
-  };
-};
-
-export type WishlistsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type WishlistsQuery = {
-  __typename?: 'Query';
-  wishlists: Array<{ __typename?: 'Wishlist'; id: number; productId: number }>;
-};
-
 export const ProductFragmentFragmentDoc = gql`
   fragment ProductFragment on Product {
     id
@@ -842,6 +827,7 @@ export const ProductFragmentFragmentDoc = gql`
     image
     price
     name
+    liked
     stripePriceId
     stripeProductId
     creator {
@@ -858,6 +844,7 @@ export const ProductsFragmentFragmentDoc = gql`
     name
     price
     description
+    liked
     stripeProductId
     creator {
       id
@@ -1006,18 +993,6 @@ export function useCreateSignatureMutation() {
     CreateSignatureMutationVariables
   >(CreateSignatureDocument);
 }
-export const CreateWishListDocument = gql`
-  mutation CreateWishList($productId: Int!) {
-    createWishlist(productId: $productId)
-  }
-`;
-
-export function useCreateWishListMutation() {
-  return Urql.useMutation<
-    CreateWishListMutation,
-    CreateWishListMutationVariables
-  >(CreateWishListDocument);
-}
 export const DeleteCartDocument = gql`
   mutation DeleteCart {
     deleteCart
@@ -1100,6 +1075,17 @@ export function useForgotPasswordMutation() {
     ForgotPasswordMutationVariables
   >(ForgotPasswordDocument);
 }
+export const LikeProductDocument = gql`
+  mutation LikeProduct($value: Boolean!, $likeProductId: Int!) {
+    likeProduct(value: $value, id: $likeProductId)
+  }
+`;
+
+export function useLikeProductMutation() {
+  return Urql.useMutation<LikeProductMutation, LikeProductMutationVariables>(
+    LikeProductDocument,
+  );
+}
 export const LoginDocument = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -1146,6 +1132,19 @@ export function useMakeUserRegularUserMutation() {
     MakeUserRegularUserMutation,
     MakeUserRegularUserMutationVariables
   >(MakeUserRegularUserDocument);
+}
+export const OrderDocument = gql`
+  query Order($paymentId: String!) {
+    order(paymentId: $paymentId) {
+      paymentId
+    }
+  }
+`;
+
+export function useOrderQuery(
+  options: Omit<Urql.UseQueryArgs<OrderQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<OrderQuery>({ query: OrderDocument, ...options });
 }
 export const RegisterDocument = gql`
   mutation Register($options: UserRegisterInput!) {
@@ -1350,36 +1349,4 @@ export function useUsersQuery(
   options: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'> = {},
 ) {
   return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options });
-}
-export const WishlistDocument = gql`
-  query Wishlist($productId: Int!) {
-    wishlist(productId: $productId) {
-      id
-      productId
-      creatorId
-    }
-  }
-`;
-
-export function useWishlistQuery(
-  options: Omit<Urql.UseQueryArgs<WishlistQueryVariables>, 'query'> = {},
-) {
-  return Urql.useQuery<WishlistQuery>({ query: WishlistDocument, ...options });
-}
-export const WishlistsDocument = gql`
-  query Wishlists {
-    wishlists {
-      id
-      productId
-    }
-  }
-`;
-
-export function useWishlistsQuery(
-  options: Omit<Urql.UseQueryArgs<WishlistsQueryVariables>, 'query'> = {},
-) {
-  return Urql.useQuery<WishlistsQuery>({
-    query: WishlistsDocument,
-    ...options,
-  });
 }

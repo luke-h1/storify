@@ -30,6 +30,7 @@ export class OrderResolver {
       .into(Order)
       .values({
         creatorId: req.session.userId,
+        status: OrderStatus.AwaitingPayment,
         total,
       })
       .returning('*')
@@ -65,6 +66,23 @@ export class OrderResolver {
     return orders;
   }
 
+  @Query(() => Order)
+  @Authorized(isAuth)
+  async order(
+    @Ctx() { req }: MyContext,
+    @Arg('paymentId') paymentId: string,
+  ): Promise<Order | null> {
+    const order = await Order.findOne({
+      paymentId,
+      creatorId: req.session.userId,
+    });
+
+    if (!order) {
+      return null;
+    }
+    return order;
+  }
+
   @Mutation(() => Order)
   @Authorized(isAuth)
   async updateOrderStatus(
@@ -85,7 +103,7 @@ export class OrderResolver {
     const session = await stripe.checkout.sessions.retrieve(paymentId);
 
     if (!session) {
-      throw new Error('not valid session ');
+      throw new Error('not valid session');
     }
 
     // update order status

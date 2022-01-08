@@ -114,7 +114,7 @@ export class CartResolver {
       .createQueryBuilder()
       .update(Cart)
       .set({
-        quantity,
+        quantity: quantity <= 0 ? 1 : quantity,
       })
       .where({ id, creatorId: req.session.userId })
       .returning('*')

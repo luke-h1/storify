@@ -14,7 +14,6 @@ import {
 import { Cart } from './Cart';
 import { OrderDetails } from './OrderDetails';
 import { User } from './User';
-import { Wishlist } from './Wishlist';
 
 @ObjectType()
 @Entity('products')
@@ -65,9 +64,9 @@ export class Product extends BaseEntity {
   @Column()
   price: number;
 
-  @Field(() => Wishlist)
-  @OneToMany(() => Wishlist, w => w.product, { onDelete: 'CASCADE' })
-  wishlist: Wishlist;
+  @Field(() => Boolean)
+  @Column()
+  liked: boolean;
 
   @Field(() => OrderDetails)
   @OneToMany(() => OrderDetails, od => od.product, { onDelete: 'CASCADE' })

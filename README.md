@@ -60,7 +60,6 @@ You must install [Docker](https://www.docker.com/) in order to run Redis & Postg
 docker-compose up 
 ```
 
-# :runner: Getting started 
 
 Now that the databases are started we can start the API for the first time. It's worth nothing that when the server is in development, we automatically run migrations in order to save time when changing database columns.
 
