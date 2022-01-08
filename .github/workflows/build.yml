@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: yarn
 
+      - name: start docker DBs
+        run: cd src/api && docker-compose up -d && cd ../../
+
       - name: format:check
         run: yarn format:check 
         
@@ -47,3 +50,6 @@ jobs:
 
       - name: build frontend
         run: yarn workspace @storify/frontend build 
+
+      - name: Backend unit tests 
+        run: yarn workspace @storify/api test
