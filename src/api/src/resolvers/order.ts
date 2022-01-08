@@ -12,7 +12,6 @@ import {
 import { getConnection } from 'typeorm';
 import { Cart } from '../entities/Cart';
 import { Order, OrderStatus } from '../entities/Order';
-import { OrderDetails } from '../entities/OrderDetails';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
