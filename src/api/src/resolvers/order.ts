@@ -44,17 +44,6 @@ export class OrderResolver {
     return result.raw[0];
   }
 
-  @Mutation(() => Order)
-  @Authorized(isAuth)
-  async cancelOrder(
-    @Arg('orderId', () => Int) orderId: number,
-    @Ctx() { req }: MyContext,
-  ): Promise<Order> {
-    return Order.findOne({
-      where: { creatorId: req.session.userId, id: orderId },
-    }) as unknown as Order;
-  }
-
   @Query(() => [Order])
   @Authorized(isAuth)
   async orders(@Ctx() { req }: MyContext): Promise<Order[]> {

@@ -8,5 +8,6 @@ declare namespace NodeJS {
     FRONTEND_URL: string;
     CLOUDINARY_SECRET: string;
     STRIPE_SECRET_KEY: string;
+    SENDGRID_API_KEY: string;
   }
 }

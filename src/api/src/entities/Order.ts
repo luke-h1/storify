@@ -17,6 +17,7 @@ import { User } from './User';
 // eslint-disable-next-line no-shadow
 export enum OrderStatus {
   Created = 'created',
+  Open = 'open',
   Cancelled = 'cancelled',
   AwaitingPayment = 'awaiting:payment',
   Completed = 'completed',
