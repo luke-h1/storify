@@ -30,10 +30,15 @@ class ReviewResponse {
 export class ReviewResolver {
   @Query(() => [Review], { nullable: true })
   @Authorized(isAuth)
-  async reviews(): Promise<Review[]> {
+  async reviews(
+    @Arg('productId', () => Int) productId: number,
+  ): Promise<Review[]> {
     return Review.find({
       order: {
         createdAt: 'DESC',
+      },
+      where: {
+        productId,
       },
     });
   }

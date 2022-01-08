@@ -303,6 +303,10 @@ export type QueryReviewArgs = {
   productId: Scalars['Int'];
 };
 
+export type QueryReviewsArgs = {
+  productId: Scalars['Int'];
+};
+
 export type QueryUserArgs = {
   id: Scalars['Int'];
 };
@@ -574,6 +578,15 @@ export type DeleteProductAsAdminMutationVariables = Exact<{
 export type DeleteProductAsAdminMutation = {
   __typename?: 'Mutation';
   deleteProductAsAdmin: boolean;
+};
+
+export type DeleteReviewMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteReviewMutation = {
+  __typename?: 'Mutation';
+  deleteReview: boolean;
 };
 
 export type DeleteUserMutationVariables = Exact<{
@@ -904,7 +917,9 @@ export type ReviewQuery = {
     | undefined;
 };
 
-export type ReviewsQueryVariables = Exact<{ [key: string]: never }>;
+export type ReviewsQueryVariables = Exact<{
+  productId: Scalars['Int'];
+}>;
 
 export type ReviewsQuery = {
   __typename?: 'Query';
@@ -1231,6 +1246,17 @@ export function useDeleteProductAsAdminMutation() {
     DeleteProductAsAdminMutationVariables
   >(DeleteProductAsAdminDocument);
 }
+export const DeleteReviewDocument = gql`
+  mutation DeleteReview($id: Int!) {
+    deleteReview(id: $id)
+  }
+`;
+
+export function useDeleteReviewMutation() {
+  return Urql.useMutation<DeleteReviewMutation, DeleteReviewMutationVariables>(
+    DeleteReviewDocument,
+  );
+}
 export const DeleteUserDocument = gql`
   mutation DeleteUser($id: Int!) {
     deleteUser(id: $id)
@@ -1547,8 +1573,8 @@ export function useReviewQuery(
   return Urql.useQuery<ReviewQuery>({ query: ReviewDocument, ...options });
 }
 export const ReviewsDocument = gql`
-  query Reviews {
-    reviews {
+  query Reviews($productId: Int!) {
+    reviews(productId: $productId) {
       id
       title
       rating

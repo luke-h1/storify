@@ -1,5 +1,5 @@
-query Reviews {
-  reviews {
+query Reviews($productId: Int!) {
+  reviews(productId: $productId) {
     id
     title
     rating
