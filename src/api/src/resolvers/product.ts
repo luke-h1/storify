@@ -35,17 +35,21 @@ export class ProductResolver {
   }
 
   @Query(() => [Product], { nullable: true })
-  async products(): Promise<Product[]> {
+  async products(@Ctx() { req }: MyContext): Promise<Product[]> {
     return Product.find({
       order: {
+        creatorId: req.session.userId,
         createdAt: 'DESC',
       },
     });
   }
 
   @Query(() => Product, { nullable: true })
-  product(@Arg('id', () => Int) id: number): Promise<Product | undefined> {
-    return Product.findOne(id);
+  product(
+    @Ctx() { req }: MyContext,
+    @Arg('id', () => Int) id: number,
+  ): Promise<Product | undefined> {
+    return Product.findOne({ id, creatorId: req.session.userId });
   }
 
   @Mutation(() => Boolean)
