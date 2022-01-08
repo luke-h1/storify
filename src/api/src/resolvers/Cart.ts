@@ -15,7 +15,7 @@ import { Cart } from '../entities/Cart';
 import { Product } from '../entities/Product';
 import { User } from '../entities/User';
 import { MyContext } from '../types/MyContext';
-import { FieldError } from './user';
+import { FieldError } from './User';
 
 @ObjectType()
 class CartResponse {
