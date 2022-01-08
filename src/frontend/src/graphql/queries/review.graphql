@@ -1,5 +1,5 @@
-query Review($reviewId: Int!) {
-  review(id: $reviewId) {
+query Review($productId: Int!) {
+  review(productId: $productId) {
     id
     title
     comment

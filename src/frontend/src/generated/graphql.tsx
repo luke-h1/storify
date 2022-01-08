@@ -300,7 +300,7 @@ export type QueryProductArgs = {
 };
 
 export type QueryReviewArgs = {
-  id: Scalars['Int'];
+  productId: Scalars['Int'];
 };
 
 export type QueryUserArgs = {
@@ -883,7 +883,7 @@ export type ProductsQuery = {
 };
 
 export type ReviewQueryVariables = Exact<{
-  reviewId: Scalars['Int'];
+  productId: Scalars['Int'];
 }>;
 
 export type ReviewQuery = {
@@ -1527,8 +1527,8 @@ export function useProductsQuery(
   return Urql.useQuery<ProductsQuery>({ query: ProductsDocument, ...options });
 }
 export const ReviewDocument = gql`
-  query Review($reviewId: Int!) {
-    review(id: $reviewId) {
+  query Review($productId: Int!) {
+    review(productId: $productId) {
       id
       title
       comment
