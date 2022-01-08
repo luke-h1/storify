@@ -1,0 +1,16 @@
+mutation CreateReview($productId: Int!, $comment: String!, $rating: Int!, $title: String!) {
+  createReview(productId: $productId, comment: $comment, rating: $rating, title: $title) {
+    errors {
+      message
+      field
+    }
+    review {
+      id
+      title
+      rating
+      comment
+      createdAt
+      updatedAt
+    }
+  }
+}

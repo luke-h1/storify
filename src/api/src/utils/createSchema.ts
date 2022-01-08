@@ -6,6 +6,7 @@ import { OrderResolver } from '../resolvers/order';
 import { OrderDetailsResolver } from '../resolvers/orderDetails';
 import { PaymentResolver } from '../resolvers/payment';
 import { ProductResolver } from '../resolvers/product';
+import { ReviewResolver } from '../resolvers/review';
 import { UserResolver } from '../resolvers/user';
 
 const createSchema = async () =>
@@ -17,6 +18,7 @@ const createSchema = async () =>
       OrderResolver,
       OrderDetailsResolver,
       PaymentResolver,
+      ReviewResolver,
       CartResolver,
     ],
     validate: false,

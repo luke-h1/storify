@@ -1,0 +1,12 @@
+query Reviews {
+  reviews {
+    id
+    title
+    rating
+    comment
+    productId
+    creatorId
+    createdAt
+    updatedAt
+  }
+}

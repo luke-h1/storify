@@ -9,6 +9,7 @@ import {
   Int,
   ObjectType,
   Field,
+  Query,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Product } from '../entities/Product';
@@ -27,6 +28,27 @@ class ReviewResponse {
 
 @Resolver(Review)
 export class ReviewResolver {
+  @Query(() => [Review], { nullable: true })
+  @Authorized(isAuth)
+  async reviews(): Promise<Review[]> {
+    return Review.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
+  @Query(() => Review, { nullable: true })
+  @Authorized(isAuth)
+  async review(@Arg('id', () => Int) id: number): Promise<Review | undefined> {
+    const review = Review.findOne({ id });
+
+    if (!review) {
+      return undefined;
+    }
+    return review;
+  }
+
   @Mutation(() => ReviewResponse)
   @Authorized(isAuth)
   async createReview(
