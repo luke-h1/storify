@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { MyContext } from 'src/types/MyContext';
 import {
   Arg,
   Authorized,
@@ -16,6 +15,7 @@ import { Product } from '../entities/Product';
 import { Review } from '../entities/Review';
 import { isAuth } from '../middleware/isAuth';
 import { FieldError } from '../shared/FieldError';
+import { MyContext } from '../types/MyContext';
 
 @ObjectType()
 class ReviewResponse {
