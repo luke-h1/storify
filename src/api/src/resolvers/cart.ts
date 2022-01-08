@@ -9,11 +9,13 @@ import {
   Root,
   ObjectType,
   Field,
+  Authorized,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Cart } from '../entities/Cart';
 import { Product } from '../entities/Product';
 import { User } from '../entities/User';
+import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { FieldError } from './user';
 
@@ -34,16 +36,21 @@ export class CartResolver {
   }
 
   @Query(() => [Cart])
-  async carts(): Promise<Cart[]> {
+  @Authorized(isAuth)
+  async carts(@Ctx() { req }: MyContext): Promise<Cart[]> {
     return Cart.find({
       order: {
         createdAt: 'DESC',
       },
       relations: ['product'],
+      where: {
+        creatorId: req.session.userId,
+      },
     });
   }
 
   @Mutation(() => Boolean)
+  @Authorized(isAuth)
   async createCart(
     @Arg('productId', () => Int) productId: number,
     @Arg('quantity', () => Int) quantity: number,
@@ -90,6 +97,7 @@ export class CartResolver {
   }
 
   @Mutation(() => CartResponse)
+  @Authorized(isAuth)
   async updateCartQuantity(
     @Arg('id', () => Int) id: number,
     @Arg('quantity', () => Int) quantity: number,
@@ -128,6 +136,7 @@ export class CartResolver {
   }
 
   @Mutation(() => Boolean)
+  @Authorized(isAuth)
   async deleteCartItem(
     @Ctx() { req }: MyContext,
     @Arg('id', () => Int) id: number,
@@ -145,6 +154,7 @@ export class CartResolver {
   }
 
   @Mutation(() => Boolean)
+  @Authorized(isAuth)
   async deleteCart(@Ctx() { req }: MyContext): Promise<Boolean> {
     await Cart.delete({ creatorId: req.session.userId });
     return true;

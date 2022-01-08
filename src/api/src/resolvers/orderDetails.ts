@@ -1,5 +1,6 @@
 import {
   Arg,
+  Authorized,
   Ctx,
   Field,
   Int,
@@ -12,6 +13,7 @@ import { getConnection } from 'typeorm';
 import { Order } from '../entities/Order';
 import { OrderDetails } from '../entities/OrderDetails';
 import { Product } from '../entities/Product';
+import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { FieldError } from './user';
 
@@ -44,6 +46,7 @@ export class OrderDetailsResolver {
   }
 
   @Mutation(() => OrderDetailsResponse)
+  @Authorized(isAuth)
   async createOrderDetails(
     @Arg('quantity', () => Int) quantity: number,
     @Arg('orderId', () => Int) orderId: number,
