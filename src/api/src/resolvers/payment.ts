@@ -39,6 +39,7 @@ export class PaymentResolver {
     const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 
     for (let i = 0; i < order.orderDetails.length; i += 1) {
+      // eslint-disable-next-line camelcase
       line_items.push({
         name: order.orderDetails[i].product.name,
         currency: 'gbp',
@@ -46,7 +47,6 @@ export class PaymentResolver {
         images: [order.orderDetails[i].product.image],
         quantity: order.orderDetails[i].quantity,
         amount: order.total * 100,
-        // price: order.orderDetails[i].product.stripePriceId,
       });
     }
 
@@ -56,6 +56,7 @@ export class PaymentResolver {
       success_url:
         'http://localhost:3000/checkout/success?source={CHECKOUT_SESSION_ID}',
       mode: 'payment',
+      // eslint-disable-next-line camelcase
       line_items,
     });
 
