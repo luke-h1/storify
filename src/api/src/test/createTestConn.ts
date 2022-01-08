@@ -1,5 +1,8 @@
 import { Connection, createConnection } from 'typeorm';
+import { Cart } from '../entities/Cart';
 import { Order } from '../entities/Order';
+import { OrderDetails } from '../entities/OrderDetails';
+import { Payment } from '../entities/Payment';
 import { Product } from '../entities/Product';
 import { Review } from '../entities/Review';
 import { User } from '../entities/User';
@@ -14,5 +17,5 @@ export const createTestConn = (drop = false): Promise<Connection> =>
     database: 'storify',
     synchronize: drop,
     dropSchema: drop,
-    entities: [User, Product, Order, Review],
+    entities: [User, Product, Order, Cart, OrderDetails, Payment, Review],
   });
