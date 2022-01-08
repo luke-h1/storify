@@ -49,6 +49,7 @@ interface FormValues {
 }
 
 const CreateProductPage: NextPage = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<string>('');
   const router = useRouter();
   useIsAuth();
@@ -68,6 +69,7 @@ const CreateProductPage: NextPage = () => {
             price: 0,
           }}
           onSubmit={async values => {
+            setLoading(true);
             const { data: signatureData } = await createSignature();
             if (signatureData) {
               const { signature, timestamp } =
@@ -77,6 +79,7 @@ const CreateProductPage: NextPage = () => {
                 signature,
                 timestamp,
               );
+              setLoading(false);
               const res = await createProduct({
                 input: {
                   image: imageData.secure_url,
@@ -129,7 +132,7 @@ const CreateProductPage: NextPage = () => {
 
               <button
                 style={{ marginLeft: '1rem' }}
-                disabled={isSubmitting}
+                disabled={isSubmitting || loading}
                 className="btn btn-blue"
                 type="submit"
               >

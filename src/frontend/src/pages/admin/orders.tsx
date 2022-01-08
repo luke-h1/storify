@@ -22,7 +22,7 @@ const Orders: NextPage = () => {
     <AdminRoute>
       <Page title="Orders (admin) | Storify">
         <div className="bg-white p-8 rounded-md w-full max-w-800">
-          <div className="flex items-center justify-bbetween pb-6">
+          <div className="flex items-center justify-between pb-6">
             <div>
               <h2 className="text-gray-600 font-semibold">
                 Manage orders on the service

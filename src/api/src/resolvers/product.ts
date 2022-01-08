@@ -11,6 +11,8 @@ import {
   Root,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
+import { Order } from '../entities/Order';
+import { OrderDetails } from '../entities/OrderDetails';
 import { Product } from '../entities/Product';
 import { User } from '../entities/User';
 import { ProductCreateInput } from '../inputs/product/ProductCreateInput';
@@ -175,17 +177,34 @@ export class ProductResolver {
     @Arg('stripeProductId') stripeProductId: string,
     @Ctx() { req }: MyContext,
   ): Promise<boolean> {
-    const product = await Product.findOne(id);
-
-    if (product) {
-      await stripe.prices.update(product.stripePriceId, {
-        active: false,
-      });
-      await stripe.products.update(stripeProductId, {
-        active: false,
-      });
-      await Product.delete({ id, creatorId: req.session.userId });
+    const product = await Product.findOne({
+      id,
+      creatorId: req.session.userId,
+    });
+    if (!product) {
+      return false;
     }
+
+    await stripe.prices.update(product.stripePriceId, {
+      active: false,
+    });
+
+    await stripe.products.update(stripeProductId, {
+      active: false,
+    });
+
+    const order = await OrderDetails.findOne({ productId: id });
+
+    if (!order) {
+      throw new Error('no order');
+    }
+
+    await Order.delete({ id: order.orderId });
+
+    await OrderDetails.delete({ productId: id });
+
+    await Product.delete({ id });
+
     return true;
   }
 
@@ -208,6 +227,16 @@ export class ProductResolver {
     await stripe.products.update(stripeProductId, {
       active: false,
     });
+
+    const order = await OrderDetails.findOne({ productId: id });
+
+    if (!order) {
+      throw new Error('no order');
+    }
+
+    await Order.delete({ id: order.orderId });
+
+    await OrderDetails.delete({ productId: id });
 
     await Product.delete({ id });
 
