@@ -64,7 +64,7 @@ docker-compose up
 ```
 
 
-Now that the databases are started we can start the API for the first time. It's worth nothing that when the server is in development, we automatically run migrations in order to save time when changing database columns.
+Now that the databases are started we can start the API for the first time.
 
 Run the following commands to start the API (ensure the databases are running): 
 
@@ -86,6 +86,12 @@ yarn dev
 
 The backend will now be listening on `http://localhost:<PORT>/api/graphql`
 
+
+At this stage migrations are ready to be ran: http
+
+```
+cd src/api && yarn migrate:up 
+```
 
 # :postbox: FAQ 
 
