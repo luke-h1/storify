@@ -2,7 +2,6 @@ import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import AuthRoute from '../../components/AuthRoute';
 import Loader from '../../components/Loader';
 import {
   useCreateCartMutation,
@@ -11,7 +10,6 @@ import {
   useProductQuery,
 } from '../../generated/graphql';
 import useGetIntId from '../../hooks/useGetIntId';
-import { useIsAuth } from '../../hooks/useIsAuth';
 import { createurqlClient } from '../../utils/createUrqlClient';
 
 const SingleProductPage: NextPage = () => {
