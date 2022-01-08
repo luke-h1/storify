@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import { Cart } from './Cart';
 import { OrderDetails } from './OrderDetails';
+import { Review } from './Review';
 import { User } from './User';
 
 @ObjectType()
@@ -75,6 +76,10 @@ export class Product extends BaseEntity {
   @Field(() => Cart)
   @OneToMany(() => Cart, c => c.product, { onDelete: 'CASCADE' })
   cart: Cart;
+
+  @Field(() => Review)
+  @OneToMany(() => Review, r => r.product, { onDelete: 'CASCADE' })
+  review: Review;
 
   @Field(() => String)
   @CreateDateColumn({ type: 'date' })

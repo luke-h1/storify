@@ -11,6 +11,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Product } from './Product';
 import { User } from './User';
 
 @ObjectType()
@@ -22,7 +23,7 @@ export class Review extends BaseEntity {
 
   @Field(() => String)
   @Column()
-  name!: string;
+  title!: string;
 
   @Field(() => Int)
   @Column()
@@ -33,6 +34,14 @@ export class Review extends BaseEntity {
   @Field(() => String)
   @Column()
   comment!: string;
+
+  @Field(() => Int)
+  @Column()
+  productId: number;
+
+  @ManyToOne(() => Product, p => p.review, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'productId' })
+  product: Product;
 
   @Field(() => Int)
   @Column()

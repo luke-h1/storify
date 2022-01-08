@@ -16,8 +16,8 @@ import { Cart } from '../entities/Cart';
 import { Product } from '../entities/Product';
 import { User } from '../entities/User';
 import { isAuth } from '../middleware/isAuth';
+import { FieldError } from '../shared/FieldError';
 import { MyContext } from '../types/MyContext';
-import { FieldError } from './user';
 
 @ObjectType()
 class CartResponse {
