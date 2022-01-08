@@ -28,11 +28,6 @@ export const authLinks = [
     text: 'Create Product',
   },
   {
-    id: 2,
-    slug: '/me/products',
-    text: 'My products',
-  },
-  {
     id: 3,
     slug: '/cart',
     text: 'Cart',
