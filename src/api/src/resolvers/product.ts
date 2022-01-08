@@ -38,8 +38,10 @@ export class ProductResolver {
   async products(@Ctx() { req }: MyContext): Promise<Product[]> {
     return Product.find({
       order: {
-        creatorId: req.session.userId,
         createdAt: 'DESC',
+      },
+      where: {
+        creatorId: req.session.userId,
       },
     });
   }
