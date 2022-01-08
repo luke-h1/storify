@@ -200,15 +200,11 @@ export class ProductResolver {
       active: false,
     });
 
-    const order = await OrderDetails.findOne({ productId: id });
+    const orderDetails = await OrderDetails.findOne({ productId: id });
 
-    if (!order) {
-      throw new Error('no order');
+    if (orderDetails) {
+      await Order.delete({ id: orderDetails.orderId });
     }
-
-    await Order.delete({ id: order.orderId });
-
-    await OrderDetails.delete({ productId: id });
 
     await Product.delete({ id });
 
