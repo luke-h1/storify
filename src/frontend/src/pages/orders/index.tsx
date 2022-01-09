@@ -9,6 +9,7 @@ import Page from '../../components/Page';
 import {
   useOrdersQuery,
   useCreatePaymentMutation,
+  useCancelOrderMutation,
 } from '../../generated/graphql';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import { isServer } from '../../utils/isServer';
@@ -52,6 +53,8 @@ const OrdersPage: NextPage = () => {
   const [{ data, fetching }] = useOrdersQuery({
     pause: isServer(),
   });
+  const [, cancelorder] = useCancelOrderMutation();
+
   return (
     <Page title="Orders | Storify" description="orders" flex={false}>
       <AuthRoute>
@@ -74,10 +77,29 @@ const OrdersPage: NextPage = () => {
                         <p className="text-gray-400">Order Status: </p>
                         <p className="font-semibold">{o.status}</p>
                       </div>
-                      <div className="flex flex-col justify-between">
+                      <div className="flex flex-col justify-between mb-5">
                         <p className="text-gray-400">Total cost</p>
                         <p className="font-semibold">£{o.total.toFixed(2)}</p>
                       </div>
+                      {o.status !== 'cancelled' ||
+                        ('completed' && (
+                          <div className="mb-5">
+                            <p className="text-gray-400">
+                              Cancel Order / Refund
+                            </p>
+                            <button
+                              onClick={async () => {
+                                await cancelorder({
+                                  id: o.id,
+                                });
+                              }}
+                              type="button"
+                              className="btn btn-blue"
+                            >
+                              Cancel Order / refund
+                            </button>
+                          </div>
+                        ))}
                       {o.orderDetails &&
                         o.orderDetails.map(od => (
                           <div
@@ -116,9 +138,10 @@ const OrdersPage: NextPage = () => {
                           </div>
                         ))}
                       <div>
-                        {o.status !== 'completed' && (
-                          <CheckoutForm orderId={o.id} />
-                        )}
+                        {o.status !== 'completed' &&
+                          o.status !== 'cancelled' && (
+                            <CheckoutForm orderId={o.id} />
+                          )}
                       </div>
                     </>
                   ))}
