@@ -82,7 +82,10 @@ export class ProductResolver {
     @Ctx() { req }: MyContext,
     @Arg('id', () => Int) id: number,
   ): Promise<Product | undefined> {
-    return Product.findOne({ id, creatorId: req.session.userId });
+    if (isProd) {
+      return Product.findOne({ id, creatorId: req.session.userId });
+    }
+    return Product.findOne({ id });
   }
 
   @Mutation(() => Boolean)
