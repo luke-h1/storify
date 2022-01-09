@@ -1,0 +1,3 @@
+mutation CancelOrder($id: Int!) {
+  cancelorder(id: $id)
+}

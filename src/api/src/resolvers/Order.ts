@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 /* eslint-disable no-console */
 
 import {
@@ -70,6 +71,41 @@ export class OrderResolver {
       return null;
     }
     return order;
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized(isAuth)
+  async cancelorder(
+    @Ctx() { req }: MyContext,
+    @Arg('id', () => Int) id: number,
+  ): Promise<boolean> {
+    const order = await Order.findOne({ id });
+
+    if (!order) {
+      return false;
+    }
+    switch (order.status) {
+      // if they have already paid, don't refund
+      case OrderStatus.AwaitingPayment:
+      case OrderStatus.Open:
+      case OrderStatus.Created:
+        await getConnection()
+          .createQueryBuilder()
+          .update(Order)
+          .set({
+            status: OrderStatus.Cancelled,
+          })
+          .where({
+            id,
+            creatorId: req.session.userId,
+          })
+          .returning('*')
+          .execute();
+        return true;
+
+      default:
+        return false;
+    }
   }
 
   @Mutation(() => Order)

@@ -55,6 +55,7 @@ export type ImageSignature = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  cancelorder: Scalars['Boolean'];
   changePassword: UserResponse;
   createCart: Scalars['Boolean'];
   createImageSignature: ImageSignature;
@@ -82,6 +83,10 @@ export type Mutation = {
   updateOrderStatus: Order;
   updateProduct?: Maybe<ProductResponse>;
   updateReview: ReviewResponse;
+};
+
+export type MutationCancelorderArgs = {
+  id: Scalars['Int'];
 };
 
 export type MutationChangePasswordArgs = {
@@ -429,6 +434,15 @@ export type UserResponseFragmentFragment = {
       }
     | null
     | undefined;
+};
+
+export type CancelOrderMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type CancelOrderMutation = {
+  __typename?: 'Mutation';
+  cancelorder: boolean;
 };
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -1081,6 +1095,17 @@ export const UserResponseFragmentFragmentDoc = gql`
   ${ErrorFragmentDoc}
   ${UserFragmentFragmentDoc}
 `;
+export const CancelOrderDocument = gql`
+  mutation CancelOrder($id: Int!) {
+    cancelorder(id: $id)
+  }
+`;
+
+export function useCancelOrderMutation() {
+  return Urql.useMutation<CancelOrderMutation, CancelOrderMutationVariables>(
+    CancelOrderDocument,
+  );
+}
 export const ChangePasswordDocument = gql`
   mutation ChangePassword($newPassword: String!, $token: String!) {
     changePassword(newPassword: $newPassword, token: $token) {
