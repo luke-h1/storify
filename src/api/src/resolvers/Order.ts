@@ -111,11 +111,22 @@ export class OrderResolver {
 
         console.log(payment);
 
-        const res = await stripe.refunds.create({
+        await stripe.refunds.create({
           amount: order.total,
           payment_intent: payment?.paymentIntentId,
         });
-        console.log(res);
+
+        await getConnection()
+          .createQueryBuilder()
+          .update(Order)
+          .set({
+            status: OrderStatus.Refunded,
+          })
+          .where('id = :id and "creatorId" = :creatorId', {
+            id: order.id,
+            creatorId: req.session.userId,
+          });
+
         return true;
 
       default:
