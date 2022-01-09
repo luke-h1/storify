@@ -86,6 +86,8 @@ yarn dev
 
 The backend will now be listening on `http://localhost:<PORT>/api/graphql`(migrations are automatically ran if needed)
 
+If you want to seed the database there is a seed available which will seed the local database with 24 users & 24 products. Simply run `yarn seed` in the api folder (with the databases running) in order to seed your local database
+
 **running migrations** 
 
 If you make any changes to the database schema you will need to generate migrations in order to apply your changes to the dataase. 
