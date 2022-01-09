@@ -95,13 +95,19 @@ If you make any changes to the database schema you will need to generate migrati
 To create a new migration (in the api project):  
 
 ```bash 
-typeorm migration:create -n <NAME_OF_MIGRATION>
+yarn migrate:gen
 ```
 
 To run these migrations against your local database (in the api project): 
 
 ```bash 
-yarn migrate:run 
+yarn migrate:up 
+```
+
+To revert these changes & rollback the migration: 
+
+```bash 
+yarn migrate:down 
 ```
 
 
