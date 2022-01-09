@@ -87,6 +87,7 @@ yarn dev
 The backend will now be listening on `http://localhost:<PORT>/api/graphql`(migrations are automatically ran if needed)
 
 **running migrations** 
+
 If you make any changes to the database schema you will need to generate migrations in order to apply your changes to the dataase. 
 
 To create a new migration (in the api project):  
