@@ -1,10 +1,11 @@
 mutation CreateProduct($input: ProductCreateInput!) {
   createProduct(input: $input) {
-    id
-    image
-    name
-    price
-    brand
-    descriptionSnippet
+    errors {
+      message
+      field
+    }
+    product {
+      id
+    }
   }
 }

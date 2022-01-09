@@ -18,6 +18,8 @@ import { ReviewUpdateInput } from '../inputs/review/ReviewUpdateInput';
 import { isAuth } from '../middleware/isAuth';
 import { FieldError } from '../shared/FieldError';
 import { MyContext } from '../types/MyContext';
+import { validateReviewCreate } from '../validations/reviewCreate';
+import { validateReviewUpdate } from '../validations/reviewUpdate';
 
 @ObjectType()
 class ReviewResponse {
@@ -74,6 +76,15 @@ export class ReviewResolver {
         ],
       };
     }
+
+    const errors = validateReviewCreate(input);
+
+    if (errors) {
+      return {
+        errors,
+      };
+    }
+
     const result = await getConnection()
       .createQueryBuilder()
       .insert()
@@ -84,7 +95,9 @@ export class ReviewResolver {
       })
       .returning('*')
       .execute();
-    return result.raw[0];
+    return {
+      review: result.raw[0],
+    };
   }
 
   @Mutation(() => ReviewResponse)
@@ -105,6 +118,14 @@ export class ReviewResolver {
         ],
       };
     }
+    const errors = validateReviewUpdate(input);
+
+    if (errors) {
+      return {
+        errors,
+      };
+    }
+
     const result = await getConnection()
       .createQueryBuilder()
       .update(Review)
@@ -119,7 +140,9 @@ export class ReviewResolver {
       })
       .returning('*')
       .execute();
-    return result.raw[0];
+    return {
+      review: result.raw[0],
+    };
   }
 
   @Mutation(() => Boolean)
