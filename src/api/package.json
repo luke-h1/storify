@@ -17,7 +17,7 @@
     "test:watch": "cross-env NODE_ENV=test npm run db:setup && jest --watch",
     "gen-env": "gen-env-types .env -o src/types/env.d.ts -e .",
     "migrate:create": "typeorm migration:create -n <NAME_OF_MIGRATION>",
-    "migrate:run": "./node_modules/typeorm/cli.js migration:run",
+    "migrate:run": "typeorm migration:run",
     "seed:db": "sh scripts/seed-db.sh"
   },
   "dependencies": {
