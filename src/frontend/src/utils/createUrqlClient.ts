@@ -19,7 +19,9 @@ import {
   DeleteCartItemMutationVariables,
   CreateCartMutationVariables,
   DeleteReviewMutationVariables,
-} from '../generated/graphql';
+  CancelOrderMutationVariables,
+  OrdersDocument,
+ CancelOrderMutation, OrdersQuery } from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
 

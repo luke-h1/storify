@@ -13,9 +13,7 @@ import {
 import { getConnection } from 'typeorm';
 import { Cart } from '../entities/Cart';
 import { Order, OrderStatus } from '../entities/Order';
-import { OrderDetails } from '../entities/OrderDetails';
 import { Payment } from '../entities/Payment';
-import { Product } from '../entities/Product';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
@@ -109,8 +107,6 @@ export class OrderResolver {
       case OrderStatus.Completed:
         const payment = await Payment.findOne({ where: { orderId: order.id } });
 
-        console.log(payment);
-
         await stripe.refunds.create({
           amount: order.total,
           payment_intent: payment?.paymentIntentId,
@@ -125,7 +121,9 @@ export class OrderResolver {
           .where('id = :id and "creatorId" = :creatorId', {
             id: order.id,
             creatorId: req.session.userId,
-          });
+          })
+          .returning('*')
+          .execute();
 
         return true;
 
