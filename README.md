@@ -20,8 +20,8 @@
 * User registration, login & authentication flow with forgot password & password resets
 * Full product creation user flow (with Stripe integration)
 * Full Cart management flow
-* Create orders 
-* Add reviews to orders
+* Create orders and cancel orders (with Stripe integration)
+* Add reviews to products
 * Admin utilities (manage products, users & orders on the service)
 
 # :construction_worker: Getting Started
