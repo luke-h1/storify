@@ -81,25 +81,22 @@ const OrdersPage: NextPage = () => {
                         <p className="text-gray-400">Total cost</p>
                         <p className="font-semibold">£{o.total.toFixed(2)}</p>
                       </div>
-                      {o.status !== 'cancelled' ||
-                        ('completed' && (
-                          <div className="mb-5">
-                            <p className="text-gray-400">
-                              Cancel Order / Refund
-                            </p>
-                            <button
-                              onClick={async () => {
-                                await cancelorder({
-                                  id: o.id,
-                                });
-                              }}
-                              type="button"
-                              className="btn btn-blue"
-                            >
-                              Cancel Order / refund
-                            </button>
-                          </div>
-                        ))}
+                      {o.status !== 'cancelled' && (
+                        <div className="mb-5">
+                          <p className="text-gray-400">Cancel Order / Refund</p>
+                          <button
+                            onClick={async () => {
+                              await cancelorder({
+                                id: o.id,
+                              });
+                            }}
+                            type="button"
+                            className="btn btn-blue"
+                          >
+                            Cancel Order / refund
+                          </button>
+                        </div>
+                      )}
                       {o.orderDetails &&
                         o.orderDetails.map(od => (
                           <div

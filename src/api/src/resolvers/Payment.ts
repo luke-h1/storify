@@ -67,6 +67,7 @@ export class PaymentResolver {
         stripeTransactionId: source.id,
         creatorId: req.session.userId,
         orderId: order.id,
+        paymentIntentId: source.payment_intent as string,
       })
       .returning('*')
       .execute();
