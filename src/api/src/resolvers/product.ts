@@ -16,7 +16,7 @@ import { OrderDetails } from '../entities/OrderDetails';
 import { Product } from '../entities/Product';
 import { User } from '../entities/User';
 import { ProductCreateInput } from '../inputs/product/ProductCreateInput';
-import { ProductUpdateInput } from '../inputs/product/productUpdateInput';
+import { ProductUpdateInput } from '../inputs/product/ProductUpdateInput';
 import { isAdmin } from '../middleware/isAdmin';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';

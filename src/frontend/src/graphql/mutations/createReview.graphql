@@ -1,14 +1,16 @@
-mutation CreateReview($productId: Int!, $comment: String!, $rating: Int!, $title: String!) {
-  createReview(productId: $productId, comment: $comment, rating: $rating, title: $title) {
+mutation CreateReview($input: ReviewCreateInput!) {
+  createReview(input: $input) {
     errors {
-      message
       field
+      message
     }
     review {
       id
       title
       rating
       comment
+      creatorId
+      productId
       createdAt
       updatedAt
     }

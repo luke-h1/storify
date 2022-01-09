@@ -28,14 +28,19 @@ export const authLinks = [
     text: 'Create Product',
   },
   {
-    id: 3,
+    id: 2,
     slug: '/cart',
     text: 'Cart',
   },
   {
-    id: 4,
+    id: 3,
     slug: '/orders',
     text: 'Orders',
+  },
+  {
+    id: 4,
+    slug: '/products/liked-products',
+    text: 'Liked products',
   },
 ];
 

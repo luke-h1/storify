@@ -18,8 +18,6 @@ import toErrorMap from '../../../utils/toErrorMap';
 const UpdateReviewPage: NextPage = () => {
   const router = useRouter();
 
-  console.log(router.query.reviewId);
-
   const productId =
     typeof router.query.productId === 'string'
       ? parseInt(router.query.productId, 10)
@@ -65,10 +63,12 @@ const UpdateReviewPage: NextPage = () => {
           }}
           onSubmit={async (values, { setErrors }) => {
             const res = await updateReview({
-              comment: values.comment as string,
-              rating: Number(values.rating),
-              title: values.title as string,
-              reviewId: Number(router.query.reviewId),
+              input: {
+                comment: values.comment as string,
+                rating: Number(values.rating),
+                title: values.title as string,
+                reviewId: Number(router.query.reviewId),
+              },
             });
             if (res?.data?.updateReview.errors) {
               setErrors(toErrorMap(res.data.updateReview.errors));

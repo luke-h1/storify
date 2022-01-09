@@ -34,10 +34,12 @@ const ReviewCreatePage: NextPage = () => {
         }}
         onSubmit={async (values, { setErrors }) => {
           const res = await createReview({
-            comment: values.comment,
-            productId: data?.product?.id as number,
-            rating: Number(values.rating),
-            title: values.title,
+            input: {
+              comment: values.comment,
+              productId: data?.product?.id as number,
+              rating: Number(values.rating),
+              title: values.title,
+            },
           });
           if (res?.data?.createReview.errors) {
             setErrors(toErrorMap(res.data.createReview.errors));
@@ -54,21 +56,21 @@ const ReviewCreatePage: NextPage = () => {
               as="select"
               name="rating"
               className="form-select appearance-none
-            block
-            w-full
-            mb-3
-            px-3
-            py-1.5
-            text-base
-            font-normal
-            text-gray-700
-            bg-white bg-clip-padding bg-no-repeat
-            border border-solid border-gray-300
-            rounded
-            transition
-            ease-in-out
-            m-0
-            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              block
+              w-full
+              mb-3
+              px-3
+              py-1.5
+              text-base
+              font-normal
+              text-gray-700
+              bg-white bg-clip-padding bg-no-repeat
+              border border-solid border-gray-300
+              rounded
+              transition
+              ease-in-out
+              m-0
+              focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             >
               <option selected disabled>
                 Rating
