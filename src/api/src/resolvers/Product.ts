@@ -22,6 +22,7 @@ import { ProductUpdateInput } from '../inputs/product/ProductUpdateInput';
 import { isAdmin } from '../middleware/isAdmin';
 import { isAuth } from '../middleware/isAuth';
 import { FieldError } from '../shared/FieldError';
+import { isProd } from '../shared/constants';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
 import { validateProductCreate } from '../validations/productCreate';
@@ -60,12 +61,17 @@ export class ProductResolver {
 
   @Query(() => [Product], { nullable: true })
   async products(@Ctx() { req }: MyContext): Promise<Product[]> {
+    if (isProd) {
+      return Product.find({
+        order: {
+          createdAt: 'DESC',
+        },
+        where: { creatorId: req.session.userId },
+      });
+    }
     return Product.find({
       order: {
         createdAt: 'DESC',
-      },
-      where: {
-        creatorId: req.session.userId,
       },
     });
   }
