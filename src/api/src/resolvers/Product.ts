@@ -49,6 +49,16 @@ export class ProductResolver {
   }
 
   @Query(() => [Product], { nullable: true })
+  @Authorized(isAdmin)
+  async productsAsAdmin(): Promise<Product[]> {
+    return Product.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
+  @Query(() => [Product], { nullable: true })
   async products(@Ctx() { req }: MyContext): Promise<Product[]> {
     return Product.find({
       order: {

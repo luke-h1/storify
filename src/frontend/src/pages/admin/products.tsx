@@ -7,6 +7,7 @@ import Page from '../../components/Page';
 import {
   useProductsQuery,
   useDeleteProductAsAdminMutation,
+  useProductsAsAdminQuery,
 } from '../../generated/graphql';
 import { useIsAdmin } from '../../hooks/useIsAdmin';
 import { createurqlClient } from '../../utils/createUrqlClient';
@@ -14,7 +15,7 @@ import { isServer } from '../../utils/isServer';
 
 const Products: NextPage = () => {
   useIsAdmin();
-  const [{ data, fetching }] = useProductsQuery({
+  const [{ data, fetching }] = useProductsAsAdminQuery({
     pause: isServer(),
   });
   const [, DeleteProductAsAdmin] = useDeleteProductAsAdminMutation();
@@ -73,8 +74,8 @@ const Products: NextPage = () => {
                       </th>
                     </tr>
                   </thead>
-                  {data?.products &&
-                    data?.products.map(p => (
+                  {data?.productsAsAdmin &&
+                    data?.productsAsAdmin.map(p => (
                       <tbody key={p.id}>
                         <tr>
                           <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">

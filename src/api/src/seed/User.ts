@@ -23,7 +23,7 @@ import { User } from '../entities/User';
       console.log(`User created: ${result.id}`);
     }
     const adminUser = await userRepository.save({
-      firstname: 'admin',
+      firstName: 'admin',
       lastName: 'admin',
       email: 'admin@test.com',
       password: hashedPassword,

@@ -61,7 +61,7 @@ export const productData: {
     brand: 'Apple',
     description:
       "There's nothing quite like getting lost in your music. Active Noise Cancellation on the Apple AirPods Pro let you do just that, blocking out distracting background sounds. They can be customised for a comfortable fit that forms a noise-cancelling seal without any pressure.",
-    price: 198.99,
+    price: 198,
   },
   {
     name: 'Apple watch series 7',
@@ -97,7 +97,7 @@ export const productData: {
     brand: 'Amazon',
     description:
       'Our most powerful streaming stick: 40% more powerful than Fire TV Stick 4K, with faster app starts and more fluid navigation.',
-    price: 54.99,
+    price: 54,
   },
   {
     name: 'Echo (4th generation) | With premium sound, smart home hub and Alexa',
@@ -106,7 +106,7 @@ export const productData: {
     brand: 'Amazon',
     description:
       'Premium sound—Echo delivers clear highs, dynamic mids and deep bass for rich, detailed sound that automatically adapts to any room.',
-    price: 89.99,
+    price: 89,
   },
   {
     name: 'Canon EOS M200 Mirrorless Compact Camera',
@@ -124,7 +124,7 @@ export const productData: {
     brand: 'Canon',
     description:
       "Canon EOS M200 It's never been easier to create and share professional-quality creative photos. The EOS M200 is a smart, connected and lightweight camera that will help you unleash your creativity and take your photos to the next level. Creativity and connectivity made easy Don't settle for a smartphone like everyone else. Explore your creative side with a connected, easy-to-use EOS camera that will help you take professional-quality photos, switch lenses with ease, and capture the atmosphere of any occasion, including bass",
-    price: 784.98,
+    price: 784,
   },
   {
     name: 'Kindle Paperwhite Signature Edition',
@@ -133,7 +133,7 @@ export const productData: {
     brand: 'Amazon',
     description:
       'Get more with Signature Edition: everything in the all-new Kindle Paperwhite, plus wireless charging, auto-adjusting front light and 32 GB storage.',
-    price: 179.99,
+    price: 179,
   },
   {
     name: 'Kindle Oasis | Now with adjustable warm light',
@@ -142,7 +142,7 @@ export const productData: {
     brand: 'Amazon',
     description:
       'Kindle Oasis features our largest 7-inch 300 ppi display using the latest E Ink technology and a sleek ergonomic design with page-turn buttons, perfect for one-handed reading. Introducing an adjustable warm light for a richer reading experience in any lighting.',
-    price: 229.99,
+    price: 229,
   },
   {
     name: 'HiFiMAN Sundara Headphones',
@@ -151,7 +151,7 @@ export const productData: {
     brand: 'HiFiMAN',
     description:
       'All New Innovative Headband Design for an Accurate Fit and Increased Comfort',
-    price: 10.99,
+    price: 111,
   },
   {
     name: 'DuckyChannel One2 SF 65% RGB Backlit Blue Cherry MX Switch Keyboard',
@@ -160,7 +160,7 @@ export const productData: {
     brand: 'Ducky',
     description:
       '65% Keyboard, PBT Double-Shot Seamless Keycaps, Cherry MX Switches, Detachable Type-C USB, 2 Stage Adjustable Feet',
-    price: 168.75,
+    price: 167,
   },
   {
     name: 'COSORI Electric Kettle, Glass Kettle with Stainless Steel Filter',
@@ -169,7 +169,7 @@ export const productData: {
     brand: 'COSORI',
     description:
       'Stainless Steel Construction: filter, inner lid & bottom are made of stainless steel, ensure your drinking water is healthy',
-    price: 22.99,
+    price: 22,
   },
   {
     name: 'Russell Hobbs RHMM701C 17 Litre 700 W Cream Solo Manual Microwave with 5 Power Levels',
@@ -178,7 +178,7 @@ export const productData: {
     brand: 'Russell Hobbs',
     description:
       'The compact RHMM701 is ideal for cooking a variety of meals in minutes. 30 minute timer and the dimensions of the product are 25.6cm x 45.1cm x 32.6cm',
-    price: 63.47,
+    price: 63,
   },
   {
     name: 'Samsung RB29FSRNDSA Freestanding Fridge Freezer',
@@ -187,7 +187,7 @@ export const productData: {
     brand: 'Samsung',
     description:
       'Maximise your storage space: Samsung’s Easy Slide shelf is built on rolling hinges and pulls out so you can efficiently organise and easily access items',
-    price: 468.99,
+    price: 468,
   },
   {
     name: 'Shark Cordless Stick Vacuum Cleaner',
@@ -214,7 +214,7 @@ export const productData: {
     brand: 'Sensiohome American',
     description:
       'EXTRA DEEP NON-STICK COATING PLATES: The integrated extra deep cooking plates with non-stick coating cook waffles to perfection, just like in America. High, higher – American Waffles!',
-    price: 29.99,
+    price: 29,
   },
   {
     name: 'Tower Xpress Pro T17039 Vortx 5-in-1 Digital Air Fryer Oven with Rapid Air Circulation',
@@ -223,6 +223,6 @@ export const productData: {
     brand: 'Vortx',
     description:
       '99 PERCENT LESS FAT – little to no oil is required, all while keeping the same great taste, so you lose the fat, not the flavour',
-    price: 92.84,
+    price: 92,
   },
 ];

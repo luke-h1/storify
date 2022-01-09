@@ -18,7 +18,7 @@ import { productData } from './data/products';
 
     for (let i = 0; i < 24; i += 1) {
       const user = await userRepository.findOne({
-        where: { id: randomInt(2, 31) },
+        where: { id: randomInt(2, 25) },
       });
       if (!user) {
         throw new Error(`user ${i} not found `);
@@ -52,6 +52,7 @@ import { productData } from './data/products';
         price: productData[i].price,
         publicId: '',
         image: productData[i].image,
+        liked: false,
         stripeProductId: stripeProduct.id,
         stripePriceId: stripePrice.id,
       });
