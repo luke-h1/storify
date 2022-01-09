@@ -108,7 +108,6 @@ const SingleProductPage: NextPage = () => {
                   });
                   if (result.data?.createCart) {
                     toast.success('Added to cart');
-                    router.push('/');
                   }
                 }}
               >

@@ -1,4 +1,4 @@
-import { ReviewUpdateInput } from 'src/inputs/review/ReviewUpdateInput';
+import { ReviewUpdateInput } from '../inputs/review/ReviewUpdateInput';
 
 export const validateReviewUpdate = (input: ReviewUpdateInput) => {
   if (!input.comment) {

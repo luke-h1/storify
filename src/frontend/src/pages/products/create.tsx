@@ -15,6 +15,7 @@ import {
 } from '../../generated/graphql';
 import { useIsAuth } from '../../hooks/useIsAuth';
 import { createurqlClient } from '../../utils/createUrqlClient';
+import toErrorMap from '../../utils/toErrorMap';
 
 interface IUploadImageResponse {
   // eslint-disable-next-line camelcase
@@ -68,7 +69,7 @@ const CreateProductPage: NextPage = () => {
             description: '',
             price: 0,
           }}
-          onSubmit={async values => {
+          onSubmit={async (values, { setErrors }) => {
             setLoading(true);
             const { data: signatureData } = await createSignature();
             if (signatureData) {
@@ -89,9 +90,14 @@ const CreateProductPage: NextPage = () => {
                   price: values.price,
                 },
               });
-              if (res?.data?.createProduct) {
+
+              if (res?.data?.createProduct.errors) {
+                setErrors(toErrorMap(res.data.createProduct.errors));
+              } else {
                 toast.success('Created product');
-                router.push(`/products/${res.data?.createProduct.id}`);
+                const productId = res?.data?.createProduct?.product
+                  ?.id as number;
+                router.push(`/products/${productId}`);
               }
             }
           }}
