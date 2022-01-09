@@ -113,10 +113,7 @@ export type MutationCreateProductArgs = {
 };
 
 export type MutationCreateReviewArgs = {
-  comment: Scalars['String'];
-  productId: Scalars['Int'];
-  rating: Scalars['Int'];
-  title: Scalars['String'];
+  input: ReviewCreateInput;
 };
 
 export type MutationDeleteCartItemArgs = {
@@ -186,10 +183,7 @@ export type MutationUpdateProductArgs = {
 };
 
 export type MutationUpdateReviewArgs = {
-  comment: Scalars['String'];
-  rating: Scalars['Int'];
-  reviewId: Scalars['Int'];
-  title: Scalars['String'];
+  input: ReviewUpdateInput;
 };
 
 export type Order = {
@@ -323,10 +317,24 @@ export type Review = {
   updatedAt: Scalars['String'];
 };
 
+export type ReviewCreateInput = {
+  comment: Scalars['String'];
+  productId: Scalars['Int'];
+  rating: Scalars['Int'];
+  title: Scalars['String'];
+};
+
 export type ReviewResponse = {
   __typename?: 'ReviewResponse';
   errors?: Maybe<Array<FieldError>>;
   review?: Maybe<Review>;
+};
+
+export type ReviewUpdateInput = {
+  comment: Scalars['String'];
+  rating: Scalars['Int'];
+  reviewId: Scalars['Int'];
+  title: Scalars['String'];
 };
 
 export type User = {
@@ -495,10 +503,7 @@ export type CreateProductMutation = {
 };
 
 export type CreateReviewMutationVariables = Exact<{
-  productId: Scalars['Int'];
-  comment: Scalars['String'];
-  rating: Scalars['Int'];
-  title: Scalars['String'];
+  input: ReviewCreateInput;
 }>;
 
 export type CreateReviewMutation = {
@@ -506,7 +511,7 @@ export type CreateReviewMutation = {
   createReview: {
     __typename?: 'ReviewResponse';
     errors?:
-      | Array<{ __typename?: 'FieldError'; message: string; field: string }>
+      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
       | null
       | undefined;
     review?:
@@ -516,6 +521,8 @@ export type CreateReviewMutation = {
           title: string;
           rating: number;
           comment: string;
+          creatorId: number;
+          productId: number;
           createdAt: string;
           updatedAt: string;
         }
@@ -749,32 +756,29 @@ export type UpdateProductMutation = {
 };
 
 export type UpdateReviewMutationVariables = Exact<{
-  comment: Scalars['String'];
-  rating: Scalars['Int'];
-  title: Scalars['String'];
-  reviewId: Scalars['Int'];
+  input: ReviewUpdateInput;
 }>;
 
 export type UpdateReviewMutation = {
   __typename?: 'Mutation';
   updateReview: {
     __typename?: 'ReviewResponse';
-    errors?:
-      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
-      | null
-      | undefined;
     review?:
       | {
           __typename?: 'Review';
           id: number;
           title: string;
-          comment: string;
           rating: number;
+          comment: string;
           productId: number;
           creatorId: number;
-          updatedAt: string;
           createdAt: string;
+          updatedAt: string;
         }
+      | null
+      | undefined;
+    errors?:
+      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
       | null
       | undefined;
   };
@@ -1139,27 +1143,19 @@ export function useCreateProductMutation() {
   >(CreateProductDocument);
 }
 export const CreateReviewDocument = gql`
-  mutation CreateReview(
-    $productId: Int!
-    $comment: String!
-    $rating: Int!
-    $title: String!
-  ) {
-    createReview(
-      productId: $productId
-      comment: $comment
-      rating: $rating
-      title: $title
-    ) {
+  mutation CreateReview($input: ReviewCreateInput!) {
+    createReview(input: $input) {
       errors {
-        message
         field
+        message
       }
       review {
         id
         title
         rating
         comment
+        creatorId
+        productId
         createdAt
         updatedAt
       }
@@ -1420,31 +1416,21 @@ export function useUpdateProductMutation() {
   >(UpdateProductDocument);
 }
 export const UpdateReviewDocument = gql`
-  mutation UpdateReview(
-    $comment: String!
-    $rating: Int!
-    $title: String!
-    $reviewId: Int!
-  ) {
-    updateReview(
-      comment: $comment
-      rating: $rating
-      title: $title
-      reviewId: $reviewId
-    ) {
-      errors {
-        field
-        message
-      }
+  mutation UpdateReview($input: ReviewUpdateInput!) {
+    updateReview(input: $input) {
       review {
         id
         title
-        comment
         rating
+        comment
         productId
         creatorId
-        updatedAt
         createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
       }
     }
   }

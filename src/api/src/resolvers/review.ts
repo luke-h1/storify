@@ -13,6 +13,8 @@ import {
 import { getConnection } from 'typeorm';
 import { Product } from '../entities/Product';
 import { Review } from '../entities/Review';
+import { ReviewCreateInput } from '../inputs/review/ReviewCreateInput';
+import { ReviewUpdateInput } from '../inputs/review/ReviewUpdateInput';
 import { isAuth } from '../middleware/isAuth';
 import { FieldError } from '../shared/FieldError';
 import { MyContext } from '../types/MyContext';
@@ -58,12 +60,9 @@ export class ReviewResolver {
   @Authorized(isAuth)
   async createReview(
     @Ctx() { req }: MyContext,
-    @Arg('title') title: string,
-    @Arg('rating', () => Int) rating: number,
-    @Arg('comment') comment: string,
-    @Arg('productId', () => Int) productId: number,
+    @Arg('input') input: ReviewCreateInput,
   ): Promise<ReviewResponse> {
-    const product = await Product.findOne({ id: productId });
+    const product = await Product.findOne({ id: input.productId });
 
     if (!product) {
       return {
@@ -80,10 +79,7 @@ export class ReviewResolver {
       .insert()
       .into(Review)
       .values({
-        title,
-        comment,
-        rating,
-        productId,
+        ...input,
         creatorId: req.session.userId,
       })
       .returning('*')
@@ -95,12 +91,9 @@ export class ReviewResolver {
   @Authorized(isAuth)
   async updateReview(
     @Ctx() { req }: MyContext,
-    @Arg('reviewId', () => Int) reviewId: number,
-    @Arg('title') title: string,
-    @Arg('rating', () => Int) rating: number,
-    @Arg('comment') comment: string,
+    @Arg('input') input: ReviewUpdateInput,
   ): Promise<ReviewResponse> {
-    const review = await Review.findOne({ id: reviewId });
+    const review = await Review.findOne({ id: input.reviewId });
 
     if (!review) {
       return {
@@ -116,12 +109,12 @@ export class ReviewResolver {
       .createQueryBuilder()
       .update(Review)
       .set({
-        title,
-        rating,
-        comment,
+        title: input.title,
+        rating: input.rating,
+        comment: input.comment,
       })
       .where('id = :id and "creatorId" = :creatorId', {
-        id: reviewId,
+        id: input.reviewId,
         creatorId: req.session.userId,
       })
       .returning('*')
