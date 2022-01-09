@@ -503,18 +503,7 @@ export type CreateProductMutation = {
       | Array<{ __typename?: 'FieldError'; message: string; field: string }>
       | null
       | undefined;
-    product?:
-      | {
-          __typename?: 'Product';
-          id: number;
-          image: string;
-          name: string;
-          price: number;
-          brand: string;
-          descriptionSnippet: string;
-        }
-      | null
-      | undefined;
+    product?: { __typename?: 'Product'; id: number } | null | undefined;
   };
 };
 
@@ -1158,11 +1147,6 @@ export const CreateProductDocument = gql`
       }
       product {
         id
-        image
-        name
-        price
-        brand
-        descriptionSnippet
       }
     }
   }

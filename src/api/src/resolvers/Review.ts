@@ -95,7 +95,9 @@ export class ReviewResolver {
       })
       .returning('*')
       .execute();
-    return result.raw[0];
+    return {
+      review: result.raw[0],
+    };
   }
 
   @Mutation(() => ReviewResponse)
@@ -138,7 +140,9 @@ export class ReviewResolver {
       })
       .returning('*')
       .execute();
-    return result.raw[0];
+    return {
+      review: result.raw[0],
+    };
   }
 
   @Mutation(() => Boolean)

@@ -1,4 +1,4 @@
-import productCreateSchema from '@storify/common/src/schemas/productCreateSchema';
+import productSchema from '@storify/common/src/schemas/productSchema';
 import { Formik, Form } from 'formik';
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
@@ -61,7 +61,7 @@ const CreateProductPage: NextPage = () => {
       <Page title="create product">
         <h1 className="text-black text-4xl mb-5">Create a new product</h1>
         <Formik<FormValues>
-          validationSchema={productCreateSchema}
+          validationSchema={productSchema}
           initialValues={{
             name: '',
             image: '',
@@ -95,9 +95,7 @@ const CreateProductPage: NextPage = () => {
                 setErrors(toErrorMap(res.data.createProduct.errors));
               } else {
                 toast.success('Created product');
-                const productId = res?.data?.createProduct?.product
-                  ?.id as number;
-                router.push(`/products/${productId}`);
+                router.push(`/products/${res.data?.createProduct.product?.id}`);
               }
             }
           }}

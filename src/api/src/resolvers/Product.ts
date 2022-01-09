@@ -142,8 +142,11 @@ export class ProductResolver {
       })
       .returning('*')
       .execute();
+    console.log(result.raw[0]);
 
-    return result.raw[0];
+    return {
+      product: result.raw[0],
+    };
   }
 
   @Mutation(() => ProductResponse, { nullable: true })
@@ -210,7 +213,9 @@ export class ProductResolver {
       })
       .returning('*')
       .execute();
-    return result.raw[0];
+    return {
+      product: result.raw[0],
+    };
   }
 
   @Mutation(() => Boolean)

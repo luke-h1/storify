@@ -6,11 +6,6 @@ mutation CreateProduct($input: ProductCreateInput!) {
     }
     product {
       id
-      image
-      name
-      price
-      brand
-      descriptionSnippet
     }
   }
 }

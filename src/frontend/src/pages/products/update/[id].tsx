@@ -1,3 +1,4 @@
+import productSchema from '@storify/common/src/schemas/productSchema';
 import { Formik, Form } from 'formik';
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
@@ -53,6 +54,7 @@ const UpdateProductPage: NextPage = () => {
     <AuthRoute>
       <Page title="Update product">
         <Formik<FormValues>
+          validationSchema={productSchema}
           initialValues={{
             name: data?.product?.name as string,
             image: data?.product?.image as string,

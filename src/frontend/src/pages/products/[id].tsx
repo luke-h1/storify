@@ -55,7 +55,7 @@ const SingleProductPage: NextPage = () => {
   return (
     <section className="text-gray-600 body-font overflow-hidden">
       <div className="container px-5 py-24 mx-auto">
-        <div className="lg:w-4/5 mx-auto flex flex-wrap">
+        <div className="lg:w-4/5 mx-auto flex flex-wrap mb-5">
           <img
             alt="ecommerce"
             className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
@@ -115,10 +115,8 @@ const SingleProductPage: NextPage = () => {
               </button>
             </div>
           </div>
-        </div>
-        <div className="flex flex-col max-w-xs align-left justify-left">
           <button
-            className="btn btn-blue mb-2"
+            className="btn btn-blue mb-2 mt-5"
             type="button"
             onClick={() => {
               router.push(`/reviews/create/${data?.product?.id}`);
@@ -126,8 +124,6 @@ const SingleProductPage: NextPage = () => {
           >
             Add Review
           </button>
-        </div>
-        <section className="text-gray-600 body-font">
           <div className="container py-24 mx-auto">
             <h1 className="text-3xl font-medium title-font text-gray-900 mb-12 text-left">
               Reviews
@@ -149,7 +145,7 @@ const SingleProductPage: NextPage = () => {
               )}
             </div>
           </div>
-        </section>
+        </div>
       </div>
     </section>
   );
