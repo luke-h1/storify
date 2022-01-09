@@ -3,12 +3,14 @@ import {
   Arg,
   Authorized,
   Ctx,
+  Field,
   FieldResolver,
   Int,
   Mutation,
   Query,
   Resolver,
   Root,
+  ObjectType,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Order } from '../entities/Order';
@@ -19,8 +21,20 @@ import { ProductCreateInput } from '../inputs/product/ProductCreateInput';
 import { ProductUpdateInput } from '../inputs/product/ProductUpdateInput';
 import { isAdmin } from '../middleware/isAdmin';
 import { isAuth } from '../middleware/isAuth';
+import { FieldError } from '../shared/FieldError';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
+import { validateProductCreate } from '../validations/productCreate';
+import { validateProductUpdate } from '../validations/productUpdate';
+
+@ObjectType()
+class ProductResponse {
+  @Field(() => [FieldError], { nullable: true })
+  errors?: FieldError[];
+
+  @Field(() => Product, { nullable: true })
+  product?: Product;
+}
 
 @Resolver(Product)
 export class ProductResolver {
@@ -82,12 +96,20 @@ export class ProductResolver {
     }
   }
 
-  @Mutation(() => Product)
+  @Mutation(() => ProductResponse)
   @Authorized(isAuth)
   async createProduct(
     @Arg('input') input: ProductCreateInput,
     @Ctx() { req }: MyContext,
-  ): Promise<Product> {
+  ): Promise<ProductResponse> {
+    const errors = validateProductCreate(input);
+
+    if (errors) {
+      return {
+        errors,
+      };
+    }
+
     // create the product in stripe
     const stripeProduct = await stripe.products.create({
       name: input.name,
@@ -124,19 +146,33 @@ export class ProductResolver {
     return result.raw[0];
   }
 
-  @Mutation(() => Product, { nullable: true })
+  @Mutation(() => ProductResponse, { nullable: true })
   @Authorized(isAuth)
   async updateProduct(
     @Arg('id', () => Int) id: number,
     @Arg('input') input: ProductUpdateInput,
     @Ctx() { req }: MyContext,
-  ): Promise<Product | null> {
+  ): Promise<ProductResponse> {
     const product = await Product.findOne({
       where: { id, creatorId: req.session.userId },
     });
 
     if (!product) {
-      throw new Error('no product');
+      return {
+        errors: [
+          {
+            field: 'name',
+            message: 'No product exists with that ID',
+          },
+        ],
+      };
+    }
+    const errors = validateProductUpdate(input);
+
+    if (errors) {
+      return {
+        errors,
+      };
     }
 
     const stripeProduct = await stripe.products.update(input.stripeProductId, {
@@ -147,6 +183,7 @@ export class ProductResolver {
       caption: input.brand,
     });
 
+    // cannot delete prices in stripe, only archive them
     await stripe.prices.update(input.stripePriceId, {
       active: false,
     });
@@ -158,7 +195,6 @@ export class ProductResolver {
       billing_scheme: 'per_unit',
       unit_amount: input.price * 100,
     });
-    // todo: update price in stripe
 
     const result = await getConnection()
       .createQueryBuilder()
