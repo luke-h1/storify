@@ -3,6 +3,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import AuthRoute from '../../components/AuthRoute';
 import Loader from '../../components/Loader';
 import Page from '../../components/Page';
@@ -50,6 +52,7 @@ const CheckoutForm = ({ orderId }: Props) => {
 };
 
 const OrdersPage: NextPage = () => {
+  const router = useRouter();
   const [{ data, fetching }] = useOrdersQuery({
     pause: isServer(),
   });
@@ -81,25 +84,28 @@ const OrdersPage: NextPage = () => {
                         <p className="text-gray-400">Total cost</p>
                         <p className="font-semibold">£{o.total.toFixed(2)}</p>
                       </div>
-                      {o.status !== 'cancelled' ||
-                        ('completed' && (
-                          <div className="mb-5">
-                            <p className="text-gray-400">
-                              Cancel Order / Refund
-                            </p>
-                            <button
-                              onClick={async () => {
-                                await cancelorder({
-                                  id: o.id,
-                                });
-                              }}
-                              type="button"
-                              className="btn btn-blue"
-                            >
-                              Cancel Order / refund
-                            </button>
-                          </div>
-                        ))}
+                      {o.status !== 'refunded' && o.status !== 'cancelled' && (
+                        <div className="mb-5">
+                          <p className="text-gray-400">Cancel Order / Refund</p>
+                          <button
+                            onClick={async () => {
+                              const res = await cancelorder({
+                                id: o.id,
+                              });
+                              if (res.data?.cancelorder) {
+                                toast.success(
+                                  'succesfully cancelled & refunded order',
+                                );
+                              }
+                              router.reload();
+                            }}
+                            type="button"
+                            className="btn btn-blue"
+                          >
+                            Cancel Order / refund
+                          </button>
+                        </div>
+                      )}
                       {o.orderDetails &&
                         o.orderDetails.map(od => (
                           <div
@@ -139,7 +145,8 @@ const OrdersPage: NextPage = () => {
                         ))}
                       <div>
                         {o.status !== 'completed' &&
-                          o.status !== 'cancelled' && (
+                          o.status !== 'cancelled' &&
+                          o.status !== 'refunded' && (
                             <CheckoutForm orderId={o.id} />
                           )}
                       </div>

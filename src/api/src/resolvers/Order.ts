@@ -13,6 +13,7 @@ import {
 import { getConnection } from 'typeorm';
 import { Cart } from '../entities/Cart';
 import { Order, OrderStatus } from '../entities/Order';
+import { Payment } from '../entities/Payment';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types/MyContext';
 import { stripe } from '../utils/stripe';
@@ -85,7 +86,7 @@ export class OrderResolver {
       return false;
     }
     switch (order.status) {
-      // if they have already paid, don't refund
+      // if they haven't already paid, don't refund
       case OrderStatus.AwaitingPayment:
       case OrderStatus.Open:
       case OrderStatus.Created:
@@ -101,6 +102,29 @@ export class OrderResolver {
           })
           .returning('*')
           .execute();
+        return true;
+
+      case OrderStatus.Completed:
+        const payment = await Payment.findOne({ where: { orderId: order.id } });
+
+        await stripe.refunds.create({
+          amount: order.total,
+          payment_intent: payment?.paymentIntentId,
+        });
+
+        await getConnection()
+          .createQueryBuilder()
+          .update(Order)
+          .set({
+            status: OrderStatus.Refunded,
+          })
+          .where('id = :id and "creatorId" = :creatorId', {
+            id: order.id,
+            creatorId: req.session.userId,
+          })
+          .returning('*')
+          .execute();
+
         return true;
 
       default:

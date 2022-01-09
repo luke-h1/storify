@@ -21,6 +21,7 @@ export enum OrderStatus {
   Cancelled = 'cancelled',
   AwaitingPayment = 'awaiting:payment',
   Completed = 'completed',
+  Refunded = 'refunded',
 }
 
 @ObjectType()

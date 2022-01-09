@@ -21,6 +21,10 @@ export class Payment extends BaseEntity {
   @Column()
   stripeTransactionId: string;
 
+  @Field()
+  @Column()
+  paymentIntentId: string;
+
   @Field(() => Int)
   @Column()
   creatorId: number;
