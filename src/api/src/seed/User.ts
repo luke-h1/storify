@@ -13,7 +13,7 @@ import { User } from '../entities/User';
     const userRepository = await getManager().getRepository(User);
     const hashedPassword = await bcrypt.hash('storify12345', 12);
 
-    for (let i = 0; i < 60; i += 1) {
+    for (let i = 0; i < 24; i += 1) {
       const result = await userRepository.save({
         firstName: `test ${i}`,
         lastName: `test ${i}`,

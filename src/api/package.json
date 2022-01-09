@@ -17,7 +17,8 @@
     "test:watch": "cross-env NODE_ENV=test npm run db:setup && jest --watch",
     "gen-env": "gen-env-types .env -o src/types/env.d.ts -e .",
     "migrate:create": "typeorm migration:create -n <NAME_OF_MIGRATION>",
-    "migrate:run": "typeorm migration:run"
+    "migrate:run": "typeorm migration:run",
+    "seed": "npx ts-node src/seed/User.ts && npx ts-node src/seed/Product.ts"
   },
   "dependencies": {
     "nodemailer": "^6.4.11",
