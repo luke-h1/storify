@@ -1,13 +1,13 @@
 import { buildSchema } from 'type-graphql';
 import { isAuth } from '../middleware/isAuth';
-import { CartResolver } from '../resolvers/cart';
-import { ImageResolver } from '../resolvers/image';
-import { OrderResolver } from '../resolvers/order';
-import { OrderDetailsResolver } from '../resolvers/orderDetails';
-import { PaymentResolver } from '../resolvers/payment';
-import { ProductResolver } from '../resolvers/product';
-import { ReviewResolver } from '../resolvers/review';
-import { UserResolver } from '../resolvers/user';
+import { CartResolver } from '../resolvers/Cart';
+import { ImageResolver } from '../resolvers/Image';
+import { OrderResolver } from '../resolvers/Order';
+import { OrderDetailsResolver } from '../resolvers/OrderDetails';
+import { PaymentResolver } from '../resolvers/Payment';
+import { ProductResolver } from '../resolvers/Product';
+import { ReviewResolver } from '../resolvers/Review';
+import { UserResolver } from '../resolvers/User';
 
 const createSchema = async () =>
   buildSchema({
