@@ -21,6 +21,8 @@
 * Full product creation user flow (with Stripe integration)
 * Full Cart management flow
 * Create orders 
+* Add reviews to orders
+* Admin utilities (manage products, users & orders on the service)
 
 # :construction_worker: Getting Started
 
