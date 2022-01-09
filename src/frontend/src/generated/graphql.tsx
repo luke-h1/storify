@@ -281,6 +281,7 @@ export type Query = {
   orders: Array<Order>;
   product?: Maybe<Product>;
   products?: Maybe<Array<Product>>;
+  productsAsAdmin?: Maybe<Array<Product>>;
   review?: Maybe<Review>;
   reviews?: Maybe<Array<Review>>;
   user?: Maybe<User>;
@@ -897,6 +898,28 @@ export type ProductsQueryVariables = Exact<{ [key: string]: never }>;
 export type ProductsQuery = {
   __typename?: 'Query';
   products?:
+    | Array<{
+        __typename?: 'Product';
+        id: number;
+        brand: string;
+        descriptionSnippet: string;
+        image: string;
+        name: string;
+        price: number;
+        description: string;
+        liked: boolean;
+        stripeProductId: string;
+        creator: { __typename?: 'User'; id: number; fullName: string };
+      }>
+    | null
+    | undefined;
+};
+
+export type ProductsAsAdminQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ProductsAsAdminQuery = {
+  __typename?: 'Query';
+  productsAsAdmin?:
     | Array<{
         __typename?: 'Product';
         id: number;
@@ -1559,6 +1582,34 @@ export function useProductsQuery(
   options: Omit<Urql.UseQueryArgs<ProductsQueryVariables>, 'query'> = {},
 ) {
   return Urql.useQuery<ProductsQuery>({ query: ProductsDocument, ...options });
+}
+export const ProductsAsAdminDocument = gql`
+  query ProductsAsAdmin {
+    productsAsAdmin {
+      id
+      brand
+      descriptionSnippet
+      image
+      name
+      price
+      description
+      liked
+      stripeProductId
+      creator {
+        id
+        fullName
+      }
+    }
+  }
+`;
+
+export function useProductsAsAdminQuery(
+  options: Omit<Urql.UseQueryArgs<ProductsAsAdminQueryVariables>, 'query'> = {},
+) {
+  return Urql.useQuery<ProductsAsAdminQuery>({
+    query: ProductsAsAdminDocument,
+    ...options,
+  });
 }
 export const ReviewDocument = gql`
   query Review($id: Int!) {
