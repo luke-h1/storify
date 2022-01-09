@@ -1,4 +1,4 @@
-import productCreateSchema from '@storify/common/src/schemas/productCreateSchema';
+import productSchema from '@storify/common/src/schemas/productSchema';
 import { Formik, Form } from 'formik';
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
@@ -15,6 +15,7 @@ import {
 } from '../../generated/graphql';
 import { useIsAuth } from '../../hooks/useIsAuth';
 import { createurqlClient } from '../../utils/createUrqlClient';
+import toErrorMap from '../../utils/toErrorMap';
 
 interface IUploadImageResponse {
   // eslint-disable-next-line camelcase
@@ -60,7 +61,7 @@ const CreateProductPage: NextPage = () => {
       <Page title="create product">
         <h1 className="text-black text-4xl mb-5">Create a new product</h1>
         <Formik<FormValues>
-          validationSchema={productCreateSchema}
+          validationSchema={productSchema}
           initialValues={{
             name: '',
             image: '',
@@ -68,7 +69,7 @@ const CreateProductPage: NextPage = () => {
             description: '',
             price: 0,
           }}
-          onSubmit={async values => {
+          onSubmit={async (values, { setErrors }) => {
             setLoading(true);
             const { data: signatureData } = await createSignature();
             if (signatureData) {
@@ -89,9 +90,12 @@ const CreateProductPage: NextPage = () => {
                   price: values.price,
                 },
               });
-              if (res?.data?.createProduct) {
+
+              if (res?.data?.createProduct.errors) {
+                setErrors(toErrorMap(res.data.createProduct.errors));
+              } else {
                 toast.success('Created product');
-                router.push(`/products/${res.data?.createProduct.id}`);
+                router.push(`/products/${res.data?.createProduct.product?.id}`);
               }
             }
           }}

@@ -1,10 +1,10 @@
 import * as yup from 'yup';
 
-const productCreateSchema = yup.object({
+const productSchema = yup.object({
   name: yup.string().required(),
   image: yup.string().required(),
   brand: yup.string().required(),
   description: yup.string().required(),
   price: yup.number().required(),
 });
-export default productCreateSchema;
+export default productSchema;

@@ -1,3 +1,4 @@
+import productSchema from '@storify/common/src/schemas/productSchema';
 import { Formik, Form } from 'formik';
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
@@ -16,6 +17,7 @@ import {
 import useGetIntId from '../../../hooks/useGetIntId';
 import { useIsAuth } from '../../../hooks/useIsAuth';
 import { createurqlClient } from '../../../utils/createUrqlClient';
+import toErrorMap from '../../../utils/toErrorMap';
 import uploadImage from '../../../utils/uploadImage';
 
 interface FormValues {
@@ -52,6 +54,7 @@ const UpdateProductPage: NextPage = () => {
     <AuthRoute>
       <Page title="Update product">
         <Formik<FormValues>
+          validationSchema={productSchema}
           initialValues={{
             name: data?.product?.name as string,
             image: data?.product?.image as string,
@@ -59,7 +62,7 @@ const UpdateProductPage: NextPage = () => {
             description: data?.product?.description as string,
             price: data?.product?.price as number,
           }}
-          onSubmit={async values => {
+          onSubmit={async (values, { setErrors }) => {
             let image = data?.product?.image as unknown as string;
 
             // user wants to update an image
@@ -88,7 +91,9 @@ const UpdateProductPage: NextPage = () => {
                 stripeProductId: data?.product?.stripeProductId as string,
               },
             });
-            if (res.data?.updateProduct) {
+            if (res?.data?.updateProduct?.errors) {
+              setErrors(toErrorMap(res.data.updateProduct.errors));
+            } else {
               toast.success(`Updated product ${values.name}`);
               router.push('/');
             }

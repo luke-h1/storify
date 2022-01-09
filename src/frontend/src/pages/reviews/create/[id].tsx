@@ -1,3 +1,4 @@
+import reviewSchema from '@storify/common/src/schemas/reviewSchema';
 import { Formik, Form, Field } from 'formik';
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
@@ -27,6 +28,7 @@ const ReviewCreatePage: NextPage = () => {
   return (
     <Page title="Create Review">
       <Formik
+        validationSchema={reviewSchema}
         initialValues={{
           title: '',
           rating: 0,

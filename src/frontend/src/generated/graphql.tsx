@@ -61,7 +61,7 @@ export type Mutation = {
   createOrder: Order;
   createOrderDetails: OrderDetailsResponse;
   createPayment: Payment;
-  createProduct: Product;
+  createProduct: ProductResponse;
   createReview: ReviewResponse;
   deleteAllProducts: Scalars['Boolean'];
   deleteCart: Scalars['Boolean'];
@@ -80,7 +80,7 @@ export type Mutation = {
   register: UserResponse;
   updateCartQuantity: CartResponse;
   updateOrderStatus: Order;
-  updateProduct?: Maybe<Product>;
+  updateProduct?: Maybe<ProductResponse>;
   updateReview: ReviewResponse;
 };
 
@@ -253,6 +253,12 @@ export type ProductCreateInput = {
   image: Scalars['String'];
   name: Scalars['String'];
   price: Scalars['Float'];
+};
+
+export type ProductResponse = {
+  __typename?: 'ProductResponse';
+  errors?: Maybe<Array<FieldError>>;
+  product?: Maybe<Product>;
 };
 
 export type ProductUpdateInput = {
@@ -492,13 +498,12 @@ export type CreateProductMutationVariables = Exact<{
 export type CreateProductMutation = {
   __typename?: 'Mutation';
   createProduct: {
-    __typename?: 'Product';
-    id: number;
-    image: string;
-    name: string;
-    price: number;
-    brand: string;
-    descriptionSnippet: string;
+    __typename?: 'ProductResponse';
+    errors?:
+      | Array<{ __typename?: 'FieldError'; message: string; field: string }>
+      | null
+      | undefined;
+    product?: { __typename?: 'Product'; id: number } | null | undefined;
   };
 };
 
@@ -742,14 +747,24 @@ export type UpdateProductMutation = {
   __typename?: 'Mutation';
   updateProduct?:
     | {
-        __typename?: 'Product';
-        id: number;
-        image: string;
-        brand: string;
-        description: string;
-        price: number;
-        publicId: string;
-        creator: { __typename?: 'User'; fullName: string };
+        __typename?: 'ProductResponse';
+        errors?:
+          | Array<{ __typename?: 'FieldError'; message: string; field: string }>
+          | null
+          | undefined;
+        product?:
+          | {
+              __typename?: 'Product';
+              id: number;
+              image: string;
+              brand: string;
+              description: string;
+              price: number;
+              publicId: string;
+              creator: { __typename?: 'User'; fullName: string };
+            }
+          | null
+          | undefined;
       }
     | null
     | undefined;
@@ -1126,12 +1141,13 @@ export function useCreatePaymentMutation() {
 export const CreateProductDocument = gql`
   mutation CreateProduct($input: ProductCreateInput!) {
     createProduct(input: $input) {
-      id
-      image
-      name
-      price
-      brand
-      descriptionSnippet
+      errors {
+        message
+        field
+      }
+      product {
+        id
+      }
     }
   }
 `;
@@ -1396,14 +1412,20 @@ export function useUpdateOrderStatusMutation() {
 export const UpdateProductDocument = gql`
   mutation UpdateProduct($input: ProductUpdateInput!, $id: Int!) {
     updateProduct(input: $input, id: $id) {
-      id
-      image
-      brand
-      description
-      price
-      publicId
-      creator {
-        fullName
+      errors {
+        message
+        field
+      }
+      product {
+        id
+        image
+        brand
+        description
+        price
+        publicId
+        creator {
+          fullName
+        }
       }
     }
   }
