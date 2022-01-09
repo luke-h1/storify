@@ -86,6 +86,22 @@ yarn dev
 
 The backend will now be listening on `http://localhost:<PORT>/api/graphql`(migrations are automatically ran if needed)
 
+**running migrations** 
+If you make any changes to the database schema you will need to generate migrations in order to apply your changes to the dataase. 
+
+To create a new migration (in the api project):  
+
+```bash 
+typeorm migration:create -n <NAME_OF_MIGRATION>
+```
+
+To run these migrations against your local database (in the api project): 
+
+```bash 
+yarn migrate:run 
+```
+
+
 # :postbox: FAQ 
 
 **Question** What tech is used in this Project? 
