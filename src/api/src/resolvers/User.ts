@@ -173,6 +173,7 @@ export class UserResolver {
       `<div><h1>Change password | Storify</h1><a href="${process.env.FRONTEND_URL}/change-password/${token}">Reset password</a>
     </div>
     `,
+      `Reset your storify password at ${process.env.FRONTEND_URL}/change-password/${token}`,
     );
     return true;
   }
@@ -296,9 +297,10 @@ export class UserResolver {
       `
     <div>
     <h1>Hello ${user.firstName}</h1>
-    <p>Your account has been deleted. You will no longer have access to the service</p>
+    <p>Your Storify account has been deleted. You will no longer have access to the service</p>
     </div>
     `,
+      'Your Storify account has been deleted. You will no longer have access to the service',
     );
 
     await User.delete({ id });

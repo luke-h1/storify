@@ -1,5 +1,4 @@
 /* eslint-disable prefer-template */
-import faker from 'faker';
 import { Connection } from 'typeorm';
 import redis from '../../db/redis';
 import { User } from '../../entities/User';
@@ -41,10 +40,10 @@ mutation Register($options: UserRegisterInput!) {
 describe('Register', () => {
   test('it creates the user', async () => {
     const user = {
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
+      firstName: 'test',
+      lastName: 'test last',
+      email: 'tester@test.com',
+      password: 'storify12345',
     };
 
     const response = await gCall({

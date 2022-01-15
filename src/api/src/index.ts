@@ -49,7 +49,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: isProd,
-        domain: isProd ? 'deployed api URL' : undefined,
+        domain: isProd ? process.env.PROD_DOMAIN : undefined,
         signed: !!isProd,
       },
       saveUninitialized: false,

@@ -5,7 +5,6 @@ import AdminRoute from '../../components/AdminRoute';
 import Loader from '../../components/Loader';
 import Page from '../../components/Page';
 import {
-  useProductsQuery,
   useDeleteProductAsAdminMutation,
   useProductsAsAdminQuery,
 } from '../../generated/graphql';

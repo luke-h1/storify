@@ -1,5 +1,4 @@
 /* eslint-disable prefer-template */
-import faker from 'faker';
 import { Connection } from 'typeorm';
 import redis from '../../db/redis';
 import { createTestConn } from '../../test/createTestConn';
@@ -61,10 +60,10 @@ mutation Login($password: String!, $email: String!) {
 describe('login', () => {
   test('it logins a valid user', async () => {
     const user = {
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
+      firstName: 'test',
+      lastName: 'test last',
+      email: 'test@test.com',
+      password: 'storify12345',
     };
 
     await gCall({
@@ -77,8 +76,8 @@ describe('login', () => {
     const response = await gCall({
       source: loginMutation,
       variableValues: {
-        email: user.email,
-        password: user.password,
+        email: 'test@test.com',
+        password: 'storify12345',
       },
     });
     expect(response).toMatchObject({
