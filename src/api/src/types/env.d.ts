@@ -9,5 +9,6 @@ declare namespace NodeJS {
     CLOUDINARY_SECRET: string;
     STRIPE_SECRET_KEY: string;
     SENDGRID_API_KEY: string;
+    SENDGRID_FROM: string;
   }
 }

@@ -11,13 +11,15 @@ const emailService = {
     to: string,
     subject: string,
     html: string,
+    text?: string,
   ) => {
     if (process.env.NODE_ENV === 'production') {
       try {
         await sendGrid.send({
-          from: 'noreply@storify.com',
+          from: process.env.SENDGRID_FROM,
           to,
           subject,
+          text,
           html,
         });
       } catch (e) {
