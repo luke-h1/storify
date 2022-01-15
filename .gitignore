@@ -8,3 +8,4 @@ src/api/data/images/
 .env
 .DS_Store
 .data
+src/api/.env.production
