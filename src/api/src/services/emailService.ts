@@ -15,13 +15,14 @@ const emailService = {
   ) => {
     if (process.env.NODE_ENV === 'production') {
       try {
-        await sendGrid.send({
+        const res = await sendGrid.send({
           from: process.env.SENDGRID_FROM,
           to,
           subject,
           text,
           html,
         });
+        console.log('email sent', res);
       } catch (e) {
         console.error(e);
       }
