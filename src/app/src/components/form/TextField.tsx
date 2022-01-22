@@ -7,27 +7,17 @@ interface TextFieldProps extends TextInputProps {
   label: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const styles = StyleSheet.create({
-  details: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 4,
-  },
-  title: {
-    marginHorizontal: 8,
-  },
-  installButton: {
-    marginVertical: 4,
-  },
-});
-
 const TextField = ({ name, label, ...props }: TextFieldProps) => {
   const [field, meta, { setValue }] = useField({ name });
   return (
-    <View style={styles.details}>
-      <View style={{ marginBottom: 8 }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 4,
+      }}
+    >
+      <View style={{ marginBottom: 8, width: '100%' }}>
         <Input
           label={label}
           {...props}

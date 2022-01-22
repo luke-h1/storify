@@ -51,7 +51,7 @@ const RegisterScreen = ({ navigation }: AuthStackNav<'Register'>) => {
           }}
         >
           {({ isSubmitting, handleSubmit }) => (
-            <>
+            <View style={{ width: '100%' }}>
               <FormSpacer>
                 <TextField
                   label="firstName"
@@ -91,7 +91,7 @@ const RegisterScreen = ({ navigation }: AuthStackNav<'Register'>) => {
               >
                 Register
               </Button>
-            </>
+            </View>
           )}
         </Formik>
       </KeyboardAwareScrollView>

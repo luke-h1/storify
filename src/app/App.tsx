@@ -3,11 +3,11 @@ import {
   ApplicationProvider,
   IconRegistry,
   Layout,
-  Text,
 } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import React from 'react';
 import { Provider } from 'urql';
+import Routes from './src/Routes';
 import { client } from './src/utils/client';
 
 const App = () => {
@@ -18,7 +18,7 @@ const App = () => {
         <Layout
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-          <Text>Welcome to UI Kitten</Text>
+          <Routes />
         </Layout>
       </ApplicationProvider>
     </Provider>
