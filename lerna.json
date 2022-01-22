@@ -1,7 +1,6 @@
 {
   "packages": [
     "src/api",
-    "src/app",
     "src/common",
     "src/frontend"
   ],

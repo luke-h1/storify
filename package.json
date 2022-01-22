@@ -1,12 +1,8 @@
 {
   "private": true,
-  "workspaces": [
-    "src/api",
-    "src/app",
-    "src/common",
-    "src/frontend"
- 
-  ],
+  "workspaces": {
+    "packages": ["src/common", "src/api", "src/frontend"]
+  },
   "name": "next-storify",
   "version": "1.0.0",
   "main": "index.js",
