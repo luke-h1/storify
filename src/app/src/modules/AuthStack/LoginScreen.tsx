@@ -1,5 +1,6 @@
 import { Button, Text } from '@ui-kitten/components';
 import { Formik } from 'formik';
+import { useState } from 'react';
 import { View } from 'react-native';
 import Center from '../../components/Center';
 import FormSpacer from '../../components/FormSpacer';
@@ -17,11 +18,12 @@ interface FormValues {
 
 const LoginScreen = ({ navigation }: AuthStackNav<'Login'>) => {
   const [, login] = useLoginMutation();
+  const [loading, setLoading] = useState<boolean>(false);
   return (
     <ScreenWrapper>
       <View style={{ padding: 31, flex: 1 }}>
         <Center>
-          <Text style={{ fontSize: 26 }}>Register</Text>
+          <Text style={{ fontSize: 26 }}>Login</Text>
         </Center>
       </View>
       <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
@@ -33,6 +35,7 @@ const LoginScreen = ({ navigation }: AuthStackNav<'Login'>) => {
             password: '',
           }}
           onSubmit={async (values, { setErrors }) => {
+            setLoading(true);
             const res = await login({
               email: values.email,
               password: values.password,
@@ -44,6 +47,7 @@ const LoginScreen = ({ navigation }: AuthStackNav<'Login'>) => {
         >
           {({ isSubmitting, handleSubmit }) => (
             <>
+              {loading && <Text>Loading</Text>}
               <FormSpacer>
                 <TextField
                   label="email"

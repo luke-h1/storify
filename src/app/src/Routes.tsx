@@ -11,6 +11,7 @@ import FullScreenLoading from './components/FullScreenloading';
 import ScreenWrapper from './components/ScreenWrapper';
 import { useMeQuery } from './generated/graphql';
 import AuthStack from './modules/AuthStack';
+import AuthTabs from './modules/AuthTabs';
 
 const Routes = () => {
   const [{ data, fetching }] = useMeQuery();
@@ -20,7 +21,7 @@ const Routes = () => {
   if (fetching && !data) {
     body = <FullScreenLoading />;
   } else if (!data?.me) {
-    body = <AuthStack />;
+    body = <AuthTabs />;
   } else if (data?.me) {
     body = <Text>Logged in</Text>;
   }
