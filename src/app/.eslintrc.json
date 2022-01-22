@@ -1,0 +1,7 @@
+{
+  "extends": "../../.eslintrc.json",
+
+  "rules": {
+    "react/style-prop-object": "off"
+  }
+}

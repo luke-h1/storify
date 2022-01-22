@@ -1,6 +1,9 @@
 {
   "packages": [
-    "src/*"
+    "src/api",
+    "src/app",
+    "src/common",
+    "src/frontend"
   ],
   "version": "0.0.0",
   "useWorkspaces": true,
