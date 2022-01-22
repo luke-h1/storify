@@ -1,7 +1,11 @@
 {
   "private": true,
   "workspaces": [
-    "src/*"
+    "src/api",
+    "src/app",
+    "src/common",
+    "src/frontend"
+ 
   ],
   "name": "next-storify",
   "version": "1.0.0",
