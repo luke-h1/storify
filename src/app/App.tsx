@@ -1,13 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text } from 'react-native';
+import * as eva from '@eva-design/eva';
+import {
+  ApplicationProvider,
+  IconRegistry,
+  Layout,
+  Text,
+} from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import React from 'react';
 import { Provider } from 'urql';
 import { client } from './src/utils/client';
 
-export default function App() {
+const App = () => {
   return (
     <Provider value={client}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={{ ...eva.light }}>
+        <Layout
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <Text>Welcome to UI Kitten</Text>
+        </Layout>
+      </ApplicationProvider>
     </Provider>
   );
-}
+};
+export default App;
