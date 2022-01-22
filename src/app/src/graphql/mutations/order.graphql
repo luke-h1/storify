@@ -1,0 +1,5 @@
+query Order($paymentId: String!) {
+  order(paymentId: $paymentId) {
+    paymentId
+  }
+}

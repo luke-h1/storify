@@ -1,0 +1,15 @@
+fragment ProductsFragment on Product {
+    id
+    brand
+    descriptionSnippet
+    image
+    name
+    price
+    description
+    liked
+    stripeProductId
+    creator {
+      id
+      fullName
+    }
+}

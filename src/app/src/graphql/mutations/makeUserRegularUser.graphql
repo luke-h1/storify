@@ -1,0 +1,3 @@
+mutation MakeUserRegularUser($id: Int!) {
+  makeUserRegularUser(id: $id)
+}
