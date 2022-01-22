@@ -1,6 +1,0 @@
-mutation UpdateOrderStatus($paymentId: String!) {
-  updateOrderStatus(paymentId: $paymentId) {
-    id
-    status
-  }
-}

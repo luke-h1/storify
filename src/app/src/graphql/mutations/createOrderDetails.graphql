@@ -1,8 +1,0 @@
-mutation CreateOrderDetails($productId: Int!, $orderId: Int!, $quantity: Int!) {
-  createOrderDetails(productId: $productId, orderId: $orderId, quantity: $quantity) {
-    errors {
-      message
-      field
-    }
-  }
-}

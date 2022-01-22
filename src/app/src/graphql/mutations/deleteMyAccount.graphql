@@ -1,3 +1,0 @@
-mutation DeleteMyAccount($id: Int!) {
-  deleteMyAccount(id: $id)
-}

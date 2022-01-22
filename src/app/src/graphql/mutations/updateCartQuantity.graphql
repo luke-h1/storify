@@ -1,8 +1,0 @@
-mutation UpdateCartQuantity($quantity: Int!, $id: Int!) {
-  updateCartQuantity(quantity: $quantity, id: $id) {
-    errors {
-      message
-      field
-    }
-  }
-}

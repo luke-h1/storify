@@ -1,5 +1,0 @@
-mutation CreateOrder($total: Int!) {
-  createOrder(total: $total) {
-    id
-  }
-}

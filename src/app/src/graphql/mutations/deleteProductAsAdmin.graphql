@@ -1,3 +1,0 @@
-mutation DeleteProductAsAdmin($stripeProductId: String!, $id: Int!) {
-  deleteProductAsAdmin(stripeProductId: $stripeProductId, id: $id)
-}

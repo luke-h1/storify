@@ -1,5 +1,0 @@
-query Product($id: Int!) {
-  product(id: $id) {
-    ...ProductFragment
-  }
-}

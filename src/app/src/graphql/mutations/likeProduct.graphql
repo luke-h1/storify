@@ -1,3 +1,0 @@
-mutation LikeProduct($value: Boolean!, $likeProductId: Int!) {
-  likeProduct(value: $value, id: $likeProductId)
-}

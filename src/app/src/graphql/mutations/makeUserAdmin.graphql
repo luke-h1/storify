@@ -1,3 +1,0 @@
-mutation MakeUserAdmin($id: Int!) {
-  makeUserAdmin(id: $id)
-}
