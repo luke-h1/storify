@@ -12,7 +12,7 @@ const AuthTabs = () => {
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({
-        headerShown: false,
+        headerShown: true,
         // eslint-disable-next-line react/no-unstable-nested-components
         tabBarIcon: ({ color, size }) => {
           if (route.name === 'Login') {
