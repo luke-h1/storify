@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "nodemailer": "^6.4.11",
+    "apollo-server-core": "3.6.2",
     "@sendgrid/mail": "7.6.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^27.0.1",
