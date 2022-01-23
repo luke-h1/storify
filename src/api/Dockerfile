@@ -4,13 +4,13 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN yarn
 
 COPY . . 
-RUN npm run build
+RUN yarn build
 
 
-FROM node:14 
+FROM node:14
 
 WORKDIR /usr/src/app
 
@@ -20,7 +20,7 @@ COPY .env.production .
 COPY .env . 
 COPY .env.production .env
 
-RUN npm ci --production 
+RUN yarn
 
 COPY --from=builder /usr/src/app/dist ./dist 
 
