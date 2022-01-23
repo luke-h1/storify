@@ -52,9 +52,8 @@ export class PaymentResolver {
 
     const source = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      cancel_url: 'http://localhost:3000/checkout/error',
-      success_url:
-        'http://localhost:3000/checkout/success?source={CHECKOUT_SESSION_ID}',
+      cancel_url: `${process.env.FRONTEND_URL}/checkout/error`,
+      success_url: `${process.env.FRONTEND_URL}/checkout/success?source={CHECKOUT_SESSION_ID}`,
       mode: 'payment',
       line_items,
     });

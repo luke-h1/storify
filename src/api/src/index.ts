@@ -27,29 +27,32 @@ const main = async () => {
   const app = express();
 
   app.use(compression());
+  const RedisStore = connectRedis(session);
   app.set('trust-proxy', 1);
+
   app.use(
     cors({
-      origin: [process.env.CORS_ORIGIN, 'https://studio.apollographql.com'],
+      origin: isProd
+        ? process.env.CORS_ORIGIN
+        : [process.env.CORS_ORIGIN, 'https://studio.apollographql.com'],
       credentials: true,
     }),
   );
 
-  const RedisStore = connectRedis(session);
   app.use(
     session({
-      name: 'fid',
+      name: '_storify-fid',
+      proxy: true,
       store: new RedisStore({
-        logErrors: true,
         client: redis,
         disableTouch: true,
       }),
       cookie: {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         httpOnly: true,
-        sameSite: 'lax', // csrf
+        sameSite: 'lax',
         secure: isProd,
-        domain: isProd ? process.env.PROD_DOMAIN : undefined,
+        domain: isProd ? '.storify-ecommerce-mock.xyz' : undefined,
         signed: !!isProd,
       },
       saveUninitialized: false,
@@ -58,16 +61,12 @@ const main = async () => {
     }),
   );
 
-  const plugins = [];
-
-  if (isProd) {
-    plugins.push(ApolloServerPluginLandingPageDisabled());
-  } else {
-    plugins.push(ApolloServerPluginInlineTrace());
-  }
-
   const apolloServer = new ApolloServer({
-    plugins,
+    plugins: [
+      isProd
+        ? ApolloServerPluginLandingPageDisabled()
+        : ApolloServerPluginInlineTrace(),
+    ],
     debug: !!isProd,
     allowBatchedHttpRequests: true,
     schema: await createSchema(),

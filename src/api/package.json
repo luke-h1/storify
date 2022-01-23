@@ -22,11 +22,12 @@
     "seed": "npx ts-node src/seed/User.ts && npx ts-node src/seed/Product.ts"
   },
   "dependencies": {
+    "nodemailer": "^6.4.11",
+    "apollo-server-core": "3.6.2",
     "@sendgrid/mail": "7.6.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^27.0.1",
     "apollo-server-cache-redis": "^3.3.0",
-    "apollo-server-core": "^3.6.1",
     "apollo-server-express": "^3.3.0",
     "aws-sdk": "^2.991.0",
     "bcryptjs": "^2.4.3",
@@ -47,7 +48,6 @@
     "ioredis": "^4.25.0",
     "jest": "^27.0.4",
     "mailgun.js": "^4.1.4",
-    "nodemailer": "^6.4.11",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "stripe": "^8.195.0",
@@ -57,6 +57,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/nodemailer": "^6.4.0",
     "@types/compression": "^1.7.2",
     "@types/connect-redis": "^0.0.18",
     "@types/cookie-parser": "^1.4.2",
@@ -67,7 +68,6 @@
     "@types/ioredis": "^4.22.2",
     "@types/jsonwebtoken": "^8.5.1",
     "@types/node": "^17.0.5",
-    "@types/nodemailer": "^6.4.0",
     "@types/redis": "^4.0.11",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^5.3.0",

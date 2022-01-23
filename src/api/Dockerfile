@@ -10,7 +10,7 @@ COPY . .
 RUN yarn build
 
 
-FROM node:14 
+FROM node:14
 
 WORKDIR /usr/src/app
 
@@ -20,7 +20,7 @@ COPY .env.production .
 COPY .env . 
 COPY .env.production .env
 
-RUN yarn --production
+RUN yarn
 
 COPY --from=builder /usr/src/app/dist ./dist 
 

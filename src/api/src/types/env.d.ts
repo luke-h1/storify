@@ -10,6 +10,5 @@ declare namespace NodeJS {
     STRIPE_SECRET_KEY: string;
     SENDGRID_API_KEY: string;
     SENDGRID_FROM: string;
-    PROD_DOMAIN: string;
   }
 }
