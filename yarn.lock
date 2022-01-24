@@ -8455,9 +8455,9 @@ lz-string@^1.4.4:
   integrity sha1-wNjq82BZ9wV5bh40SBHPTEmNOiY=
 
 mailgun.js@^4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/mailgun.js/-/mailgun.js-4.1.4.tgz#c209c2cd33f150801ac1df26e59e566e463ee468"
-  integrity sha512-ay56poetfErj/ftTZcRyyUv1eW+maQYAHdN0JYOSyTENhPJqm4N4SVGOwM6OTtFt0wBjdb8N9tPZaQLN7xOPwA==
+  version "4.1.6"
+  resolved "https://registry.yarnpkg.com/mailgun.js/-/mailgun.js-4.1.6.tgz#92db32c4ad0ba2f8f4af468dd2211c454a85c31c"
+  integrity sha512-WETLn+sbXJa+MWW+kh9kZ9B9a5j5VVAuH91Tt0Rn0Hxa60ILiItPVH/t3fNVGmyPU5mhdIurkEwHp/RP2KaqnA==
   dependencies:
     base-64 "^1.0.0"
     bluebird "^3.7.2"
