@@ -4,5 +4,6 @@ declare namespace NodeJS {
     NEXT_PUBLIC_CLOUDINARY_KEY: string;
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: string;
     NEXT_PUBLIC_STRIPE_PK: string;
+    NEXT_PUBLIC_SITE_URL: string;
   }
 }
