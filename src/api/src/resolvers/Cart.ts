@@ -96,6 +96,8 @@ export class CartResolver {
     return true;
   }
 
+  // TODO: setup multiple payment providers
+
   @Mutation(() => CartResponse)
   @Authorized(isAuth)
   async updateCartQuantity(
