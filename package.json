@@ -1,7 +1,11 @@
 {
   "private": true,
   "workspaces": {
-    "packages": ["src/common", "src/api", "src/frontend"]
+    "packages": [
+      "src/common",
+      "src/api",
+      "src/frontend"
+    ]
   },
   "name": "next-storify",
   "version": "1.0.0",
@@ -34,7 +38,7 @@
     "stylelint": "^14.0.1",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-sass-guidelines": "^9.0.1",
-    "stylelint-config-standard": "^24.0.0",
+    "stylelint-config-standard": "^25.0.0",
     "stylelint-order": "^5.0.0",
     "stylelint-prettier": "^2.0.0"
   },
