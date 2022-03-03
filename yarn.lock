@@ -8440,10 +8440,10 @@ lz-string@^1.4.4:
   resolved "https://registry.yarnpkg.com/lz-string/-/lz-string-1.4.4.tgz#c0d8eaf36059f705796e1e344811cf4c498d3a26"
   integrity sha1-wNjq82BZ9wV5bh40SBHPTEmNOiY=
 
-mailgun.js@^4.1.4:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/mailgun.js/-/mailgun.js-4.2.0.tgz#d8d512b12d0fd1f62f286654d053fd0ba1d8ea41"
-  integrity sha512-vc5cNoshpOzOXPby7nKMwPeLPRaFr7jsfGQ9GAjgeE4N+7t1LzEZq0HYT+6ar4HM9hVCVD1usqGhxo6vrvLS7g==
+mailgun.js@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/mailgun.js/-/mailgun.js-5.0.1.tgz#bd8e72c61e1dda1191a1f59aa02230160e4331e2"
+  integrity sha512-xmiC3qY8JSoy4Bc19vj8z6NMAJFvKHC3FxgW/NnZhJ0NxPcjdQqE+4uLaWby4rqMQmW0GM2N3Ykwzxz4zF34AQ==
   dependencies:
     base-64 "^1.0.0"
     bluebird "^3.7.2"
