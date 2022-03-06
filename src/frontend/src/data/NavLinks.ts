@@ -42,6 +42,11 @@ export const authLinks = [
     slug: '/products/liked-products',
     text: 'Liked products',
   },
+  {
+    id: 5,
+    slug: '/delete-account',
+    text: 'Delete account',
+  },
 ];
 
 export const noAuthLinks = [
