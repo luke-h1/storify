@@ -11,7 +11,6 @@ import {
   RegisterMutation,
   LogoutMutation,
   DeleteProductMutationVariables,
-  DeleteUserMutationVariables,
   DeleteProductAsAdminMutationVariables,
   MakeUserAdminMutationVariables,
   MakeUserRegularUserMutationVariables,
@@ -19,6 +18,7 @@ import {
   DeleteCartItemMutationVariables,
   CreateCartMutationVariables,
   DeleteReviewMutationVariables,
+  DeleteUserAsAdminMutationVariables,
 } from '../generated/graphql';
 import { CustomUpdateQuery } from './customUpdateQuery';
 import { isServer } from './isServer';
@@ -132,10 +132,10 @@ export const createurqlClient = (
                 () => ({ me: null }),
               );
             },
-            deleteUser: (_result, args, cache) => {
+            deleteUserAsAdmin: (_result, args, cache) => {
               cache.invalidate({
                 __typename: 'User',
-                id: (args as DeleteUserMutationVariables).id,
+                id: (args as DeleteUserAsAdminMutationVariables).id,
               });
             },
             deleteProductAsAdmin: (_result, args, cache) => {

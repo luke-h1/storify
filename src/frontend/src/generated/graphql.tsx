@@ -71,7 +71,7 @@ export type Mutation = {
   deleteProduct: Scalars['Boolean'];
   deleteProductAsAdmin: Scalars['Boolean'];
   deleteReview: Scalars['Boolean'];
-  deleteUser: Scalars['Boolean'];
+  deleteUserAsAdmin: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   likeProduct: Scalars['Boolean'];
   login: UserResponse;
@@ -125,10 +125,6 @@ export type MutationDeleteCartItemArgs = {
   id: Scalars['Int'];
 };
 
-export type MutationDeleteMyAccountArgs = {
-  id: Scalars['Int'];
-};
-
 export type MutationDeleteProductArgs = {
   id: Scalars['Int'];
   stripeProductId: Scalars['String'];
@@ -143,7 +139,7 @@ export type MutationDeleteReviewArgs = {
   id: Scalars['Int'];
 };
 
-export type MutationDeleteUserArgs = {
+export type MutationDeleteUserAsAdminArgs = {
   id: Scalars['Int'];
 };
 
@@ -227,6 +223,7 @@ export type Payment = {
   creatorId: Scalars['Int'];
   id: Scalars['Int'];
   orderId: Scalars['Int'];
+  paymentIntentId: Scalars['String'];
   stripeTransactionId: Scalars['String'];
 };
 
@@ -419,21 +416,19 @@ export type UserFragmentFragment = {
 
 export type UserResponseFragmentFragment = {
   __typename?: 'UserResponse';
-  errors?:
-    | Array<{ __typename?: 'FieldError'; field: string; message: string }>
-    | null
-    | undefined;
-  user?:
-    | {
-        __typename?: 'User';
-        id: number;
-        email: string;
-        firstName: string;
-        lastName: string;
-        isAdmin: boolean;
-      }
-    | null
-    | undefined;
+  errors?: Array<{
+    __typename?: 'FieldError';
+    field: string;
+    message: string;
+  }> | null;
+  user?: {
+    __typename?: 'User';
+    id: number;
+    email: string;
+    firstName: string;
+    lastName: string;
+    isAdmin: boolean;
+  } | null;
 };
 
 export type CancelOrderMutationVariables = Exact<{
@@ -454,10 +449,11 @@ export type ChangePasswordMutation = {
   __typename?: 'Mutation';
   changePassword: {
     __typename?: 'UserResponse';
-    errors?:
-      | Array<{ __typename?: 'FieldError'; message: string; field: string }>
-      | null
-      | undefined;
+    errors?: Array<{
+      __typename?: 'FieldError';
+      message: string;
+      field: string;
+    }> | null;
   };
 };
 
@@ -490,10 +486,11 @@ export type CreateOrderDetailsMutation = {
   __typename?: 'Mutation';
   createOrderDetails: {
     __typename?: 'OrderDetailsResponse';
-    errors?:
-      | Array<{ __typename?: 'FieldError'; message: string; field: string }>
-      | null
-      | undefined;
+    errors?: Array<{
+      __typename?: 'FieldError';
+      message: string;
+      field: string;
+    }> | null;
   };
 };
 
@@ -514,11 +511,12 @@ export type CreateProductMutation = {
   __typename?: 'Mutation';
   createProduct: {
     __typename?: 'ProductResponse';
-    errors?:
-      | Array<{ __typename?: 'FieldError'; message: string; field: string }>
-      | null
-      | undefined;
-    product?: { __typename?: 'Product'; id: number } | null | undefined;
+    errors?: Array<{
+      __typename?: 'FieldError';
+      message: string;
+      field: string;
+    }> | null;
+    product?: { __typename?: 'Product'; id: number } | null;
   };
 };
 
@@ -530,24 +528,22 @@ export type CreateReviewMutation = {
   __typename?: 'Mutation';
   createReview: {
     __typename?: 'ReviewResponse';
-    errors?:
-      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
-      | null
-      | undefined;
-    review?:
-      | {
-          __typename?: 'Review';
-          id: number;
-          title: string;
-          rating: number;
-          comment: string;
-          creatorId: number;
-          productId: number;
-          createdAt: string;
-          updatedAt: string;
-        }
-      | null
-      | undefined;
+    errors?: Array<{
+      __typename?: 'FieldError';
+      field: string;
+      message: string;
+    }> | null;
+    review?: {
+      __typename?: 'Review';
+      id: number;
+      title: string;
+      rating: number;
+      comment: string;
+      creatorId: number;
+      productId: number;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
   };
 };
 
@@ -578,9 +574,7 @@ export type DeleteCartItemMutation = {
   deleteCartItem: boolean;
 };
 
-export type DeleteMyAccountMutationVariables = Exact<{
-  id: Scalars['Int'];
-}>;
+export type DeleteMyAccountMutationVariables = Exact<{ [key: string]: never }>;
 
 export type DeleteMyAccountMutation = {
   __typename?: 'Mutation';
@@ -616,13 +610,13 @@ export type DeleteReviewMutation = {
   deleteReview: boolean;
 };
 
-export type DeleteUserMutationVariables = Exact<{
+export type DeleteUserAsAdminMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
-export type DeleteUserMutation = {
+export type DeleteUserAsAdminMutation = {
   __typename?: 'Mutation';
-  deleteUser: boolean;
+  deleteUserAsAdmin: boolean;
 };
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -653,21 +647,19 @@ export type LoginMutation = {
   __typename?: 'Mutation';
   login: {
     __typename?: 'UserResponse';
-    errors?:
-      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
-      | null
-      | undefined;
-    user?:
-      | {
-          __typename?: 'User';
-          id: number;
-          email: string;
-          firstName: string;
-          lastName: string;
-          isAdmin: boolean;
-        }
-      | null
-      | undefined;
+    errors?: Array<{
+      __typename?: 'FieldError';
+      field: string;
+      message: string;
+    }> | null;
+    user?: {
+      __typename?: 'User';
+      id: number;
+      email: string;
+      firstName: string;
+      lastName: string;
+      isAdmin: boolean;
+    } | null;
   };
 };
 
@@ -710,21 +702,19 @@ export type RegisterMutation = {
   __typename?: 'Mutation';
   register: {
     __typename?: 'UserResponse';
-    errors?:
-      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
-      | null
-      | undefined;
-    user?:
-      | {
-          __typename?: 'User';
-          id: number;
-          email: string;
-          firstName: string;
-          lastName: string;
-          isAdmin: boolean;
-        }
-      | null
-      | undefined;
+    errors?: Array<{
+      __typename?: 'FieldError';
+      field: string;
+      message: string;
+    }> | null;
+    user?: {
+      __typename?: 'User';
+      id: number;
+      email: string;
+      firstName: string;
+      lastName: string;
+      isAdmin: boolean;
+    } | null;
   };
 };
 
@@ -737,10 +727,11 @@ export type UpdateCartQuantityMutation = {
   __typename?: 'Mutation';
   updateCartQuantity: {
     __typename?: 'CartResponse';
-    errors?:
-      | Array<{ __typename?: 'FieldError'; message: string; field: string }>
-      | null
-      | undefined;
+    errors?: Array<{
+      __typename?: 'FieldError';
+      message: string;
+      field: string;
+    }> | null;
   };
 };
 
@@ -760,29 +751,24 @@ export type UpdateProductMutationVariables = Exact<{
 
 export type UpdateProductMutation = {
   __typename?: 'Mutation';
-  updateProduct?:
-    | {
-        __typename?: 'ProductResponse';
-        errors?:
-          | Array<{ __typename?: 'FieldError'; message: string; field: string }>
-          | null
-          | undefined;
-        product?:
-          | {
-              __typename?: 'Product';
-              id: number;
-              image: string;
-              brand: string;
-              description: string;
-              price: number;
-              publicId: string;
-              creator: { __typename?: 'User'; fullName: string };
-            }
-          | null
-          | undefined;
-      }
-    | null
-    | undefined;
+  updateProduct?: {
+    __typename?: 'ProductResponse';
+    errors?: Array<{
+      __typename?: 'FieldError';
+      message: string;
+      field: string;
+    }> | null;
+    product?: {
+      __typename?: 'Product';
+      id: number;
+      image: string;
+      brand: string;
+      description: string;
+      price: number;
+      publicId: string;
+      creator: { __typename?: 'User'; fullName: string };
+    } | null;
+  } | null;
 };
 
 export type UpdateReviewMutationVariables = Exact<{
@@ -793,24 +779,22 @@ export type UpdateReviewMutation = {
   __typename?: 'Mutation';
   updateReview: {
     __typename?: 'ReviewResponse';
-    review?:
-      | {
-          __typename?: 'Review';
-          id: number;
-          title: string;
-          rating: number;
-          comment: string;
-          productId: number;
-          creatorId: number;
-          createdAt: string;
-          updatedAt: string;
-        }
-      | null
-      | undefined;
-    errors?:
-      | Array<{ __typename?: 'FieldError'; field: string; message: string }>
-      | null
-      | undefined;
+    review?: {
+      __typename?: 'Review';
+      id: number;
+      title: string;
+      rating: number;
+      comment: string;
+      productId: number;
+      creatorId: number;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+    errors?: Array<{
+      __typename?: 'FieldError';
+      field: string;
+      message: string;
+    }> | null;
   };
 };
 
@@ -840,17 +824,14 @@ export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
   __typename?: 'Query';
-  me?:
-    | {
-        __typename?: 'User';
-        id: number;
-        email: string;
-        firstName: string;
-        lastName: string;
-        isAdmin: boolean;
-      }
-    | null
-    | undefined;
+  me?: {
+    __typename?: 'User';
+    id: number;
+    email: string;
+    firstName: string;
+    lastName: string;
+    isAdmin: boolean;
+  } | null;
 };
 
 export type OrdersQueryVariables = Exact<{ [key: string]: never }>;
@@ -889,66 +870,57 @@ export type ProductQueryVariables = Exact<{
 
 export type ProductQuery = {
   __typename?: 'Query';
-  product?:
-    | {
-        __typename?: 'Product';
-        id: number;
-        brand: string;
-        description: string;
-        image: string;
-        price: number;
-        name: string;
-        liked: boolean;
-        stripePriceId: string;
-        stripeProductId: string;
-        creator: { __typename?: 'User'; id: number };
-      }
-    | null
-    | undefined;
+  product?: {
+    __typename?: 'Product';
+    id: number;
+    brand: string;
+    description: string;
+    image: string;
+    price: number;
+    name: string;
+    liked: boolean;
+    stripePriceId: string;
+    stripeProductId: string;
+    creator: { __typename?: 'User'; id: number };
+  } | null;
 };
 
 export type ProductsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ProductsQuery = {
   __typename?: 'Query';
-  products?:
-    | Array<{
-        __typename?: 'Product';
-        id: number;
-        brand: string;
-        descriptionSnippet: string;
-        image: string;
-        name: string;
-        price: number;
-        description: string;
-        liked: boolean;
-        stripeProductId: string;
-        creator: { __typename?: 'User'; id: number; fullName: string };
-      }>
-    | null
-    | undefined;
+  products?: Array<{
+    __typename?: 'Product';
+    id: number;
+    brand: string;
+    descriptionSnippet: string;
+    image: string;
+    name: string;
+    price: number;
+    description: string;
+    liked: boolean;
+    stripeProductId: string;
+    creator: { __typename?: 'User'; id: number; fullName: string };
+  }> | null;
 };
 
 export type ProductsAsAdminQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ProductsAsAdminQuery = {
   __typename?: 'Query';
-  productsAsAdmin?:
-    | Array<{
-        __typename?: 'Product';
-        id: number;
-        brand: string;
-        descriptionSnippet: string;
-        image: string;
-        name: string;
-        price: number;
-        description: string;
-        liked: boolean;
-        stripeProductId: string;
-        creator: { __typename?: 'User'; id: number; fullName: string };
-      }>
-    | null
-    | undefined;
+  productsAsAdmin?: Array<{
+    __typename?: 'Product';
+    id: number;
+    brand: string;
+    descriptionSnippet: string;
+    image: string;
+    name: string;
+    price: number;
+    description: string;
+    liked: boolean;
+    stripeProductId: string;
+    creator: { __typename?: 'User'; id: number; fullName: string };
+  }> | null;
 };
 
 export type ReviewQueryVariables = Exact<{
@@ -957,20 +929,17 @@ export type ReviewQueryVariables = Exact<{
 
 export type ReviewQuery = {
   __typename?: 'Query';
-  review?:
-    | {
-        __typename?: 'Review';
-        id: number;
-        title: string;
-        comment: string;
-        rating: number;
-        creatorId: number;
-        productId: number;
-        createdAt: string;
-        updatedAt: string;
-      }
-    | null
-    | undefined;
+  review?: {
+    __typename?: 'Review';
+    id: number;
+    title: string;
+    comment: string;
+    rating: number;
+    creatorId: number;
+    productId: number;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ReviewsQueryVariables = Exact<{
@@ -979,20 +948,17 @@ export type ReviewsQueryVariables = Exact<{
 
 export type ReviewsQuery = {
   __typename?: 'Query';
-  reviews?:
-    | Array<{
-        __typename?: 'Review';
-        id: number;
-        title: string;
-        rating: number;
-        comment: string;
-        productId: number;
-        creatorId: number;
-        createdAt: string;
-        updatedAt: string;
-      }>
-    | null
-    | undefined;
+  reviews?: Array<{
+    __typename?: 'Review';
+    id: number;
+    title: string;
+    rating: number;
+    comment: string;
+    productId: number;
+    creatorId: number;
+    createdAt: string;
+    updatedAt: string;
+  }> | null;
 };
 
 export type UserQueryVariables = Exact<{
@@ -1001,38 +967,32 @@ export type UserQueryVariables = Exact<{
 
 export type UserQuery = {
   __typename?: 'Query';
-  user?:
-    | {
-        __typename?: 'User';
-        id: number;
-        firstName: string;
-        lastName: string;
-        email: string;
-        isAdmin: boolean;
-        createdAt: string;
-        updatedAt: string;
-      }
-    | null
-    | undefined;
+  user?: {
+    __typename?: 'User';
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    isAdmin: boolean;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type UsersQuery = {
   __typename?: 'Query';
-  users?:
-    | Array<{
-        __typename: 'User';
-        id: number;
-        email: string;
-        firstName: string;
-        lastName: string;
-        isAdmin: boolean;
-        createdAt: string;
-        updatedAt: string;
-      }>
-    | null
-    | undefined;
+  users?: Array<{
+    __typename: 'User';
+    id: number;
+    email: string;
+    firstName: string;
+    lastName: string;
+    isAdmin: boolean;
+    createdAt: string;
+    updatedAt: string;
+  }> | null;
 };
 
 export const ProductFragmentFragmentDoc = gql`
@@ -1271,8 +1231,8 @@ export function useDeleteCartItemMutation() {
   >(DeleteCartItemDocument);
 }
 export const DeleteMyAccountDocument = gql`
-  mutation DeleteMyAccount($id: Int!) {
-    deleteMyAccount(id: $id)
+  mutation DeleteMyAccount {
+    deleteMyAccount
   }
 `;
 
@@ -1317,16 +1277,17 @@ export function useDeleteReviewMutation() {
     DeleteReviewDocument,
   );
 }
-export const DeleteUserDocument = gql`
-  mutation DeleteUser($id: Int!) {
-    deleteUser(id: $id)
+export const DeleteUserAsAdminDocument = gql`
+  mutation DeleteUserAsAdmin($id: Int!) {
+    deleteUserAsAdmin(id: $id)
   }
 `;
 
-export function useDeleteUserMutation() {
-  return Urql.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(
-    DeleteUserDocument,
-  );
+export function useDeleteUserAsAdminMutation() {
+  return Urql.useMutation<
+    DeleteUserAsAdminMutation,
+    DeleteUserAsAdminMutationVariables
+  >(DeleteUserAsAdminDocument);
 }
 export const ForgotPasswordDocument = gql`
   mutation ForgotPassword($email: String!) {
@@ -1407,7 +1368,7 @@ export const OrderDocument = gql`
 `;
 
 export function useOrderQuery(
-  options: Omit<Urql.UseQueryArgs<OrderQueryVariables>, 'query'> = {},
+  options: Omit<Urql.UseQueryArgs<OrderQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<OrderQuery>({ query: OrderDocument, ...options });
 }
@@ -1531,7 +1492,7 @@ export const CartsDocument = gql`
 `;
 
 export function useCartsQuery(
-  options: Omit<Urql.UseQueryArgs<CartsQueryVariables>, 'query'> = {},
+  options?: Omit<Urql.UseQueryArgs<CartsQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<CartsQuery>({ query: CartsDocument, ...options });
 }
@@ -1545,7 +1506,7 @@ export const MeDocument = gql`
 `;
 
 export function useMeQuery(
-  options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {},
+  options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 }
@@ -1576,7 +1537,7 @@ export const OrdersDocument = gql`
 `;
 
 export function useOrdersQuery(
-  options: Omit<Urql.UseQueryArgs<OrdersQueryVariables>, 'query'> = {},
+  options?: Omit<Urql.UseQueryArgs<OrdersQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<OrdersQuery>({ query: OrdersDocument, ...options });
 }
@@ -1590,7 +1551,7 @@ export const ProductDocument = gql`
 `;
 
 export function useProductQuery(
-  options: Omit<Urql.UseQueryArgs<ProductQueryVariables>, 'query'> = {},
+  options: Omit<Urql.UseQueryArgs<ProductQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<ProductQuery>({ query: ProductDocument, ...options });
 }
@@ -1604,7 +1565,7 @@ export const ProductsDocument = gql`
 `;
 
 export function useProductsQuery(
-  options: Omit<Urql.UseQueryArgs<ProductsQueryVariables>, 'query'> = {},
+  options?: Omit<Urql.UseQueryArgs<ProductsQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<ProductsQuery>({ query: ProductsDocument, ...options });
 }
@@ -1629,7 +1590,7 @@ export const ProductsAsAdminDocument = gql`
 `;
 
 export function useProductsAsAdminQuery(
-  options: Omit<Urql.UseQueryArgs<ProductsAsAdminQueryVariables>, 'query'> = {},
+  options?: Omit<Urql.UseQueryArgs<ProductsAsAdminQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<ProductsAsAdminQuery>({
     query: ProductsAsAdminDocument,
@@ -1652,7 +1613,7 @@ export const ReviewDocument = gql`
 `;
 
 export function useReviewQuery(
-  options: Omit<Urql.UseQueryArgs<ReviewQueryVariables>, 'query'> = {},
+  options: Omit<Urql.UseQueryArgs<ReviewQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<ReviewQuery>({ query: ReviewDocument, ...options });
 }
@@ -1672,7 +1633,7 @@ export const ReviewsDocument = gql`
 `;
 
 export function useReviewsQuery(
-  options: Omit<Urql.UseQueryArgs<ReviewsQueryVariables>, 'query'> = {},
+  options: Omit<Urql.UseQueryArgs<ReviewsQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<ReviewsQuery>({ query: ReviewsDocument, ...options });
 }
@@ -1691,7 +1652,7 @@ export const UserDocument = gql`
 `;
 
 export function useUserQuery(
-  options: Omit<Urql.UseQueryArgs<UserQueryVariables>, 'query'> = {},
+  options: Omit<Urql.UseQueryArgs<UserQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<UserQuery>({ query: UserDocument, ...options });
 }
@@ -1711,7 +1672,7 @@ export const UsersDocument = gql`
 `;
 
 export function useUsersQuery(
-  options: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'> = {},
+  options?: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options });
 }
