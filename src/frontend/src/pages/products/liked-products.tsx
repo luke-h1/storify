@@ -25,12 +25,6 @@ const LikedProducts: NextPage = () => {
     <Page title="your liked products" flex={false}>
       <section className="text-gray-600 body-font max-w-800">
         <div className="container px-5 py-24 mx-auto">
-          <h1 className="text-4xl text-left mb-10">
-            {data?.products &&
-              data?.products.map(p =>
-                p.liked === true ? 'Your liked products' : 'No liked products',
-              )}
-          </h1>
           <div className="flex flex-wrap -m-4">
             {data?.products &&
               data?.products.map(

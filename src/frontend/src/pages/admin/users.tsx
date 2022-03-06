@@ -6,16 +6,16 @@ import Loader from '../../components/Loader';
 import Page from '../../components/Page';
 import {
   useUsersQuery,
-  useDeleteUserMutation,
   useMakeUserAdminMutation,
   useMakeUserRegularUserMutation,
+  useDeleteUserAsAdminMutation,
 } from '../../generated/graphql';
 import { useIsAdmin } from '../../hooks/useIsAdmin';
 import { createurqlClient } from '../../utils/createUrqlClient';
 import { isServer } from '../../utils/isServer';
 
 const Users: NextPage = () => {
-  const [, deleteUser] = useDeleteUserMutation();
+  const [, deleteUserAsAdmin] = useDeleteUserAsAdminMutation();
   const [, makeUserAdmin] = useMakeUserAdminMutation();
   const [, makeUserRegularUser] = useMakeUserRegularUserMutation();
   useIsAdmin();
@@ -131,7 +131,7 @@ const Users: NextPage = () => {
                               type="button"
                               onClick={async () => {
                                 if (window.confirm('Are you sure?')) {
-                                  await deleteUser({ id: u.id });
+                                  await deleteUserAsAdmin({ id: u.id });
                                 }
                               }}
                             >

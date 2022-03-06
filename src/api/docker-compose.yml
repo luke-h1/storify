@@ -1,7 +1,7 @@
 version: '3'
 services:
   postgres:
-    container_name: postgres
+    container_name: postgres-storify
     image: 'postgres:latest'
     restart: always
     ports:
