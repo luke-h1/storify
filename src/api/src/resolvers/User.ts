@@ -283,27 +283,14 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   @Authorized(isAuth)
-  async deleteMyAccount(@Arg('id', () => Int) id: number): Promise<Boolean> {
-    const user = await User.findOne({ id });
+  async deleteMyAccount(@Ctx() { req }: MyContext): Promise<Boolean> {
+    const user = await User.findOne({ id: req.session.userId });
 
     if (!user) {
       return false;
     }
 
-    await emailService.sendEmail(
-      'noreply@storify.com',
-      user.email,
-      'Your account has been deleted | storify',
-      `
-    <div>
-    <h1>Hello ${user.firstName}</h1>
-    <p>Your Storify account has been deleted. You will no longer have access to the service</p>
-    </div>
-    `,
-      'Your Storify account has been deleted. You will no longer have access to the service',
-    );
-
-    await User.delete({ id });
+    await User.delete({ id: req.session.userId });
     return true;
   }
 
@@ -347,7 +334,7 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   @Authorized(isAdmin)
-  async deleteUser(@Arg('id', () => Int) id: number): Promise<boolean> {
+  async deleteUserAsAdmin(@Arg('id', () => Int) id: number): Promise<Boolean> {
     const user = await User.find({ id });
 
     if (!user) {
