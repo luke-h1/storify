@@ -117,7 +117,7 @@ yarn migrate:down
 
 **Question** What tech is used in this Project? 
 
-**Answer:** [Node.js](https://nodejs.org/en/), [Apollo server](https://www.apollographql.com/docs/apollo-server/), [TypeGraphQL](https://typegraphql.com/), [Redis](https://redis.io/), [Stripe](https://stripe.com/en-gb-de), [Next.js](https://nextjs.org/), [TailwindCSS](https://tailwindcss.com/), [URQL](https://formidable.com/open-source/urql/)
+**Answer:** [Node.js](https://nodejs.org/en/), [Apollo server](https://www.apollographql.com/docs/apollo-server/), [TypeGraphQL](https://typegraphql.com/), [Redis](https://redis.io/), [Stripe](https://stripe.com/en-gb-de), [Next.js](https://nextjs.org/), [TailwindCSS](https://tailwindcss.com/), [URQL](https://formidable.com/open-source/urql/), [AWS] (https://aws.amazon.com/)
 
 **Question** Why use GraphQL & not REST? 
 
