@@ -68,7 +68,7 @@ docker-compose up
 
 Now that the databases are started we can migrate the DB for the first time
 
-Run `yarn workspace @storify-api migrate:up` to run initial migrations.
+Run `yarn workspace @storify-api migrate:up` to upsert initial migrations.
 
 Now that migrations have been taken care of, we can run the following commands to start the API (ensure the databases are running): 
 
