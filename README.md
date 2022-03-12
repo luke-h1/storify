@@ -66,9 +66,11 @@ docker-compose up
 ```
 
 
-Now that the databases are started we can start the API for the first time.
+Now that the databases are started we can migrate the DB for the first time
 
-Run the following commands to start the API (ensure the databases are running): 
+Run `yarn workspace @storify-api migrate:up` to run initial migrations.
+
+Now that migrations have been taken care of, we can run the following commands to start the API (ensure the databases are running): 
 
 
 This command transpiles Typescript to Javascript:
@@ -86,7 +88,7 @@ Start the API in a development environment:
 yarn dev 
 ```
 
-The backend will now be listening on `http://localhost:<PORT>/api/graphql`(migrations are automatically ran if needed)
+The backend will now be listening on `http://localhost:<PORT>/api/graphql`
 
 If you want to seed the database there is a seed available which will seed the local database with 24 users & 24 products. Simply run `yarn seed` in the api folder (with the databases running) in order to seed your local database
 
