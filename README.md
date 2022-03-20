@@ -66,9 +66,11 @@ docker-compose up
 ```
 
 
-Now that the databases are started we can start the API for the first time.
+Now that the databases are started we can migrate the DB for the first time
 
-Run the following commands to start the API (ensure the databases are running): 
+Run `yarn workspace @storify-api migrate:up` to upsert initial migrations.
+
+Now that migrations have been taken care of, we can run the following commands to start the API (ensure the databases are running): 
 
 
 This command transpiles Typescript to Javascript:
@@ -86,7 +88,7 @@ Start the API in a development environment:
 yarn dev 
 ```
 
-The backend will now be listening on `http://localhost:<PORT>/api/graphql`(migrations are automatically ran if needed)
+The backend will now be listening on `http://localhost:<PORT>/api/graphql`
 
 If you want to seed the database there is a seed available which will seed the local database with 24 users & 24 products. Simply run `yarn seed` in the api folder (with the databases running) in order to seed your local database
 
@@ -117,7 +119,7 @@ yarn migrate:down
 
 **Question** What tech is used in this Project? 
 
-**Answer:** [Node.js](https://nodejs.org/en/), [Apollo server](https://www.apollographql.com/docs/apollo-server/), [TypeGraphQL](https://typegraphql.com/), [Redis](https://redis.io/), [Stripe](https://stripe.com/en-gb-de), [Next.js](https://nextjs.org/), [TailwindCSS](https://tailwindcss.com/), [URQL](https://formidable.com/open-source/urql/)
+**Answer:** [Node.js](https://nodejs.org/en/), [Apollo server](https://www.apollographql.com/docs/apollo-server/), [TypeGraphQL](https://typegraphql.com/), [Redis](https://redis.io/), [Stripe](https://stripe.com/en-gb-de), [Next.js](https://nextjs.org/), [TailwindCSS](https://tailwindcss.com/), [URQL](https://formidable.com/open-source/urql/), [AWS](https://aws.amazon.com/)
 
 **Question** Why use GraphQL & not REST? 
 
