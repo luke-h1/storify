@@ -22,7 +22,7 @@
     "seed": "npx ts-node src/seed/User.ts && npx ts-node src/seed/Product.ts"
   },
   "dependencies": {
-    "@sendgrid/mail": "7.6.1",
+    "@sendgrid/mail": "7.6.2",
     "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^27.0.1",
     "apollo-server-cache-redis": "^3.3.0",
