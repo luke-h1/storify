@@ -53,7 +53,7 @@
     "stripe": "^8.195.0",
     "ts-jest": "^27.0.3",
     "type-graphql": "^1.1.1",
-    "typeorm": "0.2.44",
+    "typeorm": "0.3.5",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
