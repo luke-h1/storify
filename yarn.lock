@@ -4399,9 +4399,9 @@ cloudinary-core@^2.10.2, cloudinary-core@^2.11.3:
   integrity sha512-EXvnWuq3Ah6pZHB2vEfkrJ4tCGlccZo3xsmt1f+bmrB53jU42ZrnX+v8xKRMot9c/STSO7GPbxbhJQ/z/xRazg==
 
 cloudinary-react@^1.6.7:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/cloudinary-react/-/cloudinary-react-1.7.1.tgz#71a69e8b80407999bd2c837670a71e6020763ae4"
-  integrity sha512-ckRVeQethNtKyyEGamARZDE5TXzMV7Ecn/ehGyAp0fMT+cMaNGzs35h2mqcdvVoW9Y7dTpE+Lxp6TWNdWbwdJw==
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/cloudinary-react/-/cloudinary-react-1.7.2.tgz#1e43a41cd7df38f4b2cfc42bb6c933aafd6a6061"
+  integrity sha512-crwKQRGLP5SkYblwR8Li5O+ZiwKLL/xAz9BjIkg8/hNDF5/+vT3/K+JCWne86lA2AWAuk4OTbv4YVjHx4xA8eA==
   dependencies:
     cloudinary-core "^2.11.3"
     prop-types "^15.6.2"
