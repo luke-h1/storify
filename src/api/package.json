@@ -44,7 +44,7 @@
     "express-session": "^1.17.1",
     "form-data": "^4.0.0",
     "graphql": "^15.3.0",
-    "ioredis": "^4.25.0",
+    "ioredis": "^5.0.4",
     "jest": "^27.5.1",
     "mailgun.js": "^5.0.1",
     "nodemailer": "^6.4.11",
