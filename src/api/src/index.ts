@@ -52,7 +52,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax',
         secure: isProd,
-        domain: isProd ? '.storify-ecommerce-mock.xyz' : undefined,
+        domain: isProd ? '.luke-h1.com' : undefined,
         signed: !!isProd,
       },
       saveUninitialized: false,
