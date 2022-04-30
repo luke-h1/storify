@@ -32,7 +32,7 @@
 
 * [Node.js](https://nodejs.org/en/)
 * [Yarn](https://yarnpkg.com/)
-* [NVM](https://github.com/nvm-sh/nvm) (this project only currently supports node versions V14 or higher)
+* [NVM](https://github.com/nvm-sh/nvm) (this project only currently supports node versions V16 or higher)
 * [Docker](https://www.docker.com/)
 
 
