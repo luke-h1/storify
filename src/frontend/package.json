@@ -21,7 +21,7 @@
     "axios": "^0.26.0",
     "nprogress": "^0.2.0",
     "@storify/common": "1.0.0",
-    "@reach/combobox": "^0.16.4",
+    "@reach/combobox": "^0.18.0",
     "@stripe/react-stripe-js": "^1.7.0",
     "react-table": "7.7.0",
     "@stripe/stripe-js": "^1.22.0",
